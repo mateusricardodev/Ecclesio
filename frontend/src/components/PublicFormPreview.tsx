@@ -9,18 +9,18 @@ export function PublicFormPreview() {
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             <span
               className="text-xs font-semibold tracking-[0.15em] uppercase"
-              style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
             >
               Experiência do participante
             </span>
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
           </div>
           <h2
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
           >
             O que o inscrito vê
           </h2>
-          <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Uma página limpa, profissional e fácil de usar — sem cadastro, sem complicação.
           </p>
         </div>
@@ -37,13 +37,13 @@ export function PublicFormPreview() {
                 >
                   <div
                     className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(212,177,106,0.2)', color: '#D4B16A', fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}
+                    style={{ background: 'rgba(212,177,106,0.2)', color: '#D4B16A', fontFamily: 'var(--font-sans)', letterSpacing: '0.06em' }}
                   >
                     Vagas disponíveis
                   </div>
                   <div>
-                    <p className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>Paróquia São Pedro — SP</p>
-                    <h3 className="font-bold text-base leading-tight" style={{ color: '#FFFFFF', fontFamily: 'Cormorant Garamond, serif' }}>
+                    <p className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-sans)' }}>Paróquia São Pedro — SP</p>
+                    <h3 className="font-bold text-base leading-tight" style={{ color: '#FFFFFF', fontFamily: 'var(--font-display)' }}>
                       Retiro de Jovens 2025
                     </h3>
                   </div>
@@ -57,7 +57,7 @@ export function PublicFormPreview() {
                     { Icon: Clock,    text: 'Saída às 18h de sexta-feira' },
                     { Icon: Users,    text: '13 vagas restantes de 60' },
                   ].map(({ Icon, text }) => (
-                    <div key={text} className="flex items-center gap-2 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    <div key={text} className="flex items-center gap-2 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                       <Icon size={13} style={{ color: '#00186D', opacity: 0.5 }} className="shrink-0" />
                       {text}
                     </div>
@@ -66,22 +66,22 @@ export function PublicFormPreview() {
 
                 {/* Form */}
                 <div className="flex-1 px-4 py-3 overflow-hidden flex flex-col gap-2">
-                  <p className="text-xs font-semibold" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-xs font-semibold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                     Preencha para se inscrever
                   </p>
                   {['Nome completo', 'E-mail', 'CPF', 'Celular'].map((label) => (
                     <div key={label}>
-                      <p className="text-xs mb-0.5" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{label}</p>
+                      <p className="text-xs mb-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{label}</p>
                       <div className="h-7 rounded-lg" style={{ background: '#F5F2E8' }} />
                     </div>
                   ))}
                   <button
                     className="mt-1 w-full text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5"
-                    style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}
+                    style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
                   >
                     Confirmar inscrição <ArrowRight size={11} />
                   </button>
-                  <p className="text-center text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-center text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                     Não é necessário criar conta
                   </p>
                 </div>
@@ -105,11 +105,11 @@ export function PublicFormPreview() {
                 <div className="text-center">
                   <h3
                     className="font-bold text-xl mb-1"
-                    style={{ fontFamily: 'Cormorant Garamond, serif', color: '#00186D' }}
+                    style={{ fontFamily: 'var(--font-display)', color: '#00186D' }}
                   >
                     Inscrição confirmada!
                   </h3>
-                  <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                     Sua inscrição foi realizada com sucesso.
                   </p>
                 </div>
@@ -123,17 +123,17 @@ export function PublicFormPreview() {
                     { label: 'Status', value: 'Confirmado', gold: true },
                   ].map(({ label, value, gold }) => (
                     <div key={label} className="flex justify-between">
-                      <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{label}</span>
+                      <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{label}</span>
                       <span
                         className="font-semibold text-xs text-right max-w-[140px]"
-                        style={{ color: gold ? '#D4B16A' : '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+                        style={{ color: gold ? '#D4B16A' : '#0A0A09', fontFamily: 'var(--font-sans)' }}
                       >
                         {value}
                       </span>
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-center text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   Um e-mail de confirmação foi enviado para você.
                 </p>
               </div>
@@ -143,11 +143,11 @@ export function PublicFormPreview() {
           {/* Texto descritivo */}
           <div className="max-w-sm flex flex-col gap-5">
             <h3
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.7rem', fontWeight: 600, color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.7rem', fontWeight: 600, color: '#00186D' }}
             >
               Simples para quem se inscreve, poderoso para quem organiza.
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               O participante recebe um link, abre no celular e preenche o formulário em menos de 1 minuto.
               Sem downloads, sem cadastros, sem complicação.
             </p>
@@ -158,7 +158,7 @@ export function PublicFormPreview() {
                 'Confirmação imediata ao se inscrever',
                 'Funciona em qualquer celular ou computador',
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2 text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+                <li key={item} className="flex items-center gap-2 text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                   <span style={{ color: '#D4B16A', fontSize: '0.65rem' }}>✦</span>
                   {item}
                 </li>

@@ -27,18 +27,18 @@ export function BeforeAfter() {
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             <span
               className="text-xs font-semibold tracking-[0.15em] uppercase"
-              style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
             >
               Comparativo
             </span>
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
           </div>
           <h2
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
           >
             A diferença na prática
           </h2>
-          <p className="mt-2 text-sm max-w-md mx-auto" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="mt-2 text-sm max-w-md mx-auto" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Chega de improvisar com ferramentas que não foram feitas para isso.
           </p>
         </div>
@@ -56,11 +56,11 @@ export function BeforeAfter() {
               >
                 <X size={16} style={{ color: '#EF4444' }} />
               </span>
-              <span className="font-semibold text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>Sem a plataforma</span>
+              <span className="font-semibold text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>Sem a plataforma</span>
             </div>
             <ul className="flex flex-col gap-3">
               {before.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   <X size={14} className="mt-0.5 shrink-0" style={{ color: '#EF4444' }} />
                   {item}
                 </li>
@@ -75,7 +75,7 @@ export function BeforeAfter() {
           >
             <span
               className="absolute top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full"
-              style={{ background: 'rgba(0,24,109,0.08)', color: '#00186D', fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}
+              style={{ background: 'rgba(0,24,109,0.08)', color: '#00186D', fontFamily: 'var(--font-sans)', letterSpacing: '0.06em' }}
             >
               Ecclesio
             </span>
@@ -86,11 +86,11 @@ export function BeforeAfter() {
               >
                 <Check size={16} style={{ color: '#00186D' }} />
               </span>
-              <span className="font-semibold text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>Com o Ecclesio</span>
+              <span className="font-semibold text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>Com o Ecclesio</span>
             </div>
             <ul className="flex flex-col gap-3">
               {after.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   <Check size={14} className="mt-0.5 shrink-0" style={{ color: '#D4B16A' }} />
                   {item}
                 </li>

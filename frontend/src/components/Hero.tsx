@@ -23,7 +23,7 @@ export function Hero() {
             <span style={{ color: '#D4B16A', fontSize: '0.65rem' }}>✦</span>
             <span
               className="text-xs font-semibold tracking-[0.1em]"
-              style={{ color: '#00186D', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}
             >
               Gestão de eventos católicos
             </span>
@@ -33,7 +33,7 @@ export function Hero() {
           <h1
             className="leading-tight"
             style={{
-              fontFamily: 'Cormorant Garamond, serif',
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.6rem, 5vw, 4rem)',
               fontWeight: 600,
               color: '#00186D',
@@ -49,7 +49,7 @@ export function Hero() {
           {/* Descrição */}
           <p
             className="text-base leading-relaxed max-w-md"
-            style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
           >
             O Ecclesio é a plataforma completa para gestão de retiros, encontros, conferências e inscrições.
             Seus participantes se inscrevem pelo link —{' '}
@@ -64,7 +64,7 @@ export function Hero() {
               style={{
                 background: '#00186D',
                 color: '#FFFFFF',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--font-sans)',
                 boxShadow: '0 4px 16px rgba(0,24,109,0.22)',
               }}
             >
@@ -78,7 +78,7 @@ export function Hero() {
                 background: 'transparent',
                 color: '#00186D',
                 border: '1.5px solid rgba(0,24,109,0.25)',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--font-sans)',
               }}
             >
               Ver como funciona
@@ -94,7 +94,7 @@ export function Hero() {
             ].map((text) => (
               <div key={text} className="flex items-center gap-1.5">
                 <span style={{ color: '#D4B16A', fontSize: '0.7rem' }}>✦</span>
-                <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {text}
                 </span>
               </div>
@@ -136,10 +136,10 @@ export function Hero() {
                 <ShieldCheck size={20} style={{ color: '#00186D' }} />
               </span>
               <div>
-                <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
                   Segurança e confiança
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   Seus dados e os dos participantes sempre protegidos.
                 </p>
               </div>
@@ -161,13 +161,13 @@ export function Hero() {
           >
             <span
               className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-              style={{ background: '#D4B16A', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+              style={{ background: '#D4B16A', color: '#00186D', fontFamily: 'var(--font-sans)' }}
             >
               MR
             </span>
             <div>
-              <p className="text-xs font-bold" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>Nova inscrição</p>
-              <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Maria R. — Retiro de Jovens</p>
+              <p className="text-xs font-bold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>Nova inscrição</p>
+              <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Maria R. — Retiro de Jovens</p>
             </div>
           </div>
         </div>

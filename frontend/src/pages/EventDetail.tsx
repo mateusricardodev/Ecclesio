@@ -174,7 +174,7 @@ export function EventDetail() {
     border: '1px solid rgba(0,24,109,0.15)',
     borderRadius: '10px',
     color: '#0A0A09',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'var(--font-sans)',
     fontSize: '0.8125rem',
     padding: '0.5rem 0.75rem',
     outline: 'none',
@@ -190,7 +190,7 @@ export function EventDetail() {
           <Link
             to="/eventos"
             className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-colors"
-            style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
           >
             <ArrowLeft size={14} />
             Voltar aos eventos
@@ -198,19 +198,19 @@ export function EventDetail() {
 
           <h1
             className="leading-tight truncate"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
           >
             {event?.title ?? '...'}
           </h1>
 
           {event && (
             <div className="flex flex-wrap items-center gap-4 mt-1.5">
-              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                 <Calendar size={13} style={{ color: '#00186D', opacity: 0.5 }} />
                 {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
               </span>
               {event.location && (
-                <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   <MapPin size={13} style={{ color: '#00186D', opacity: 0.5 }} />
                   {event.location}
                 </span>
@@ -226,7 +226,7 @@ export function EventDetail() {
             style={{
               border: '1.5px solid rgba(0,24,109,0.25)',
               color: '#00186D',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-sans)',
             }}
           >
             <Pencil size={15} />
@@ -253,10 +253,10 @@ export function EventDetail() {
             >
               <c.icon size={15} style={{ color: c.accent }} />
             </div>
-            <p className="text-2xl font-bold" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-2xl font-bold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
               {c.value}
             </p>
-            <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               {c.label}
             </p>
           </div>
@@ -277,7 +277,7 @@ export function EventDetail() {
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4"
           style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}
         >
-          <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'Inter, sans-serif' }}>
+          <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Inscrições
           </h2>
           <div className="flex items-center gap-2">
@@ -288,7 +288,7 @@ export function EventDetail() {
               style={{
                 border: '1.5px solid rgba(0,24,109,0.25)',
                 color: '#00186D',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--font-sans)',
                 opacity: exporting ? 0.7 : 1,
               }}
             >
@@ -298,7 +298,7 @@ export function EventDetail() {
             <Link
               to={`/events/${id}/registrations/new`}
               className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all"
-              style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', boxShadow: '0 2px 8px rgba(0,24,109,0.18)' }}
+              style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', boxShadow: '0 2px 8px rgba(0,24,109,0.18)' }}
             >
               <Plus size={13} />
               Nova inscrição
@@ -364,7 +364,7 @@ export function EventDetail() {
               <span
                 key={col.label}
                 className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${col.cls}`}
-                style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
               >
                 {col.label}
               </span>
@@ -374,11 +374,11 @@ export function EventDetail() {
 
         {/* Linhas */}
         {loading ? (
-          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Carregando...
           </p>
         ) : filtered.length === 0 ? (
-          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Nenhuma inscrição encontrada.
           </p>
         ) : (
@@ -395,27 +395,27 @@ export function EventDetail() {
                   <div className="flex items-center gap-3 sm:contents">
                     <span
                       className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                      style={{ background: 'rgba(0,24,109,0.07)', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+                      style={{ background: 'rgba(0,24,109,0.07)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                     >
                       {initials(reg.user.name)}
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                      <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                         {reg.user.name}
                       </p>
-                      <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                      <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                         {reg.user.email}
                       </p>
                     </div>
 
-                    <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                       {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '—'}
                     </span>
 
                     <span
                       className="hidden md:block text-xs w-28 shrink-0 truncate"
-                      style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+                      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
                       title={paymentMethodLabel(reg)}
                     >
                       {paymentMethodLabel(reg)}
@@ -423,7 +423,7 @@ export function EventDetail() {
 
                     <span
                       className="text-[11px] sm:text-xs font-semibold px-2 sm:px-2.5 py-1 rounded-full shrink-0 sm:w-24 sm:text-center"
-                      style={{ background: badge.bg, color: badge.color, fontFamily: 'Inter, sans-serif' }}
+                      style={{ background: badge.bg, color: badge.color, fontFamily: 'var(--font-sans)' }}
                     >
                       {badge.label}
                     </span>
@@ -437,10 +437,10 @@ export function EventDetail() {
                     <div className="flex items-baseline gap-2 min-w-0 sm:contents">
                       {/* A coluna "Tipo" da linha única só aparece em md+, então
                           abaixo de sm a forma de pagamento precisa deste espelho. */}
-                      <span className="sm:hidden text-xs truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="sm:hidden text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                         {paymentMethodLabel(reg)}
                       </span>
-                      <span className="text-sm shrink-0 sm:w-24 sm:text-right" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="text-sm shrink-0 sm:w-24 sm:text-right" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                         {reg.payment ? brl(Number(reg.payment.amount)) : brl(0)}
                       </span>
                     </div>
@@ -468,7 +468,7 @@ export function EventDetail() {
                         <button
                           onClick={() => setCancelConfirm(reg.id)}
                           className="text-xs px-2.5 py-1.5 rounded-lg transition-all shrink-0"
-                          style={{ border: '1px solid rgba(220,38,38,0.3)', color: '#DC2626', fontFamily: 'Inter, sans-serif' }}
+                          style={{ border: '1px solid rgba(220,38,38,0.3)', color: '#DC2626', fontFamily: 'var(--font-sans)' }}
                         >
                           Cancelar
                         </button>
@@ -486,7 +486,7 @@ export function EventDetail() {
         {/* Rodapé da tabela */}
         <div
           className="px-5 py-3 text-xs"
-          style={{ borderTop: '1px solid rgba(0,24,109,0.06)', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+          style={{ borderTop: '1px solid rgba(0,24,109,0.06)', color: '#6B7280', fontFamily: 'var(--font-sans)' }}
         >
           {filtered.length} inscrição(ões) exibida(s)
         </div>
@@ -504,18 +504,18 @@ export function EventDetail() {
           >
             <h3
               className="font-semibold mb-2"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
             >
               Cancelar inscrição
             </h3>
-            <p className="text-sm mb-6" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mb-6" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Tem certeza que deseja cancelar esta inscrição? Esta ação não pode ser desfeita.
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setCancelConfirm(null)}
                 className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
@@ -523,7 +523,7 @@ export function EventDetail() {
                 onClick={() => handleCancel(cancelConfirm)}
                 disabled={canceling}
                 className="px-4 py-2 text-sm font-semibold rounded-xl"
-                style={{ background: '#DC2626', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', opacity: canceling ? 0.7 : 1 }}
+                style={{ background: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: canceling ? 0.7 : 1 }}
               >
                 {canceling ? 'Cancelando...' : 'Confirmar cancelamento'}
               </button>
@@ -544,15 +544,15 @@ export function EventDetail() {
           >
             <h3
               className="font-semibold mb-2"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
             >
               Confirmar pagamento
             </h3>
-            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Use isto apenas se você já recebeu o pagamento fora do sistema (transferência, dinheiro, etc.). A inscrição passará para "Confirmado" e o participante receberá o e-mail de confirmação.
             </p>
             {confirmError && (
-              <p className="text-sm mb-2" style={{ color: '#DC2626', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-sm mb-2" style={{ color: '#DC2626', fontFamily: 'var(--font-sans)' }}>
                 {confirmError}
               </p>
             )}
@@ -560,7 +560,7 @@ export function EventDetail() {
               <button
                 onClick={() => setConfirmPaymentModal(null)}
                 className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
@@ -568,7 +568,7 @@ export function EventDetail() {
                 onClick={() => handleConfirmPayment(confirmPaymentModal)}
                 disabled={confirmingPayment}
                 className="px-4 py-2 text-sm font-semibold rounded-xl"
-                style={{ background: '#166534', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', opacity: confirmingPayment ? 0.7 : 1 }}
+                style={{ background: '#166534', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: confirmingPayment ? 0.7 : 1 }}
               >
                 {confirmingPayment ? 'Confirmando...' : 'Confirmar pagamento'}
               </button>

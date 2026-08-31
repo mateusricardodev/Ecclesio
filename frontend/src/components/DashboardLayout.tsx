@@ -82,7 +82,7 @@ export function DashboardLayout({
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.12)',
                 color: 'rgba(255,255,255,0.85)',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'var(--font-sans)',
               }}
             />
           </div>
@@ -112,10 +112,10 @@ export function DashboardLayout({
               {initials || '?'}
             </span>
             <span className="hidden sm:flex flex-col items-start leading-tight">
-              <span className="text-sm font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-sm font-semibold" style={{ fontFamily: 'var(--font-sans)' }}>
                 {fullName}
               </span>
-              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-sans)' }}>
                 Organizador
               </span>
             </span>
@@ -179,7 +179,7 @@ function SidebarContent({
     <nav className="flex flex-col gap-0.5 p-3 flex-1">
       <p
         className="px-3 pt-2 pb-1 text-[10px] font-semibold tracking-[0.12em] uppercase"
-        style={{ color: '#6B7280', fontFamily: 'Cinzel, serif' }}
+        style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
       >
         Principal
       </p>
@@ -193,7 +193,7 @@ function SidebarContent({
             onClick={onNavigate}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
             style={{
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-sans)',
               background: isActive ? 'rgba(0,24,109,0.06)' : 'transparent',
               color: isActive ? '#00186D' : '#33425C',
               borderLeft: isActive ? '3px solid #D4B16A' : '3px solid transparent',

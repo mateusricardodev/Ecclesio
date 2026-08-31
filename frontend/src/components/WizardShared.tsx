@@ -7,7 +7,7 @@ export const inputStyle: React.CSSProperties = {
   border: '1px solid rgba(0,24,109,0.15)',
   borderRadius: '10px',
   color: '#0A0A09',
-  fontFamily: 'Inter, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '0.875rem',
   padding: '0.625rem 0.75rem',
   outline: 'none',
@@ -41,7 +41,7 @@ export function WizardField({
     <div className="flex flex-col gap-1.5">
       <label
         className="text-sm font-medium"
-        style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+        style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
       >
         {label}
         {required && <span style={{ color: '#D4B16A', marginLeft: '0.2rem' }}>*</span>}
@@ -102,7 +102,7 @@ export function wizardPrimaryBtn(disabled?: boolean): React.CSSProperties {
   return {
     background: disabled ? '#33425C' : '#00186D',
     color: '#FFFFFF',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'var(--font-sans)',
     fontWeight: 600,
     fontSize: '0.875rem',
     padding: '0.625rem 1.75rem',
@@ -119,7 +119,7 @@ export function wizardNavBtn(): React.CSSProperties {
   return {
     background: 'transparent',
     color: '#6B7280',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'var(--font-sans)',
     fontWeight: 500,
     fontSize: '0.8125rem',
     padding: '0.5rem 0',
@@ -132,7 +132,7 @@ export function wizardSecondaryBtn(): React.CSSProperties {
   return {
     background: 'transparent',
     color: '#00186D',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'var(--font-sans)',
     fontWeight: 600,
     fontSize: '0.875rem',
     padding: '0.625rem 1.5rem',

@@ -76,7 +76,7 @@ export function CreateEvent() {
                     background: 'rgba(0,24,109,0.04)',
                     borderRight: '1px solid rgba(0,24,109,0.12)',
                     color: '#00186D',
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'var(--font-sans)',
                   }}
                 >
                   {baseUrl}
@@ -87,7 +87,7 @@ export function CreateEvent() {
                   onChange={handleChange}
                   placeholder="nome-do-evento"
                   className="flex-1 px-3 py-2.5 text-sm focus:outline-none"
-                  style={{ background: 'transparent', color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+                  style={{ background: 'transparent', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
                 />
               </div>
             </WizardField>
@@ -141,7 +141,7 @@ export function CreateEvent() {
 
 function Alert({ message }: { message: string }) {
   return (
-    <div className="text-sm rounded-xl px-4 py-3 mb-5" style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'Inter, sans-serif' }}>
+    <div className="text-sm rounded-xl px-4 py-3 mb-5" style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'var(--font-sans)' }}>
       {message}
     </div>
   )

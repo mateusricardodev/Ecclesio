@@ -72,7 +72,7 @@ const inputStyle: React.CSSProperties = {
   border:       '1px solid rgba(0,24,109,0.15)',
   borderRadius: '10px',
   color:        '#0A0A09',
-  fontFamily:   'Inter, sans-serif',
+  fontFamily:   'var(--font-sans)',
   fontSize:     '0.875rem',
   padding:      '0.625rem 0.75rem',
   outline:      'none',
@@ -83,7 +83,7 @@ const labelStyle: React.CSSProperties = {
   fontSize:    '0.8125rem',
   fontWeight:  500,
   color:       '#33425C',
-  fontFamily:  'Inter, sans-serif',
+  fontFamily:  'var(--font-sans)',
   marginBottom: '0.375rem',
 }
 
@@ -91,7 +91,7 @@ const sectionLabelStyle: React.CSSProperties = {
   fontSize:      '0.625rem',
   fontWeight:    700,
   color:         '#D4B16A',
-  fontFamily:    'Cinzel, serif',
+  fontFamily:    'var(--font-sans)',
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
 }
@@ -270,14 +270,14 @@ export function PublicRegistration() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F2E8' }}>
-      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Carregando...</p>
+      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
     </div>
   )
 
   if (notFound || !event) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-3" style={{ background: '#F5F2E8' }}>
-      <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'Cinzel, serif' }}>Evento não encontrado</p>
-      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>O endereço pode estar incorreto ou o evento não está publicado.</p>
+      <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>Evento não encontrado</p>
+      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>O endereço pode estar incorreto ou o evento não está publicado.</p>
     </div>
   )
 
@@ -331,10 +331,10 @@ export function PublicRegistration() {
       {/* Cabeçalho do evento */}
       <div className="py-8 px-4" style={{ background: '#00186D' }}>
         <div className="max-w-2xl mx-auto">
-          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}>
             {event.title}
           </h1>
-          <p className="text-sm mt-1 capitalize" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm mt-1 capitalize" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-sans)' }}>
             {formatDate(startDate)}{event.location && ` · ${event.location}`}
           </p>
         </div>
@@ -348,7 +348,7 @@ export function PublicRegistration() {
           {/* Título do formulário */}
           <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
             <p style={sectionLabelStyle}>Formulário de inscrição</p>
-            <p className="text-xl font-semibold mt-0.5" style={{ color: '#00186D', fontFamily: 'Cormorant Garamond, serif' }}>
+            <p className="text-xl font-semibold mt-0.5" style={{ color: '#00186D', fontFamily: 'var(--font-display)' }}>
               Preencha seus dados
             </p>
           </div>
@@ -484,15 +484,15 @@ export function PublicRegistration() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'Inter, sans-serif' }}>Autorização de Responsável</p>
-                    <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>Autorização de Responsável</p>
+                    <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                       Baixe o modelo, preencha, assine e entregue no dia do evento.
                     </p>
                     <a
                       href="/autorizacao-responsavel.pdf"
                       download
                       className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-sm font-semibold transition-all"
-                      style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}
+                      style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -510,7 +510,7 @@ export function PublicRegistration() {
               {event.paymentMethods.length === 0 ? (
                 <p
                   className="text-sm rounded-xl px-4 py-3"
-                  style={{ color: '#991B1B', background: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: '#991B1B', background: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-sans)' }}
                 >
                   Nenhuma forma de pagamento disponível para este evento.
                 </p>
@@ -531,15 +531,15 @@ export function PublicRegistration() {
                       }}
                     >
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold" style={{ color: selected ? '#00186D' : '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                        <span className="font-semibold" style={{ color: selected ? '#00186D' : '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                           {TYPE_LABELS[method.type] ?? method.type}
                         </span>
-                        <span className="font-bold" style={{ color: selected ? '#00186D' : '#33425C', fontFamily: 'Inter, sans-serif' }}>
+                        <span className="font-bold" style={{ color: selected ? '#00186D' : '#33425C', fontFamily: 'var(--font-sans)' }}>
                           {value === 0 ? 'Grátis' : `R$ ${value.toFixed(2).replace('.', ',')}`}
                         </span>
                       </div>
                       {method.description && (
-                        <p className="text-xs mt-1" style={{ color: selected ? 'rgba(0,24,109,0.6)' : '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-xs mt-1" style={{ color: selected ? 'rgba(0,24,109,0.6)' : '#6B7280', fontFamily: 'var(--font-sans)' }}>
                           {method.description}
                         </p>
                       )}
@@ -559,7 +559,7 @@ export function PublicRegistration() {
                   className="mt-0.5 w-4 h-4 shrink-0"
                   style={{ accentColor: '#00186D' }}
                 />
-                <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   Concordo com os termos de participação e autorizo o uso dos meus dados para fins de organização do evento.
                 </span>
               </label>
@@ -567,7 +567,7 @@ export function PublicRegistration() {
               {error && (
                 <p
                   className="text-sm rounded-xl px-3 py-2"
-                  style={{ color: '#991B1B', background: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: '#991B1B', background: '#FEF2F2', border: '1px solid #FECACA', fontFamily: 'var(--font-sans)' }}
                 >
                   {error}
                 </p>
@@ -580,7 +580,7 @@ export function PublicRegistration() {
                 style={{
                   background:  (submitting || !form.termsAccepted) ? 'rgba(0,24,109,0.4)' : '#00186D',
                   color:       '#FFFFFF',
-                  fontFamily:  'Inter, sans-serif',
+                  fontFamily:  'var(--font-sans)',
                   cursor:      (submitting || !form.termsAccepted) ? 'not-allowed' : 'pointer',
                   boxShadow:   (submitting || !form.termsAccepted) ? 'none' : '0 4px 14px rgba(0,24,109,0.25)',
                 }}
@@ -597,7 +597,7 @@ export function PublicRegistration() {
               <Link
                 to={`/evento/${slug}`}
                 className="text-center text-sm transition-colors"
-                style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}
               >
                 ← Voltar para o evento
               </Link>

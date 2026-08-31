@@ -6,14 +6,25 @@
   --color-brand-teal: #2dd4bf;
   --color-brand-teal-dark: #0f766e;
 
-  /* Fontes */
-  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
-  --font-unifraktur: 'UnifrakturCook', cursive;
-  --font-bebas: 'Bebas Neue', sans-serif;
-  --font-cinzel: 'Cinzel', Georgia, serif;
-  --font-inter: 'Inter', system-ui, sans-serif;
+  /* Tipografia — duas famílias e nada mais: uma serifada editorial de alto
+     contraste nos títulos e uma grotesca geométrica em toda a UI, incluindo
+     os rótulos pequenos em caixa alta. Trocar a tipografia do sistema
+     inteiro é trocar estas duas linhas. */
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Apelidos dos tokens antigos, para as classes font-* que ainda existem
+     em PixPayment. Todos apontam para uma das duas famílias acima. */
+  --font-cormorant: var(--font-display);
+  --font-cinzel: var(--font-sans);
+  --font-bebas: var(--font-sans);
+  --font-inter: var(--font-sans);
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
+  /* A Instrument Serif só tem o peso 400. Sem isto o navegador falsifica um
+     bold nos títulos que pedem 600/700, engrossando os traços e matando o
+     contraste que define a fonte. A propriedade é herdada por toda a árvore. */
+  font-synthesis-weight: none;
 }

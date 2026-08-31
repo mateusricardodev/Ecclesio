@@ -51,25 +51,25 @@ export function Register() {
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
               <span
                 className="text-xs font-semibold tracking-[0.2em] uppercase"
-                style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+                style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
               >
                 Comece agora
               </span>
             </div>
             <h1
               className="text-white leading-tight mb-4"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3rem', fontWeight: 600 }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '3rem', fontWeight: 600 }}
             >
               Crie sua conta<br />
               e organize seu<br />
               <span style={{ color: '#D4B16A', fontStyle: 'italic' }}>próximo evento.</span>
             </h1>
-            <p className="text-white/70 text-base leading-relaxed max-w-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-white/70 text-base leading-relaxed max-w-sm" style={{ fontFamily: 'var(--font-sans)' }}>
               Em menos de 2 minutos você já pode criar seu primeiro evento e começar a receber inscrições.
             </p>
           </div>
 
-          <p className="text-white/30 text-xs" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-white/30 text-xs" style={{ fontFamily: 'var(--font-sans)' }}>
             © {new Date().getFullYear()} Ecclesio. Todos os direitos reservados.
           </p>
         </div>
@@ -96,18 +96,18 @@ export function Register() {
 
             <h2
               className="mb-1"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.875rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.875rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
             >
               Criar conta
             </h2>
-            <p className="text-sm mb-7" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mb-7" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Preencha os dados abaixo para começar
             </p>
 
             {error && (
               <div
                 className="text-sm rounded-xl px-4 py-3 mb-5"
-                style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'Inter, sans-serif' }}
+                style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'var(--font-sans)' }}
               >
                 {error}
               </div>
@@ -178,7 +178,7 @@ export function Register() {
                 style={{
                   background: loading ? '#33425C' : '#00186D',
                   color: '#FFFFFF',
-                  fontFamily: 'Inter, sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   opacity: loading ? 0.75 : 1,
                 }}
               >
@@ -198,7 +198,7 @@ export function Register() {
                 )}
               </button>
 
-              <p className="text-center text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-center text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                 Já tem conta?{' '}
                 <Link to="/login" style={{ color: '#00186D', fontWeight: 600 }}>
                   Entrar
@@ -206,7 +206,7 @@ export function Register() {
               </p>
             </form>
 
-            <p className="text-center text-xs mt-6" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-center text-xs mt-6" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Ao criar uma conta, você concorda com os{' '}
               <span className="cursor-pointer" style={{ color: '#00186D' }}>Termos de uso</span>
               {' '}e{' '}
@@ -224,7 +224,7 @@ const inputStyle: React.CSSProperties = {
   border: '1px solid #E5E0D4',
   borderRadius: '10px',
   color: '#0A0A09',
-  fontFamily: 'Inter, sans-serif',
+  fontFamily: 'var(--font-sans)',
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -232,7 +232,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div>
       <label
         className="block text-sm font-medium mb-1.5"
-        style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+        style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
       >
         {label}
       </label>

@@ -77,7 +77,7 @@ export function EventSetupPayment() {
         {/* Formas cadastradas */}
         {methods.length > 0 && (
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'Cinzel, serif' }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Modalidades cadastradas
             </p>
             <div className="flex flex-col gap-2">
@@ -89,26 +89,26 @@ export function EventSetupPayment() {
                 >
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                         R$ {Number(m.value).toFixed(2).replace('.', ',')}
                       </span>
                       {m.type === 'credit_card' && (
-                        <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                        <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                           {m.installments}x
                         </span>
                       )}
                       <span
                         className="text-xs px-2 py-0.5 rounded-full"
-                        style={{ background: 'rgba(0,24,109,0.08)', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+                        style={{ background: 'rgba(0,24,109,0.08)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                       >
                         {TYPE_LABELS[m.type] ?? m.type}
                       </span>
                     </div>
                     {m.description && (
-                      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{m.description}</p>
+                      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{m.description}</p>
                     )}
                     {m.startDate && m.endDate && (
-                      <p className="text-xs mt-0.5" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+                      <p className="text-xs mt-0.5" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
                         {new Date(m.startDate).toLocaleDateString('pt-BR')} a {new Date(m.endDate).toLocaleDateString('pt-BR')}
                       </p>
                     )}
@@ -128,7 +128,7 @@ export function EventSetupPayment() {
 
         {/* Formulário nova modalidade */}
         <WizardCard>
-          <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'Cinzel, serif' }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Adicionar modalidade
           </p>
 
@@ -153,7 +153,7 @@ export function EventSetupPayment() {
             )}
             <WizardField label="Valor" required>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>R$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>R$</span>
                 <WizardInput name="value" type="number" min={0} step="0.01" value={form.value} onChange={handleChange} placeholder="0,00" style={{ paddingLeft: '2.25rem' }} />
               </div>
             </WizardField>
@@ -180,7 +180,7 @@ export function EventSetupPayment() {
         </WizardCard>
 
         {!canProceed && (
-          <p className="text-center text-xs" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-center text-xs" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
             Adicione ao menos uma forma de pagamento para avançar.
           </p>
         )}

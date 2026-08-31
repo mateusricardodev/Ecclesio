@@ -58,17 +58,17 @@ export function Events() {
         <div>
           <p
             className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-            style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+            style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
           >
             Gestão
           </p>
           <h1
             className="leading-tight"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
           >
             Eventos
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Gerencie todos os seus eventos em um só lugar.
           </p>
         </div>
@@ -79,7 +79,7 @@ export function Events() {
           style={{
             background: '#00186D',
             color: '#FFFFFF',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-sans)',
             boxShadow: '0 2px 12px rgba(0,24,109,0.20)',
           }}
         >
@@ -106,17 +106,17 @@ export function Events() {
           </span>
           <h2
             className="mb-2"
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}
           >
             Nenhum evento ainda
           </h2>
-          <p className="text-sm mb-6" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm mb-6" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Crie seu primeiro evento e comece a receber inscrições.
           </p>
           <Link
             to="/events/new"
             className="inline-flex items-center gap-2 text-sm font-semibold px-6 py-2.5 rounded-xl transition-all"
-            style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', boxShadow: '0 2px 12px rgba(0,24,109,0.20)' }}
+            style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', boxShadow: '0 2px 12px rgba(0,24,109,0.20)' }}
           >
             <Plus size={16} />
             Criar evento
@@ -148,14 +148,14 @@ export function Events() {
             className="w-full max-w-sm rounded-2xl p-7"
             style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
           >
-            <h3 className="font-semibold mb-2" style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', color: '#00186D' }}>
+            <h3 className="font-semibold mb-2" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}>
               Excluir evento
             </h3>
-            <p className="text-sm mb-5" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mb-5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.
             </p>
             {deleteError && (
-              <p className="text-sm rounded-xl px-4 py-3 mb-4" style={{ background: '#FEF2F2', color: '#991B1B', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-sm rounded-xl px-4 py-3 mb-4" style={{ background: '#FEF2F2', color: '#991B1B', fontFamily: 'var(--font-sans)' }}>
                 {deleteError}
               </p>
             )}
@@ -164,7 +164,7 @@ export function Events() {
                 onClick={() => { setConfirmId(null); setDeleteError('') }}
                 disabled={deleting}
                 className="px-4 py-2 text-sm rounded-xl transition-all"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Cancelar
               </button>
@@ -172,7 +172,7 @@ export function Events() {
                 onClick={handleDelete}
                 disabled={deleting}
                 className="px-4 py-2 text-sm font-semibold rounded-xl transition-all"
-                style={{ background: '#DC2626', color: '#FFFFFF', fontFamily: 'Inter, sans-serif', opacity: deleting ? 0.7 : 1 }}
+                style={{ background: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: deleting ? 0.7 : 1 }}
               >
                 {deleting ? 'Excluindo...' : 'Excluir'}
               </button>
@@ -192,13 +192,13 @@ function Section({ title, count, muted, children }: { title: string; count: numb
       <div className="flex items-center gap-3 mb-4">
         <h2
           className="text-xs font-semibold uppercase tracking-[0.12em]"
-          style={{ color: muted ? '#9CA3AF' : '#6B7280', fontFamily: 'Cinzel, serif' }}
+          style={{ color: muted ? '#9CA3AF' : '#6B7280', fontFamily: 'var(--font-sans)' }}
         >
           {title}
         </h2>
         <span
           className="text-xs font-semibold px-2 py-0.5 rounded-full"
-          style={{ background: muted ? 'rgba(0,0,0,0.04)' : 'rgba(0,24,109,0.06)', color: muted ? '#9CA3AF' : '#00186D', fontFamily: 'Inter, sans-serif' }}
+          style={{ background: muted ? 'rgba(0,0,0,0.04)' : 'rgba(0,24,109,0.06)', color: muted ? '#9CA3AF' : '#00186D', fontFamily: 'var(--font-sans)' }}
         >
           {count}
         </span>
@@ -236,7 +236,7 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
           <div className="flex items-center gap-2 mb-1">
             <h3
               className="font-semibold truncate text-sm"
-              style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+              style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
             >
               {event.title}
             </h3>
@@ -253,17 +253,17 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               <Calendar size={12} />
               {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
             </span>
             {event.location && (
-              <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                 <MapPin size={12} />
                 {event.location}
               </span>
             )}
-            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               <Users size={12} />
               {event._count.registrations} inscritos
             </span>
@@ -279,7 +279,7 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
           style={{
             border: '1px solid rgba(0,24,109,0.2)',
             color: '#00186D',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-sans)',
           }}
         >
           Ver

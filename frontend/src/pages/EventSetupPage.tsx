@@ -106,11 +106,11 @@ export function EventSetupPage() {
           </div>
           <div className="text-center">
             <h2
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.75rem', fontWeight: 600, color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#00186D' }}
             >
               Evento publicado com sucesso!
             </h2>
-            <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Redirecionando para o painel...
             </p>
           </div>
@@ -130,12 +130,12 @@ export function EventSetupPage() {
           <WizardCard>
             <p
               className="text-[10px] font-semibold uppercase tracking-[0.1em]"
-              style={{ color: '#6B7280', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
             >
               Seções da página
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                 Descrição
               </span>
               <Toggle enabled={aboutEnabled} onToggle={() => setAboutEnabled((v) => !v)} />
@@ -167,7 +167,7 @@ export function EventSetupPage() {
                     className="absolute inset-0 flex items-center justify-center cursor-pointer transition-all"
                     style={{ background: 'rgba(0,24,109,0.45)' }}
                   >
-                    <span className="text-white text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <span className="text-white text-sm font-medium" style={{ fontFamily: 'var(--font-sans)' }}>
                       {uploading ? 'Enviando...' : 'Alterar imagem'}
                     </span>
                     <input type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} disabled={uploading} />
@@ -179,14 +179,14 @@ export function EventSetupPage() {
                   style={{ border: '2px dashed rgba(0,24,109,0.2)', background: 'rgba(0,24,109,0.02)' }}
                 >
                   {uploading ? (
-                    <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Enviando...</span>
+                    <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Enviando...</span>
                   ) : (
                     <>
                       <ImageIcon size={28} style={{ color: '#9CA3AF', marginBottom: '0.5rem' }} />
-                      <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                         Clique para anexar uma imagem
                       </span>
-                      <span className="text-xs mt-1" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="text-xs mt-1" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
                         PNG, JPG ou WebP · máx. 5 MB
                       </span>
                     </>
@@ -214,7 +214,7 @@ export function EventSetupPage() {
           {/* Ações */}
           <WizardCard>
             {saved && (
-              <p className="text-xs font-medium" style={{ color: '#166534', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-xs font-medium" style={{ color: '#166534', fontFamily: 'var(--font-sans)' }}>
                 ✓ Alterações salvas com sucesso!
               </p>
             )}
@@ -225,7 +225,7 @@ export function EventSetupPage() {
                 className="flex items-center gap-2 rounded-xl px-3 py-2.5"
                 style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.1)' }}
               >
-                <span className="flex-1 text-xs truncate" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+                <span className="flex-1 text-xs truncate" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                   {publicUrl}
                 </span>
                 <button onClick={copyLink} className="p-1 rounded transition-all" style={{ color: copied ? '#00186D' : '#6B7280' }} title="Copiar link">
@@ -237,17 +237,17 @@ export function EventSetupPage() {
               </div>
             )}
             {copied && (
-              <p className="text-xs" style={{ color: '#00186D', fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-xs" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
                 Link copiado!
               </p>
             )}
 
             <div className="flex items-center gap-3 pt-1" style={{ borderTop: '1px solid rgba(0,24,109,0.07)' }}>
-              <span className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                 Publicar evento
               </span>
               <Toggle enabled={isPublished} onToggle={() => setIsPublished((v) => !v)} />
-              <span className="text-xs" style={{ color: isPublished ? '#00186D' : '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-xs" style={{ color: isPublished ? '#00186D' : '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
                 {isPublished ? 'Publicado' : 'Não publicado'}
               </span>
             </div>

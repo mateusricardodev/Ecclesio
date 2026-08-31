@@ -18,14 +18,14 @@ export function TrustBadges() {
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             <span
               className="text-xs font-semibold tracking-[0.15em] uppercase"
-              style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
             >
               Segurança & Confiança
             </span>
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
           </div>
           <h2
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 600, color: '#00186D' }}
           >
             Seus dados estão seguros
           </h2>
@@ -48,10 +48,10 @@ export function TrustBadges() {
                 <Icon size={17} style={{ color: '#00186D' }} />
               </div>
               <div>
-                <p className="font-semibold text-sm mb-1" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                <p className="font-semibold text-sm mb-1" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   {title}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {description}
                 </p>
               </div>

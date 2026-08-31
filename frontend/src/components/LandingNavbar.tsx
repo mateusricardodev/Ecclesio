@@ -39,7 +39,7 @@ export function LandingNavbar() {
               key={l.label}
               href={l.href}
               className="text-sm font-medium transition-colors"
-              style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+              style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
               onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#00186D')}
               onMouseLeave={(e) => ((e.target as HTMLElement).style.color = '#33425C')}
             >
@@ -55,14 +55,14 @@ export function LandingNavbar() {
               <Link
                 to="/dashboard"
                 className="text-sm font-semibold px-5 py-2 rounded-xl transition-all"
-                style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}
+                style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
               >
                 Meu painel
               </Link>
               <button
                 onClick={() => logout()}
                 className="text-sm font-medium px-4 py-2 rounded-xl transition-all"
-                style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Sair
               </button>
@@ -72,7 +72,7 @@ export function LandingNavbar() {
               <Link
                 to="/login"
                 className="text-sm font-medium px-4 py-2 rounded-xl transition-all"
-                style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Entrar
               </Link>
@@ -82,7 +82,7 @@ export function LandingNavbar() {
                 style={{
                   background: '#00186D',
                   color: '#FFFFFF',
-                  fontFamily: 'Inter, sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   boxShadow: '0 2px 10px rgba(0,24,109,0.18)',
                 }}
               >
@@ -115,7 +115,7 @@ export function LandingNavbar() {
               href={l.href}
               onClick={() => setOpen(false)}
               className="text-sm font-medium"
-              style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+              style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
             >
               {l.label}
             </a>
@@ -145,7 +145,7 @@ export function LandingNavbar() {
                 to="/login"
                 onClick={() => setOpen(false)}
                 className="text-sm font-medium"
-                style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
               >
                 Entrar
               </Link>
@@ -153,7 +153,7 @@ export function LandingNavbar() {
                 to="/register"
                 onClick={() => setOpen(false)}
                 className="text-center text-sm font-semibold py-3 rounded-xl"
-                style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}
+                style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
               >
                 Criar conta
               </Link>

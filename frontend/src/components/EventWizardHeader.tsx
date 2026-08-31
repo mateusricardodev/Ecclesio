@@ -33,7 +33,7 @@ export function EventWizardHeader({ active, eventId }: Props) {
       {/* Label superior */}
       <p
         className="text-xs font-semibold uppercase tracking-[0.12em] mb-4"
-        style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+        style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
       >
         Configuração do evento
       </p>
@@ -61,7 +61,7 @@ export function EventWizardHeader({ active, eventId }: Props) {
                       ? '#D4B16A'
                       : 'rgba(0,24,109,0.06)',
                     color: isDone || isActive ? '#FFFFFF' : '#6B7280',
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'var(--font-sans)',
                   }}
                 >
                   {isDone ? <Check size={13} /> : i + 1}
@@ -71,7 +71,7 @@ export function EventWizardHeader({ active, eventId }: Props) {
                 <span
                   className="text-sm font-medium hidden sm:block"
                   style={{
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'var(--font-sans)',
                     color: isActive ? '#00186D' : isDone ? '#33425C' : '#9CA3AF',
                     fontWeight: isActive ? 600 : 400,
                   }}

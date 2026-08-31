@@ -234,10 +234,10 @@ export function EditRegistration() {
             >
               <CheckCircle size={28} style={{ color: '#00186D' }} />
             </div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}>
               Inscrição atualizada!
             </h2>
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Redirecionando para o evento...
             </p>
           </div>
@@ -249,7 +249,7 @@ export function EditRegistration() {
   if (loading) {
     return (
       <DashboardLayout active="eventos">
-        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Carregando...</p>
+        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
       </DashboardLayout>
     )
   }
@@ -261,14 +261,14 @@ export function EditRegistration() {
           <Link
             to={`/events/${eventId}`}
             className="inline-flex items-center gap-1.5 text-sm mb-4"
-            style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
           >
             <ArrowLeft size={14} /> Voltar ao evento
           </Link>
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
             Inscrições
           </p>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.75rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}>
             Editar inscrição
           </h1>
         </div>
@@ -276,7 +276,7 @@ export function EditRegistration() {
         {error && (
           <div
             className="mb-4 text-sm rounded-xl px-4 py-3"
-            style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'Inter, sans-serif' }}
+            style={{ background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA', fontFamily: 'var(--font-sans)' }}
           >
             {error}
           </div>
@@ -284,7 +284,7 @@ export function EditRegistration() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
               Dados básicos
             </p>
             <WizardField label="Nome completo" required>
@@ -309,7 +309,7 @@ export function EditRegistration() {
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
               Dados complementares
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -332,7 +332,7 @@ export function EditRegistration() {
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
               Pagamento
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -340,7 +340,7 @@ export function EditRegistration() {
                 <div className="relative">
                   <span
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                    style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+                    style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
                   >
                     R$
                   </span>
@@ -378,7 +378,7 @@ export function EditRegistration() {
                 />
               </WizardField>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               {paymentLocked
                 ? 'Há uma cobrança em aberto no gateway com o valor e a forma de pagamento atuais. Só é possível alterá-los depois que ela for paga ou vencer.'
                 : payment?.status === 'paid'
@@ -389,7 +389,7 @@ export function EditRegistration() {
 
           {(allExtraKeys.length > 0 || showUsaMed) && (
             <WizardCard>
-              <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+              <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
                 Campos do formulário
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -405,7 +405,7 @@ export function EditRegistration() {
 
                 {showUsaMed && (
                   <div className="sm:col-span-2 flex flex-col gap-2">
-                    <p className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+                    <p className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                       Faz uso de medicamento?
                     </p>
                     <div className="flex gap-2">

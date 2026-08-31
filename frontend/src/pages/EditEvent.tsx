@@ -98,7 +98,7 @@ export function EditEvent() {
     return (
       <DashboardLayout active="eventos">
         <EventWizardHeader active="info" eventId={id} />
-        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
           Carregando...
         </p>
       </DashboardLayout>
@@ -122,7 +122,7 @@ export function EditEvent() {
               >
                 <span
                   className="px-3 py-2.5 text-xs shrink-0"
-                  style={{ background: 'rgba(0,24,109,0.04)', borderRight: '1px solid rgba(0,24,109,0.12)', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+                  style={{ background: 'rgba(0,24,109,0.04)', borderRight: '1px solid rgba(0,24,109,0.12)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                 >
                   {baseUrl}
                 </span>
@@ -132,7 +132,7 @@ export function EditEvent() {
                   onChange={handleChange}
                   placeholder="nome-do-evento"
                   className="flex-1 px-3 py-2.5 text-sm focus:outline-none"
-                  style={{ background: 'transparent', color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+                  style={{ background: 'transparent', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
                 />
               </div>
             </WizardField>
@@ -193,7 +193,7 @@ function FeedbackBanner({ type, message }: { type: 'error' | 'success'; message:
     ? { background: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }
     : { background: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0' }
   return (
-    <div className="text-sm rounded-xl px-4 py-3 mb-4" style={{ ...styles, fontFamily: 'Inter, sans-serif' }}>
+    <div className="text-sm rounded-xl px-4 py-3 mb-4" style={{ ...styles, fontFamily: 'var(--font-sans)' }}>
       {message}
     </div>
   )

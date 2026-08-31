@@ -98,11 +98,11 @@ export function FeaturesGrid() {
                 </div>
                 <h3
                   className="font-semibold mb-1.5 text-sm"
-                  style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
                 >
                   {title}
                 </h3>
-                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {description}
                 </p>
               </div>
@@ -119,18 +119,18 @@ export function FeaturesGrid() {
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
               <span
                 className="text-xs font-semibold tracking-[0.15em] uppercase"
-                style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+                style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
               >
                 Simples assim
               </span>
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             </div>
             <h2
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
             >
               Como funciona
             </h2>
-            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Do cadastro ao primeiro inscrito em menos de 10 minutos.
             </p>
           </div>
@@ -155,15 +155,15 @@ export function FeaturesGrid() {
                   </div>
                   <span
                     className="font-bold select-none"
-                    style={{ color: 'rgba(0,24,109,0.08)', fontSize: '2.25rem', fontFamily: 'Cinzel, serif', lineHeight: 1 }}
+                    style={{ color: 'rgba(0,24,109,0.08)', fontSize: '2.25rem', fontFamily: 'var(--font-sans)', lineHeight: 1 }}
                   >
                     {step}
                   </span>
                 </div>
-                <h3 className="font-semibold mb-1.5 text-sm" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                <h3 className="font-semibold mb-1.5 text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   {title}
                 </h3>
-                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {description}
                 </p>
               </div>
@@ -180,18 +180,18 @@ export function FeaturesGrid() {
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
               <span
                 className="text-xs font-semibold tracking-[0.15em] uppercase"
-                style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+                style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
               >
                 Por que escolher
               </span>
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             </div>
             <h2
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: '#FFFFFF' }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 600, color: '#FFFFFF' }}
             >
               Pensado para ministérios
             </h2>
-            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
+            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-sans)' }}>
               Cada funcionalidade foi desenhada para a realidade de quem organiza eventos em igrejas e comunidades.
             </p>
           </div>
@@ -212,10 +212,10 @@ export function FeaturesGrid() {
                 >
                   <Icon size={18} style={{ color: '#D4B16A' }} />
                 </div>
-                <h3 className="font-semibold mb-1.5 text-sm" style={{ color: '#FFFFFF', fontFamily: 'Inter, sans-serif' }}>
+                <h3 className="font-semibold mb-1.5 text-sm" style={{ color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}>
                   {title}
                 </h3>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-sans)' }}>
                   {description}
                 </p>
               </div>

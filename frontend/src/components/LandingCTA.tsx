@@ -16,7 +16,7 @@ export function LandingCTA() {
         <h2
           className="mb-4"
           style={{
-            fontFamily: 'Cormorant Garamond, serif',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2rem, 4vw, 3rem)',
             fontWeight: 600,
             color: '#00186D',
@@ -29,7 +29,7 @@ export function LandingCTA() {
           </span>
         </h2>
 
-        <p className="text-base mb-8 max-w-md mx-auto" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+        <p className="text-base mb-8 max-w-md mx-auto" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
           Junte-se a organizadores que simplificaram a gestão de eventos na sua comunidade.
         </p>
 
@@ -40,7 +40,7 @@ export function LandingCTA() {
             style={{
               background: '#00186D',
               color: '#FFFFFF',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-sans)',
               boxShadow: '0 4px 16px rgba(0,24,109,0.22)',
             }}
           >
@@ -53,7 +53,7 @@ export function LandingCTA() {
             style={{
               border: '1.5px solid rgba(0,24,109,0.25)',
               color: '#00186D',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-sans)',
             }}
           >
             Já tenho conta

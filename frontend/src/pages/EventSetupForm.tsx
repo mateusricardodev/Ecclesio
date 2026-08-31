@@ -63,7 +63,7 @@ export function EventSetupForm() {
     <span
       key={label}
       className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${cls}`}
-      style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
     >
       {label}
     </span>
@@ -92,7 +92,7 @@ export function EventSetupForm() {
               className="grid grid-cols-3 items-center py-3"
               style={{ borderBottom: '1px solid rgba(0,24,109,0.06)' }}
             >
-              <span className="text-sm font-medium" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-sm font-medium" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                 {field}
               </span>
               <div className="flex justify-center">
@@ -104,7 +104,7 @@ export function EventSetupForm() {
                 </span>
               </div>
               <div className="flex justify-end">
-                <span className="text-xs" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+                <span className="text-xs" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
                   Obrigatório
                 </span>
               </div>
@@ -120,7 +120,7 @@ export function EventSetupForm() {
               >
                 <span
                   className="text-[10px] font-semibold uppercase tracking-[0.1em]"
-                  style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+                  style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
                 >
                   {group.label}
                 </span>
@@ -132,12 +132,12 @@ export function EventSetupForm() {
                   className="grid grid-cols-3 items-center py-3"
                   style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}
                 >
-                  <span className="text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+                  <span className="text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                     {field}
                   </span>
                   <span />
                   <div className="flex items-center justify-end gap-2.5">
-                    <span className="text-xs" style={{ color: enabled.has(field) ? '#00186D' : '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>
+                    <span className="text-xs" style={{ color: enabled.has(field) ? '#00186D' : '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
                       {enabled.has(field) ? 'Ativo' : 'Inativo'}
                     </span>
                     <Toggle enabled={enabled.has(field)} onToggle={() => toggle(field)} />

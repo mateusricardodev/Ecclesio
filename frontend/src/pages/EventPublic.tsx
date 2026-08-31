@@ -43,7 +43,7 @@ export function EventPublic() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F2E8' }}>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>Carregando evento...</p>
+        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando evento...</p>
       </div>
     )
   }
@@ -51,10 +51,10 @@ export function EventPublic() {
   if (notFound || !event) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-3" style={{ background: '#F5F2E8' }}>
-        <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'Cinzel, serif' }}>
+        <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
           Evento não encontrado
         </p>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
           O endereço pode estar incorreto ou o evento não está publicado.
         </p>
       </div>
@@ -89,7 +89,7 @@ export function EventPublic() {
           >
             <h1
               className="text-center"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}
             >
               {event.title}
             </h1>
@@ -109,7 +109,7 @@ export function EventPublic() {
         <div className="flex flex-col items-center gap-2 text-center">
           {event.bannerUrl && (
             <h1
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
             >
               {event.title}
             </h1>
@@ -133,7 +133,7 @@ export function EventPublic() {
             >
               <Calendar size={16} style={{ color: '#00186D' }} />
             </div>
-            <p className="text-sm font-semibold capitalize" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm font-semibold capitalize" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
               {formatDate(startDate)}{endDate && ` — ${formatDate(endDate)}`}
             </p>
           </div>
@@ -145,7 +145,7 @@ export function EventPublic() {
               >
                 <MapPin size={16} style={{ color: '#00186D' }} />
               </div>
-              <p className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>{event.location}</p>
+              <p className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>{event.location}</p>
             </div>
           )}
         </div>
@@ -158,7 +158,7 @@ export function EventPublic() {
             style={{
               background: '#00186D',
               color:      '#FFFFFF',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-sans)',
               cursor:     'pointer',
               boxShadow:  '0 4px 14px rgba(0,24,109,0.25)',
             }}
@@ -170,7 +170,7 @@ export function EventPublic() {
             className="rounded-2xl p-4 text-center"
             style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}
           >
-            <p className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'Inter, sans-serif' }}>Inscrições em breve</p>
+            <p className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>Inscrições em breve</p>
           </div>
         )}
 
@@ -180,10 +180,10 @@ export function EventPublic() {
             className="rounded-2xl p-5"
             style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-2" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-2" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
               Sobre o evento
             </p>
-            <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
               {event.about}
             </p>
           </div>

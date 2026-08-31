@@ -83,7 +83,7 @@ export function SearchRegistrations() {
     <span
       key={label}
       className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${cls}`}
-      style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
     >
       {label}
     </span>
@@ -96,17 +96,17 @@ export function SearchRegistrations() {
       <div className="mb-8">
         <p
           className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-          style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+          style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
         >
           Gestão
         </p>
         <h1
           className="leading-tight"
-          style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+          style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
         >
           Inscrições
         </h1>
-        <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+        <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
           Todas as inscrições dos seus eventos. Use a busca para filtrar.
         </p>
       </div>
@@ -125,7 +125,7 @@ export function SearchRegistrations() {
             border: '1px solid rgba(0,24,109,0.15)',
             borderRadius: '12px',
             color: '#0A0A09',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-sans)',
             padding: '0.65rem 0.875rem 0.65rem 2.5rem',
             boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
           }}
@@ -162,7 +162,7 @@ export function SearchRegistrations() {
           {/* Contagem */}
           <div
             className="px-5 py-3 text-xs"
-            style={{ borderBottom: '1px solid rgba(0,24,109,0.07)', color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+            style={{ borderBottom: '1px solid rgba(0,24,109,0.07)', color: '#6B7280', fontFamily: 'var(--font-sans)' }}
           >
             {query.trim() ? `${filtered.length} de ${regs.length} inscrição(ões)` : `${regs.length} inscrição(ões)`}
           </div>
@@ -193,27 +193,27 @@ export function SearchRegistrations() {
                 >
                   <span
                     className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                    style={{ background: 'rgba(0,24,109,0.07)', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+                    style={{ background: 'rgba(0,24,109,0.07)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                   >
                     {initials(reg.user.name)}
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                    <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                       {reg.user.name}
                     </p>
-                    <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                    <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                       {reg.user.email}
                     </p>
                   </div>
 
-                  <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                  <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                     {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '—'}
                   </span>
 
                   <span
                     className="hidden md:inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full w-40 shrink-0 truncate"
-                    style={{ background: 'rgba(0,24,109,0.06)', color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+                    style={{ background: 'rgba(0,24,109,0.06)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                   >
                     <Calendar size={11} className="shrink-0" />
                     <span className="truncate">{reg.event.title}</span>
@@ -221,12 +221,12 @@ export function SearchRegistrations() {
 
                   <span
                     className="text-xs font-semibold px-2.5 py-1 rounded-full w-24 text-center shrink-0"
-                    style={{ background: badge.bg, color: badge.color, fontFamily: 'Inter, sans-serif' }}
+                    style={{ background: badge.bg, color: badge.color, fontFamily: 'var(--font-sans)' }}
                   >
                     {badge.label}
                   </span>
 
-                  <span className="hidden sm:block text-sm w-24 text-right shrink-0" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                  <span className="hidden sm:block text-sm w-24 text-right shrink-0" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                     {reg.payment ? brl(Number(reg.payment.amount)) : brl(0)}
                   </span>
 
@@ -260,8 +260,8 @@ function EmptyHint({ title, subtitle }: { title: string; subtitle: string }) {
       >
         <Users size={20} style={{ color: '#00186D' }} />
       </span>
-      <p className="font-semibold text-sm" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>{title}</p>
-      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{subtitle}</p>
+      <p className="font-semibold text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>{title}</p>
+      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{subtitle}</p>
     </div>
   )
 }

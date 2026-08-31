@@ -11,7 +11,7 @@ export function Footer() {
             <Link to="/" className="inline-block mb-4">
               <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-8 object-contain brightness-0 invert" />
             </Link>
-            <p className="text-sm leading-relaxed max-w-xs" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ fontFamily: 'var(--font-sans)' }}>
               Plataforma de gestão de eventos para igrejas e comunidades católicas. Simples, eficiente e gratuita para começar.
             </p>
 
@@ -23,11 +23,11 @@ export function Footer() {
           <div>
             <h4
               className="text-sm font-semibold mb-4"
-              style={{ color: '#FFFFFF', fontFamily: 'Cinzel, serif', letterSpacing: '0.08em' }}
+              style={{ color: '#FFFFFF', fontFamily: 'var(--font-sans)', letterSpacing: '0.08em' }}
             >
               Plataforma
             </h4>
-            <ul className="flex flex-col gap-2.5 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <ul className="flex flex-col gap-2.5 text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
               <li><Link to="/register" className="transition-colors hover:text-white">Criar conta</Link></li>
               <li><Link to="/login" className="transition-colors hover:text-white">Entrar</Link></li>
               <li><a href="#como-funciona" className="transition-colors hover:text-white">Como funciona</a></li>
@@ -39,11 +39,11 @@ export function Footer() {
           <div>
             <h4
               className="text-sm font-semibold mb-4"
-              style={{ color: '#FFFFFF', fontFamily: 'Cinzel, serif', letterSpacing: '0.08em' }}
+              style={{ color: '#FFFFFF', fontFamily: 'var(--font-sans)', letterSpacing: '0.08em' }}
             >
               Institucional
             </h4>
-            <ul className="flex flex-col gap-2.5 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <ul className="flex flex-col gap-2.5 text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Sobre</span></li>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Privacidade</span></li>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Termos de uso</span></li>
@@ -55,7 +55,7 @@ export function Footer() {
         {/* Rodapé */}
         <div
           className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)', fontFamily: 'Inter, sans-serif' }}
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-sans)' }}
         >
           <p>© {new Date().getFullYear()} Ecclesio. Todos os direitos reservados.</p>
           <p style={{ color: '#D4B16A' }}>✦ Feito para a missão da Igreja</p>

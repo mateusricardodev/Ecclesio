@@ -105,14 +105,14 @@ export function Dashboard() {
         <div>
           <p
             className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-            style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+            style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
           >
             Bem-vindo de volta, {firstName}
           </p>
           <h1
             className="leading-tight"
             style={{
-              fontFamily: 'Cormorant Garamond, serif',
+              fontFamily: 'var(--font-display)',
               fontSize: '1.85rem',
               fontWeight: 600,
               color: '#00186D',
@@ -120,7 +120,7 @@ export function Dashboard() {
           >
             Painel de controle
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Acompanhe seus eventos e inscrições em um só lugar.
           </p>
         </div>
@@ -131,7 +131,7 @@ export function Dashboard() {
           style={{
             background: '#00186D',
             color: '#FFFFFF',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-sans)',
             boxShadow: '0 2px 12px rgba(0,24,109,0.20)',
           }}
         >
@@ -163,11 +163,11 @@ export function Dashboard() {
                 </div>
                 <p
                   className="text-2xl font-bold mb-0.5"
-                  style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
                 >
                   {m.value}
                 </p>
-                <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {m.label}
                 </p>
               </button>
@@ -198,15 +198,15 @@ export function Dashboard() {
                         <Calendar size={15} style={{ color: '#00186D' }} />
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-sm font-semibold truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                           {e.title}
                         </p>
-                        <p className="text-xs mt-0.5 truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-xs mt-0.5 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                           {new Date(e.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                           {e.location && ` · ${e.location}`}
                         </p>
                       </div>
-                      <span className="text-xs shrink-0 flex items-center gap-1" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                      <span className="text-xs shrink-0 flex items-center gap-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                         <Users size={12} />
                         {e._count.registrations}
                       </span>
@@ -234,16 +234,16 @@ export function Dashboard() {
                         {r.user.name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?'}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-sm font-semibold truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                           {r.user.name}
                         </p>
-                        <p className="text-xs mt-0.5 truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-xs mt-0.5 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                           {r.eventTitle}
                         </p>
                       </div>
                       <span
                         className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
-                        style={{ background: badge.bg, color: badge.color, fontFamily: 'Inter, sans-serif' }}
+                        style={{ background: badge.bg, color: badge.color, fontFamily: 'var(--font-sans)' }}
                       >
                         {badge.label}
                       </span>
@@ -284,14 +284,14 @@ function Card({ title, onSeeAll, children }: { title: string; onSeeAll: () => vo
       <div className="flex items-center justify-between mb-4">
         <h2
           className="font-semibold text-sm"
-          style={{ color: '#00186D', fontFamily: 'Inter, sans-serif' }}
+          style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}
         >
           {title}
         </h2>
         <button
           onClick={onSeeAll}
           className="flex items-center gap-1 text-xs font-medium transition-colors"
-          style={{ color: '#D4B16A', fontFamily: 'Inter, sans-serif' }}
+          style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
         >
           Ver todos <ArrowRight size={12} />
         </button>
@@ -307,7 +307,7 @@ function EmptyBlock({ icon: Icon, text }: { icon: typeof Calendar; text: string 
       <span className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,24,109,0.05)' }}>
         <Icon size={18} style={{ color: '#6B7280' }} />
       </span>
-      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>{text}</p>
+      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{text}</p>
     </div>
   )
 }
@@ -339,7 +339,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
       <h2
         className="mb-2"
         style={{
-          fontFamily: 'Cormorant Garamond, serif',
+          fontFamily: 'var(--font-display)',
           fontSize: '1.75rem',
           fontWeight: 600,
           color: '#00186D',
@@ -347,7 +347,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
       >
         Bem-vindo ao Ecclesio
       </h2>
-      <p className="text-sm mb-8 max-w-sm mx-auto" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+      <p className="text-sm mb-8 max-w-sm mx-auto" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
         Crie seu primeiro evento e comece a receber inscrições online. É rápido e simples.
       </p>
 
@@ -364,7 +364,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
             >
               <f.icon size={15} style={{ color: '#00186D' }} />
             </span>
-            <span className="text-sm" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
+            <span className="text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
               {f.label}
             </span>
           </div>
@@ -377,7 +377,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
         style={{
           background: '#00186D',
           color: '#FFFFFF',
-          fontFamily: 'Inter, sans-serif',
+          fontFamily: 'var(--font-sans)',
           boxShadow: '0 2px 12px rgba(0,24,109,0.20)',
         }}
       >

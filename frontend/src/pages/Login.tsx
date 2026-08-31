@@ -97,21 +97,21 @@ export function Login() {
             {/* Ornamento dourado */}
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-8" style={{ background: '#D4B16A' }} />
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+              <span className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
                 Plataforma de eventos católicos
               </span>
             </div>
 
             <h1
               className="text-white leading-tight mb-4"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3.25rem', fontWeight: 600 }}
+              style={{ fontFamily: 'var(--font-display)', fontSize: '3.25rem', fontWeight: 600 }}
             >
               Organize eventos.<br />
               Conecte pessoas.<br />
               <span style={{ color: '#D4B16A', fontStyle: 'italic' }}>Fortaleça a missão.</span>
             </h1>
 
-            <p className="text-white/70 text-base leading-relaxed max-w-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-white/70 text-base leading-relaxed max-w-sm" style={{ fontFamily: 'var(--font-sans)' }}>
               A plataforma completa para gestão de retiros, encontros, conferências e inscrições da sua comunidade.
             </p>
 
@@ -123,15 +123,15 @@ export function Login() {
                 { value: '100%', label: 'Seguro' },
               ].map((s) => (
                 <div key={s.label}>
-                  <p className="text-white font-bold text-xl" style={{ fontFamily: 'Cinzel, serif' }}>{s.value}</p>
-                  <p className="text-white/50 text-xs mt-0.5" style={{ fontFamily: 'Inter, sans-serif' }}>{s.label}</p>
+                  <p className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-sans)' }}>{s.value}</p>
+                  <p className="text-white/50 text-xs mt-0.5" style={{ fontFamily: 'var(--font-sans)' }}>{s.label}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Rodapé esquerdo */}
-          <p className="text-white/30 text-xs" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-white/30 text-xs" style={{ fontFamily: 'var(--font-sans)' }}>
             © {new Date().getFullYear()} Ecclesio. Todos os direitos reservados.
           </p>
         </div>
@@ -162,7 +162,7 @@ export function Login() {
             <h2
               className="mb-1"
               style={{
-                fontFamily: 'Cormorant Garamond, serif',
+                fontFamily: 'var(--font-display)',
                 fontSize: '1.875rem',
                 fontWeight: 600,
                 color: '#00186D',
@@ -171,7 +171,7 @@ export function Login() {
             >
               {isLogin ? 'Bem-vindo de volta' : 'Crie sua conta'}
             </h2>
-            <p className="text-sm mb-7" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-sm mb-7" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               {isLogin
                 ? 'Acesse sua conta para gerenciar seus eventos'
                 : 'Comece a gerenciar seus eventos hoje'}
@@ -189,7 +189,7 @@ export function Login() {
                   onClick={() => switchMode(m)}
                   className="flex-1 py-2 rounded-lg text-sm font-semibold transition-all"
                   style={{
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: 'var(--font-sans)',
                     background: mode === m ? '#FFFFFF' : 'transparent',
                     color: mode === m ? '#00186D' : '#6B7280',
                     boxShadow: mode === m ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
@@ -342,7 +342,7 @@ export function Login() {
             )}
 
             {/* Rodapé do card */}
-            <p className="text-center text-xs mt-6" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-center text-xs mt-6" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Ao continuar, você concorda com os{' '}
               <span className="cursor-pointer" style={{ color: '#00186D' }}>Termos de uso</span>
               {' '}e{' '}
@@ -362,7 +362,7 @@ const inputStyle: React.CSSProperties = {
   border: '1px solid #E5E0D4',
   borderRadius: '10px',
   color: '#0A0A09',
-  fontFamily: 'Inter, sans-serif',
+  fontFamily: 'var(--font-sans)',
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -370,7 +370,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div>
       <label
         className="block text-sm font-medium mb-1.5"
-        style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}
+        style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
       >
         {label}
       </label>
@@ -388,7 +388,7 @@ function PrimaryButton({ loading, label, loadingLabel }: { loading: boolean; lab
       style={{
         background: loading ? '#33425C' : '#00186D',
         color: '#FFFFFF',
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'var(--font-sans)',
         letterSpacing: '0.01em',
         opacity: loading ? 0.75 : 1,
       }}

@@ -41,7 +41,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors"
         style={{ background: open ? 'rgba(0,24,109,0.03)' : '#FFFFFF' }}
       >
-        <span className="font-medium text-sm pr-4" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+        <span className="font-medium text-sm pr-4" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
           {q}
         </span>
         <ChevronDown
@@ -58,7 +58,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
           className="px-5 pb-4 pt-3 text-sm leading-relaxed"
           style={{
             color: '#6B7280',
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: 'var(--font-sans)',
             borderTop: '1px solid rgba(0,24,109,0.06)',
           }}
         >
@@ -78,18 +78,18 @@ export function FAQ() {
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
             <span
               className="text-xs font-semibold tracking-[0.15em] uppercase"
-              style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}
+              style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
             >
               Dúvidas frequentes
             </span>
             <div className="h-px w-8" style={{ background: '#D4B16A' }} />
           </div>
           <h2
-            style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 600, color: '#00186D' }}
           >
             Perguntas e respostas
           </h2>
-          <p className="mt-2 text-sm" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+          <p className="mt-2 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Não encontrou sua dúvida? Entre em contato com nossa equipe.
           </p>
         </div>
