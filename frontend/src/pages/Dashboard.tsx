@@ -162,7 +162,7 @@ export function Dashboard() {
                   <m.icon size={17} style={{ color: m.accent }} />
                 </div>
                 <p
-                  className="text-2xl font-bold mb-0.5"
+                  className="text-xl font-bold mb-0.5"
                   style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
                 >
                   {m.value}
@@ -265,7 +265,7 @@ function MetricSkeleton() {
   return (
     <div className="rounded-2xl p-5 animate-pulse" style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}>
       <div className="w-9 h-9 rounded-xl mb-4" style={{ background: 'rgba(0,24,109,0.06)' }} />
-      <div className="h-7 w-14 rounded-lg mb-2" style={{ background: 'rgba(0,24,109,0.06)' }} />
+      <div className="h-6 w-14 rounded-lg mb-2" style={{ background: 'rgba(0,24,109,0.06)' }} />
       <div className="h-3 w-20 rounded" style={{ background: 'rgba(0,24,109,0.04)' }} />
     </div>
   )
