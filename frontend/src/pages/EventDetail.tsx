@@ -65,6 +65,7 @@ export function EventDetail() {
   const [dateFrom, setDateFrom]       = useState('')
   const [dateTo, setDateTo]           = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [methodFilter, setMethodFilter] = useState('')
   const [cancelConfirm, setCancelConfirm] = useState<string | null>(null)
   const [canceling, setCanceling]     = useState(false)
   const [confirmPaymentModal, setConfirmPaymentModal] = useState<string | null>(null)
@@ -120,6 +121,7 @@ export function EventDetail() {
       if (statusFilter) params.status   = statusFilter
       if (dateFrom)     params.dateFrom = dateFrom
       if (dateTo)       params.dateTo   = dateTo
+      if (methodFilter) params.method   = methodFilter
 
       const res = await api.get(`/events/${id}/registrations/export`, { params, responseType: 'blob' })
       const disposition = res.headers['content-disposition'] as string | undefined
@@ -147,7 +149,11 @@ export function EventDetail() {
     const matchFrom   = !dateFrom || created >= new Date(dateFrom)
     const matchTo     = !dateTo   || created <= new Date(dateTo + 'T23:59:59')
     const matchStatus = statusFilter ? r.status === statusFilter : r.status !== 'canceled'
-    return matchSearch && matchFrom && matchTo && matchStatus
+    // 'none' cobre inscrição sem Payment e Payment sem modalidade gravada —
+    // mesmo critério que o backend aplica na exportação.
+    const matchMethod = !methodFilter
+      || (methodFilter === 'none' ? !r.payment?.method : r.payment?.method === methodFilter)
+    return matchSearch && matchFrom && matchTo && matchStatus && matchMethod
   })
 
   const counts = {
@@ -302,7 +308,7 @@ export function EventDetail() {
 
         {/* Filtros */}
         <div
-          className="px-5 py-4 grid grid-cols-1 sm:grid-cols-4 gap-3"
+          className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"
           style={{ borderBottom: '1px solid rgba(0,24,109,0.07)', background: 'rgba(0,24,109,0.02)' }}
         >
           <div className="relative sm:col-span-1">
@@ -326,6 +332,17 @@ export function EventDetail() {
             <option value="confirmed">Confirmado</option>
             <option value="pending">Pendente</option>
             <option value="canceled">Cancelado</option>
+          </select>
+          <select
+            value={methodFilter}
+            onChange={(e) => setMethodFilter(e.target.value)}
+            style={{ ...inputStyle, cursor: 'pointer' }}
+          >
+            <option value="">Todas as formas de pagamento</option>
+            {Object.entries(PAYMENT_METHOD_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+            <option value="none">Não informada</option>
           </select>
         </div>
 

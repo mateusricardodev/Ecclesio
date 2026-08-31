@@ -11,7 +11,10 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { MailService } from '../mail/mail.service.js';
 import { CreateRegistrationDto } from './dto/create-registration.dto.js';
 import { CreateRegistrationOrganizerDto } from './dto/create-registration-organizer.dto.js';
-import { UpdateRegistrationDto } from './dto/update-registration.dto.js';
+import {
+  PAYMENT_METHODS,
+  UpdateRegistrationDto,
+} from './dto/update-registration.dto.js';
 import { generateUniqueRegistrationCode } from '../common/registration-code.js';
 
 const REGISTRATION_STATUS_LABELS: Record<string, string> = {
@@ -48,6 +51,24 @@ function formatCpf(cpf: string): string {
  */
 function sanitizeCell(value: string): string {
   return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
+
+/**
+ * Fragmento de `where` para o filtro por forma de pagamento. `'none'` cobre os
+ * dois jeitos de a modalidade estar ausente: inscrição sem Payment nenhum
+ * (lançada pelo organizador, por exemplo) e Payment com `method` nulo.
+ * Vai dentro de `AND` para não colidir com o `OR` da busca textual.
+ */
+function buildPaymentMethodWhere(method?: string) {
+  if (method === 'none') {
+    return {
+      AND: [{ OR: [{ payment: { is: null } }, { payment: { method: null } }] }],
+    };
+  }
+  if ((PAYMENT_METHODS as readonly string[]).includes(method ?? '')) {
+    return { payment: { method } };
+  }
+  return {};
 }
 
 @Injectable()
@@ -131,7 +152,13 @@ export class RegistrationsService {
   async exportToXlsx(
     eventId: string,
     userId: string,
-    filters: { search?: string; status?: string; dateFrom?: string; dateTo?: string },
+    filters: {
+      search?: string;
+      status?: string;
+      dateFrom?: string;
+      dateTo?: string;
+      method?: string;
+    },
   ) {
     const event = await this.prisma.db.event.findUnique({ where: { id: eventId } });
     if (!event) throw new NotFoundException('Evento não encontrado');
@@ -141,6 +168,7 @@ export class RegistrationsService {
     const allowedStatuses = ['pending', 'confirmed', 'canceled', 'overbooked'];
     const status = allowedStatuses.includes(filters.status ?? '') ? filters.status : undefined;
     const search = filters.search?.trim();
+    const methodWhere = buildPaymentMethodWhere(filters.method);
 
     const registrations = await this.prisma.db.registration.findMany({
       where: {
@@ -160,6 +188,7 @@ export class RegistrationsService {
             { id: { contains: search, mode: 'insensitive' } },
           ],
         }),
+        ...methodWhere,
       },
       orderBy: { createdAt: 'desc' },
       include: {

@@ -149,6 +149,55 @@ describe('RegistrationsService', () => {
     });
   });
 
+  // ─── exportToXlsx ───────────────────────────────────────────────────────────
+
+  describe('exportToXlsx', () => {
+    beforeEach(() => {
+      mockDb.event.findUnique.mockResolvedValue(baseEvent);
+      mockDb.registration.findMany.mockResolvedValue([]);
+    });
+
+    function whereOfLastFindMany() {
+      return mockDb.registration.findMany.mock.calls[0][0].where;
+    }
+
+    it('filtra por forma de pagamento', async () => {
+      await service.exportToXlsx(EVENT_ID, OWNER_ID, { method: 'pix' });
+
+      expect(whereOfLastFindMany()).toMatchObject({ payment: { method: 'pix' } });
+    });
+
+    it("filtra inscrições sem forma de pagamento com method='none'", async () => {
+      await service.exportToXlsx(EVENT_ID, OWNER_ID, { method: 'none' });
+
+      expect(whereOfLastFindMany()).toMatchObject({
+        AND: [{ OR: [{ payment: { is: null } }, { payment: { method: null } }] }],
+      });
+    });
+
+    it('ignora forma de pagamento desconhecida', async () => {
+      await service.exportToXlsx(EVENT_ID, OWNER_ID, { method: 'bitcoin' });
+
+      const where = whereOfLastFindMany();
+      expect(where.payment).toBeUndefined();
+      expect(where.AND).toBeUndefined();
+    });
+
+    it('combina busca textual e forma de pagamento sem uma sobrescrever a outra', async () => {
+      await service.exportToXlsx(EVENT_ID, OWNER_ID, { search: 'joao', method: 'cash' });
+
+      const where = whereOfLastFindMany();
+      expect(where.OR).toHaveLength(4);
+      expect(where.payment).toEqual({ method: 'cash' });
+    });
+
+    it('lança ForbiddenException quando não é o dono do evento', async () => {
+      await expect(service.exportToXlsx(EVENT_ID, 'outro-user', {})).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+  });
+
   // ─── createByOrganizer ──────────────────────────────────────────────────────
 
   describe('createByOrganizer', () => {

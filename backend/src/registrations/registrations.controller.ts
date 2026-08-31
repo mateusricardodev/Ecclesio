@@ -50,6 +50,7 @@ export class RegistrationsController {
     @Query('status') status: string | undefined,
     @Query('dateFrom') dateFrom: string | undefined,
     @Query('dateTo') dateTo: string | undefined,
+    @Query('method') method: string | undefined,
     @Res() res: Response,
   ) {
     const { buffer, filename } = await this.registrationsService.exportToXlsx(eventId, user.id, {
@@ -57,6 +58,7 @@ export class RegistrationsController {
       status,
       dateFrom,
       dateTo,
+      method,
     });
     res.set({
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
