@@ -73,6 +73,9 @@ const BASE_ONLY = new Set([
   'Usa Medicamento',
 ])
 
+// Mesma exceção da inscrição pública: nem todo endereço tem complemento.
+const OPTIONAL_FIELDS = new Set(['Endereço: complemento'])
+
 export function EditRegistration() {
   const { id: eventId, regId } = useParams<{ id: string; regId: string }>()
   const navigate = useNavigate()
@@ -152,8 +155,25 @@ export function EditRegistration() {
   const amountChanged = !paymentLocked && Number(amount || 0) !== Number(initialAmount || 0)
   const methodChanged = !paymentLocked && method !== initialMethod
 
+  const extraFormKeys = formFieldKeys.filter((k) => !BASE_ONLY.has(k))
+  const legacyKeys    = Object.keys(extraMap).filter((k) => !formFieldKeys.includes(k) && k !== 'Qual Medicamento')
+  const allExtraKeys  = [...new Set([...extraFormKeys, ...legacyKeys])]
+  const showUsaMed    = formFieldKeys.includes('Usa Medicamento')
+  // Obrigatórios são só os campos que o evento ainda pede, menos os opcionais.
+  // legacyKeys ficam de fora de propósito: são resquícios de campos que o
+  // organizador já removeu do formulário, e exigi-los travaria a edição por um
+  // dado que o evento nem coleta mais.
+  const requiredExtraKeys = new Set(extraFormKeys.filter((k) => !OPTIONAL_FIELDS.has(k)))
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // Os inputs são cobertos pelo required nativo, que barra o submit antes
+    // daqui. "Faz uso de medicamento?" é um par de botões, não um controle de
+    // formulário, então precisa de checagem própria.
+    if (showUsaMed && !usaMedicamento) {
+      setError('Informe se o participante faz uso de medicamento.')
+      return
+    }
     setError('')
     setSaving(true)
     try {
@@ -186,11 +206,6 @@ export function EditRegistration() {
       setSaving(false)
     }
   }
-
-  const extraFormKeys = formFieldKeys.filter((k) => !BASE_ONLY.has(k))
-  const legacyKeys    = Object.keys(extraMap).filter((k) => !formFieldKeys.includes(k) && k !== 'Qual Medicamento')
-  const allExtraKeys  = [...new Set([...extraFormKeys, ...legacyKeys])]
-  const showUsaMed    = formFieldKeys.includes('Usa Medicamento')
 
   if (success) {
     return (
@@ -282,17 +297,21 @@ export function EditRegistration() {
               Dados complementares
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <WizardField label="Celular">
+              {/* Os dois inputs existem sempre, mas só viram obrigatórios se o
+                  evento pede o campo correspondente no formulário. */}
+              <WizardField label="Celular" required={formFieldKeys.includes('Celular')}>
                 <WizardInput
                   value={form.phone}
                   onChange={(e) => setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))}
                   placeholder="(00) 00000-0000"
+                  required={formFieldKeys.includes('Celular')}
                 />
               </WizardField>
-              <WizardField label="Data de nascimento">
+              <WizardField label="Data de nascimento" required={formFieldKeys.includes('Data de Nascimento')}>
                 <WizardInput
                   type="date" name="birthDate" value={form.birthDate}
                   onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
+                  required={formFieldKeys.includes('Data de Nascimento')}
                 />
               </WizardField>
             </div>
@@ -361,10 +380,11 @@ export function EditRegistration() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {allExtraKeys.map((key) => (
-                  <WizardField key={key} label={FIELD_LABELS[key] ?? key}>
+                  <WizardField key={key} label={FIELD_LABELS[key] ?? key} required={requiredExtraKeys.has(key)}>
                     <WizardInput
                       value={extraMap[key] ?? ''}
                       onChange={(e) => setExtraMap((m) => ({ ...m, [key]: e.target.value }))}
+                      required={requiredExtraKeys.has(key)}
                     />
                   </WizardField>
                 ))}
@@ -373,6 +393,7 @@ export function EditRegistration() {
                   <div className="sm:col-span-2 flex flex-col gap-2">
                     <p className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
                       Faz uso de medicamento?
+                      <span style={{ color: '#D4B16A', marginLeft: '0.2rem' }}>*</span>
                     </p>
                     <div className="flex gap-2">
                       {(['sim', 'nao'] as const).map((op) => (
@@ -395,11 +416,12 @@ export function EditRegistration() {
                       ))}
                     </div>
                     {usaMedicamento === 'sim' && (
-                      <WizardField label="Qual medicamento?">
+                      <WizardField label="Qual medicamento?" required>
                         <WizardInput
                           value={qualMedicamento}
                           onChange={(e) => setQualMedicamento(e.target.value)}
                           placeholder="Ex: Ritalina 10mg"
+                          required
                         />
                       </WizardField>
                     )}
