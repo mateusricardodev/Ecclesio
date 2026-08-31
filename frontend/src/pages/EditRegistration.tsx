@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
-import { WizardCard, WizardField, WizardInput, wizardPrimaryBtn } from '../components/WizardShared'
+import { WizardCard, WizardField, WizardInput, WizardSelect, wizardPrimaryBtn } from '../components/WizardShared'
 import api from '../api/axios'
 
 interface Registration {
@@ -22,6 +22,13 @@ interface Registration {
     provider: string
   } | null
 }
+
+const PAYMENT_METHOD_OPTIONS = [
+  { value: 'pix',         label: 'Pix' },
+  { value: 'credit_card', label: 'Cartão de crédito' },
+  { value: 'debit_card',  label: 'Cartão de débito' },
+  { value: 'cash',        label: 'Dinheiro' },
+]
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
   pending: 'Pendente',
@@ -84,6 +91,8 @@ export function EditRegistration() {
   const [qualMedicamento, setQualMedicamento]   = useState('')
   const [amount, setAmount]                     = useState('')
   const [initialAmount, setInitialAmount]       = useState('')
+  const [method, setMethod]                     = useState('')
+  const [initialMethod, setInitialMethod]       = useState('')
   const [payment, setPayment]                   = useState<Registration['payment']>(null)
 
   useEffect(() => {
@@ -110,6 +119,9 @@ export function EditRegistration() {
           const loadedAmount = reg.payment ? Number(reg.payment.amount).toFixed(2) : ''
           setAmount(loadedAmount)
           setInitialAmount(loadedAmount)
+          const loadedMethod = reg.payment?.method ?? ''
+          setMethod(loadedMethod)
+          setInitialMethod(loadedMethod)
           if (reg.extraFields) {
             try {
               const parsed = JSON.parse(reg.extraFields) as Record<string, string>
@@ -134,8 +146,11 @@ export function EditRegistration() {
       .replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2')
   }
 
-  const amountLocked  = hasOpenGatewayCharge(payment)
-  const amountChanged = !amountLocked && Number(amount || 0) !== Number(initialAmount || 0)
+  // Valor e modalidade viajam no mesmo Payment, então a cobrança em aberto no
+  // gateway trava os dois campos de uma vez.
+  const paymentLocked = hasOpenGatewayCharge(payment)
+  const amountChanged = !paymentLocked && Number(amount || 0) !== Number(initialAmount || 0)
+  const methodChanged = !paymentLocked && method !== initialMethod
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -157,9 +172,10 @@ export function EditRegistration() {
         phone:     form.phone.replace(/\D/g,'') || undefined,
         birthDate: form.birthDate || undefined,
         ...(Object.keys(updatedExtra).length > 0 && { extraFields: updatedExtra }),
-        // Só vai no payload se o organizador mexeu no campo — enviar sempre
-        // criaria um Payment de R$ 0 em toda edição de inscrição sem valor.
+        // Só vão no payload se o organizador mexeu nos campos — enviar sempre
+        // criaria um Payment vazio em toda edição de inscrição sem pagamento.
         ...(amountChanged && { amount: Math.round(Number(amount || 0) * 100) / 100 }),
+        ...(methodChanged && { method: method || null }),
       })
       setSuccess(true)
       setTimeout(() => navigate(`/events/${eventId}`), 2000)
@@ -300,13 +316,26 @@ export function EditRegistration() {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="0,00"
-                    disabled={amountLocked}
+                    disabled={paymentLocked}
                     style={{
                       paddingLeft: '2.25rem',
-                      ...(amountLocked ? { cursor: 'not-allowed', opacity: 0.55 } : {}),
+                      ...(paymentLocked ? { cursor: 'not-allowed', opacity: 0.55 } : {}),
                     }}
                   />
                 </div>
+              </WizardField>
+              <WizardField label="Forma de pagamento">
+                <WizardSelect
+                  value={method}
+                  onChange={(e) => setMethod(e.target.value)}
+                  disabled={paymentLocked}
+                  style={paymentLocked ? { cursor: 'not-allowed', opacity: 0.55 } : undefined}
+                >
+                  <option value="">Não informada</option>
+                  {PAYMENT_METHOD_OPTIONS.map((op) => (
+                    <option key={op.value} value={op.value}>{op.label}</option>
+                  ))}
+                </WizardSelect>
               </WizardField>
               <WizardField label="Status do pagamento">
                 <WizardInput
@@ -317,11 +346,11 @@ export function EditRegistration() {
               </WizardField>
             </div>
             <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-              {amountLocked
-                ? 'Há uma cobrança em aberto no gateway com o valor atual. Só é possível alterá-lo depois que ela for paga ou vencer.'
+              {paymentLocked
+                ? 'Há uma cobrança em aberto no gateway com o valor e a forma de pagamento atuais. Só é possível alterá-los depois que ela for paga ou vencer.'
                 : payment?.status === 'paid'
-                  ? 'Pagamento já confirmado. Alterar o valor corrige apenas o registro — não gera cobrança nem estorno.'
-                  : 'Valor cobrado desta inscrição. Fica registrado como recebido se a inscrição já estiver confirmada, ou como pendente até a confirmação do pagamento.'}
+                  ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro — não gera cobrança nem estorno.'
+                  : 'Valor e forma de pagamento desta inscrição. Ficam registrados como recebidos se a inscrição já estiver confirmada, ou como pendentes até a confirmação do pagamento.'}
             </p>
           </WizardCard>
 

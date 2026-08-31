@@ -1,5 +1,7 @@
-import { IsOptional, IsString, IsObject, IsNumber, Min } from 'class-validator';
+import { IsOptional, IsString, IsObject, IsNumber, IsIn, Min } from 'class-validator';
 import { IsCpf } from '../../common/validators/is-cpf.validator.js';
+
+export const PAYMENT_METHODS = ['pix', 'credit_card', 'debit_card', 'cash'] as const;
 
 export class UpdateRegistrationDto {
   @IsString()
@@ -39,4 +41,14 @@ export class UpdateRegistrationDto {
   @Min(0)
   @IsOptional()
   amount?: number;
+
+  /**
+   * Modalidade de pagamento (`Payment.method`), nos mesmos valores de
+   * `EventPaymentMethod.type`. `null` limpa a modalidade registrada;
+   * ausente mantém a atual. Não confundir com `Payment.provider`, que
+   * identifica o gateway e não é alterado por aqui.
+   */
+  @IsIn(PAYMENT_METHODS)
+  @IsOptional()
+  method?: string | null;
 }

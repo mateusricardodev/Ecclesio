@@ -250,7 +250,7 @@ describe('RegistrationsService', () => {
       await service.update('r1', OWNER_ID, { amount: 80 });
 
       expect(mockDb.payment.create).toHaveBeenCalledWith({
-        data: { registrationId: 'r1', amount: 80, status: 'pending', provider: 'manual' },
+        data: { registrationId: 'r1', amount: 80, method: null, status: 'pending', provider: 'manual' },
       });
     });
 
@@ -261,7 +261,7 @@ describe('RegistrationsService', () => {
       await service.update('r1', OWNER_ID, { amount: 80 });
 
       expect(mockDb.payment.create).toHaveBeenCalledWith({
-        data: { registrationId: 'r1', amount: 80, status: 'paid', provider: 'manual' },
+        data: { registrationId: 'r1', amount: 80, method: null, status: 'paid', provider: 'manual' },
       });
     });
 
@@ -277,13 +277,83 @@ describe('RegistrationsService', () => {
       expect(mockDb.registration.update).not.toHaveBeenCalled();
     });
 
-    it('não mexe no Payment quando o valor não foi enviado', async () => {
+    it('não mexe no Payment quando valor e forma de pagamento não foram enviados', async () => {
       mockDb.registration.findUnique.mockResolvedValue({ ...reg, status: 'pending', payment: null });
       mockDb.registration.update.mockResolvedValue(reg);
 
       await service.update('r1', OWNER_ID, { name: 'Novo nome' });
 
       expect(mockDb.payment.create).not.toHaveBeenCalled();
+      expect(mockDb.payment.update).not.toHaveBeenCalled();
+    });
+
+    it('altera a forma de pagamento sem tocar no valor nem no provider', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'confirmed',
+        payment: { id: 'p1', status: 'paid', providerPaymentId: null },
+      });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { method: 'cash' });
+
+      expect(mockDb.payment.update).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        data: { method: 'cash' },
+      });
+    });
+
+    it('limpa a forma de pagamento quando recebe null', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'pending',
+        payment: { id: 'p1', status: 'pending', providerPaymentId: null },
+      });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { method: null });
+
+      expect(mockDb.payment.update).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        data: { method: null },
+      });
+    });
+
+    it('grava valor e forma de pagamento na mesma edição', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'pending',
+        payment: { id: 'p1', status: 'pending', providerPaymentId: null },
+      });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { amount: 45, method: 'debit_card' });
+
+      expect(mockDb.payment.update).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        data: { amount: 45, method: 'debit_card' },
+      });
+    });
+
+    it('cria Payment zerado quando só a forma de pagamento é informada', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({ ...reg, status: 'pending', payment: null });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { method: 'pix' });
+
+      expect(mockDb.payment.create).toHaveBeenCalledWith({
+        data: { registrationId: 'r1', amount: 0, method: 'pix', status: 'pending', provider: 'manual' },
+      });
+    });
+
+    it('recusa alterar a forma de pagamento com cobrança em aberto no gateway', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'pending',
+        payment: { id: 'p1', status: 'pending', providerPaymentId: 'mp-123' },
+      });
+
+      await expect(service.update('r1', OWNER_ID, { method: 'cash' })).rejects.toThrow(BadRequestException);
       expect(mockDb.payment.update).not.toHaveBeenCalled();
     });
   });

@@ -311,8 +311,11 @@ export class RegistrationsService {
       });
     }
 
-    if (dto.amount !== undefined) {
-      await this.setRegistrationAmount(registration, dto.amount);
+    if (dto.amount !== undefined || dto.method !== undefined) {
+      await this.setRegistrationPayment(registration, {
+        amount: dto.amount,
+        method: dto.method,
+      });
     }
 
     return this.prisma.db.registration.update({
@@ -337,32 +340,40 @@ export class RegistrationsService {
   }
 
   /**
-   * Grava o valor da inscrição. Não há coluna de valor na Registration — ele
-   * vive em `Payment.amount`, então aqui é um upsert do Payment vinculado.
+   * Grava valor e/ou modalidade de pagamento da inscrição. Nenhum dos dois tem
+   * coluna própria na Registration — ambos vivem no Payment vinculado, então
+   * aqui é um upsert desse Payment.
+   *
+   * `provider` de um Payment já existente não é tocado: ele registra por onde
+   * a cobrança passou tecnicamente (gateway, dinheiro, lançamento manual), e
+   * isso não muda porque o organizador corrigiu a modalidade no cadastro.
    */
-  private async setRegistrationAmount(
+  private async setRegistrationPayment(
     registration: {
       id: string;
       status: string;
       payment: { id: string; status: string; providerPaymentId: string | null } | null;
     },
-    amount: number,
+    changes: { amount?: number; method?: string | null },
   ) {
     const { payment } = registration;
 
-    // Uma cobrança em aberto no gateway já foi emitida com o valor antigo (o
-    // QR do Pix carrega o valor embutido). Trocar só o registro local faria o
-    // webhook confirmar um valor diferente do que ficou gravado aqui.
+    // Uma cobrança em aberto no gateway já foi emitida com o valor e a
+    // modalidade atuais (o QR do Pix carrega o valor embutido). Trocar só o
+    // registro local faria o webhook confirmar dados diferentes dos gravados.
     if (payment && payment.status === 'pending' && payment.providerPaymentId) {
       throw new BadRequestException(
-        'Há uma cobrança em aberto no gateway para esta inscrição. Aguarde o pagamento ou o vencimento para alterar o valor.',
+        'Há uma cobrança em aberto no gateway para esta inscrição. Aguarde o pagamento ou o vencimento para alterar valor ou forma de pagamento.',
       );
     }
 
     if (payment) {
       await this.prisma.db.payment.update({
         where: { id: payment.id },
-        data: { amount },
+        data: {
+          ...(changes.amount !== undefined && { amount: changes.amount }),
+          ...(changes.method !== undefined && { method: changes.method }),
+        },
       });
       return;
     }
@@ -370,7 +381,10 @@ export class RegistrationsService {
     await this.prisma.db.payment.create({
       data: {
         registrationId: registration.id,
-        amount,
+        // Sem Payment ainda: informar só a modalidade cria o lançamento zerado,
+        // que o organizador completa depois com o valor.
+        amount: changes.amount ?? 0,
+        method: changes.method ?? null,
         // Inscrição já confirmada = o valor lançado agora é um recebimento
         // registrado à mão; nos demais casos segue pendente e continua
         // disponível para a confirmação manual do organizador.
