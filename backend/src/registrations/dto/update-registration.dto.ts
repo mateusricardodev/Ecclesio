@@ -1,7 +1,19 @@
-import { IsOptional, IsString, IsObject, IsNumber, IsIn, Min } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsObject,
+  IsNumber,
+  IsIn,
+  Min,
+} from 'class-validator';
 import { IsCpf } from '../../common/validators/is-cpf.validator.js';
 
-export const PAYMENT_METHODS = ['pix', 'credit_card', 'debit_card', 'cash'] as const;
+export const PAYMENT_METHODS = [
+  'pix',
+  'credit_card',
+  'debit_card',
+  'cash',
+] as const;
 
 export class UpdateRegistrationDto {
   @IsString()
@@ -24,10 +36,6 @@ export class UpdateRegistrationDto {
   @IsString()
   @IsOptional()
   ticketId?: string;
-
-  @IsString()
-  @IsOptional()
-  paymentCategory?: string;
 
   @IsObject()
   @IsOptional()

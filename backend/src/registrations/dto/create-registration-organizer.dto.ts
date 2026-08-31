@@ -26,10 +26,6 @@ export class CreateRegistrationOrganizerDto {
   @IsOptional()
   birthDate?: string;
 
-  @IsString()
-  @IsOptional()
-  paymentCategory?: string;
-
   @IsObject()
   @IsOptional()
   extraFields?: Record<string, string>;
