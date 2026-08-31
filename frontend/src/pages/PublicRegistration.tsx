@@ -62,6 +62,9 @@ const PERSONAL_FIELDS    = ['Data de Nascimento', 'Sexo', 'Estado Civil']
 const ADDRESS_FIELDS     = ['CEP', 'Endereço: logradouro', 'Endereço: número', 'Endereço: bairro', 'Endereço: complemento', 'Cidade', 'Estado', 'País']
 const RESPONSIBLE_FIELDS = ['Nome do Responsável', 'Telefone do Responsável']
 const EXTRA_SKIP         = new Set(['Celular', 'Telefone Fixo'])
+// Campos habilitados que seguem opcionais: nem todo endereço tem complemento,
+// e exigir um obrigaria a pessoa a inventar um valor pra conseguir se inscrever.
+const OPTIONAL_FIELDS    = new Set(['Endereço: complemento'])
 
 const inputStyle: React.CSSProperties = {
   width:        '100%',
@@ -285,29 +288,31 @@ export function PublicRegistration() {
   const hasAddress     = ADDRESS_FIELDS.some(f => enabled.has(f))
   const hasResponsible = RESPONSIBLE_FIELDS.some(f => enabled.has(f))
 
-  // Todo campo que o organizador habilitou em formFields é obrigatório. A única
-  // exceção é "Qual Medicamento", que só é exigido quando a pessoa responde
-  // "sim" — e aí o próprio input só existe nesse caso, então o required nativo
-  // já dá conta.
+  // Todo campo que o organizador habilitou em formFields é obrigatório, salvo os
+  // de OPTIONAL_FIELDS. "Qual Medicamento" também escapa, mas de graça: o input
+  // só é renderizado quando a resposta é "sim", então o required nativo já cai
+  // fora sozinho no "não".
   function renderField(fieldName: string) {
     const config = FIELD_CONFIG[fieldName]
     if (!config || !enabled.has(fieldName) || EXTRA_SKIP.has(fieldName)) return null
+    const isRequired = !OPTIONAL_FIELDS.has(fieldName)
+    const label      = `${config.label}${isRequired ? ' *' : ''}`
     const isBirthDate = fieldName === 'Data de Nascimento'
     if (isBirthDate) {
       return (
         <div key={fieldName}>
-          <label style={labelStyle}>{config.label} *</label>
-          <input type="date" value={form.birthDate} required onChange={e => setForm(f => ({ ...f, birthDate: e.target.value }))} style={inputStyle} />
+          <label style={labelStyle}>{label}</label>
+          <input type="date" value={form.birthDate} required={isRequired} onChange={e => setForm(f => ({ ...f, birthDate: e.target.value }))} style={inputStyle} />
         </div>
       )
     }
     return (
       <div key={fieldName}>
-        <label style={labelStyle}>{config.label} *</label>
+        <label style={labelStyle}>{label}</label>
         <input
           type="text"
           value={form.extra[fieldName] ?? ''}
-          required
+          required={isRequired}
           onChange={e => setExtra(fieldName, config.format ? config.format(e.target.value) : e.target.value)}
           placeholder={config.placeholder}
           style={inputStyle}
