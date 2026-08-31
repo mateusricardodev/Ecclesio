@@ -429,11 +429,21 @@ export function EventDetail() {
                     </span>
                   </div>
 
-                  {/* Linha 2 no mobile: valor + ações. Em sm+, vira parte da linha única. */}
-                  <div className="flex items-center justify-between sm:contents">
-                    <span className="text-sm shrink-0 sm:w-24 sm:text-right" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
-                      {reg.payment ? brl(Number(reg.payment.amount)) : brl(0)}
-                    </span>
+                  {/* Linha 2 no mobile: forma de pagamento + valor + ações. Em sm+, vira parte da linha única. */}
+                  <div className="flex items-center justify-between gap-3 sm:contents">
+                    {/* sm:contents aninhado: no mobile agrupa forma + valor à
+                        esquerda; em sm+ dissolve e cada span volta a ser célula
+                        da linha, preservando a ordem das colunas do cabeçalho. */}
+                    <div className="flex items-baseline gap-2 min-w-0 sm:contents">
+                      {/* A coluna "Tipo" da linha única só aparece em md+, então
+                          abaixo de sm a forma de pagamento precisa deste espelho. */}
+                      <span className="sm:hidden text-xs truncate" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                        {paymentMethodLabel(reg)}
+                      </span>
+                      <span className="text-sm shrink-0 sm:w-24 sm:text-right" style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}>
+                        {reg.payment ? brl(Number(reg.payment.amount)) : brl(0)}
+                      </span>
+                    </div>
 
                     <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:w-[130px] sm:justify-end">
                       <Link
