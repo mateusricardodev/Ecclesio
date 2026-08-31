@@ -211,7 +211,7 @@ function Section({ title, count, muted, children }: { title: string; count: numb
 function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boolean; onDelete: () => void }) {
   return (
     <div
-      className="flex items-center gap-4 p-5 rounded-2xl transition-all"
+      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl transition-all"
       style={{
         background: '#FFFFFF',
         border: '1px solid rgba(0,24,109,0.08)',
@@ -219,55 +219,60 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
         opacity: muted ? 0.65 : 1,
       }}
     >
-      {/* Ícone */}
-      <span
-        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: 'rgba(0,24,109,0.06)' }}
-      >
-        <Calendar size={19} style={{ color: '#00186D' }} />
-      </span>
+      {/* Linha 1 no mobile: ícone + info, com as ações descendo pra linha
+          própria. Em sm+ o sm:contents dissolve este agrupamento e os dois
+          voltam a ser células da linha única. */}
+      <div className="flex items-center gap-3 sm:contents">
+        {/* Ícone */}
+        <span
+          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'rgba(0,24,109,0.06)' }}
+        >
+          <Calendar size={19} style={{ color: '#00186D' }} />
+        </span>
 
-      {/* Info */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 mb-1">
-          <h3
-            className="font-semibold truncate text-sm"
-            style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
-          >
-            {event.title}
-          </h3>
-          <span
-            className="text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0"
-            style={
-              event.isPublished
-                ? { background: '#F0FDF4', color: '#166534' }
-                : { background: 'rgba(0,0,0,0.05)', color: '#6B7280' }
-            }
-          >
-            {event.isPublished ? 'Publicado' : 'Rascunho'}
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-            <Calendar size={12} />
-            {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-          </span>
-          {event.location && (
-            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-              <MapPin size={12} />
-              {event.location}
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <h3
+              className="font-semibold truncate text-sm"
+              style={{ color: '#0A0A09', fontFamily: 'Inter, sans-serif' }}
+            >
+              {event.title}
+            </h3>
+            <span
+              className="text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0"
+              style={
+                event.isPublished
+                  ? { background: '#F0FDF4', color: '#166534' }
+                  : { background: 'rgba(0,0,0,0.05)', color: '#6B7280' }
+              }
+            >
+              {event.isPublished ? 'Publicado' : 'Rascunho'}
             </span>
-          )}
-          <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
-            <Users size={12} />
-            {event._count.registrations} inscritos
-          </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              <Calendar size={12} />
+              {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+            {event.location && (
+              <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+                <MapPin size={12} />
+                {event.location}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1 text-xs" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              <Users size={12} />
+              {event._count.registrations} inscritos
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Ações */}
-      <div className="flex items-center gap-2 shrink-0">
+      {/* Ações — linha própria no mobile, encostadas à direita */}
+      <div className="flex items-center gap-2 justify-end shrink-0">
         <Link
           to={`/events/${event.id}`}
           className="text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all"
@@ -303,13 +308,13 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
 function CardSkeleton() {
   return (
     <div
-      className="flex items-center gap-4 p-5 rounded-2xl animate-pulse"
+      className="flex items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl animate-pulse"
       style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}
     >
       <div className="w-11 h-11 rounded-xl shrink-0" style={{ background: 'rgba(0,24,109,0.06)' }} />
-      <div className="flex-1">
-        <div className="h-4 w-48 rounded-lg mb-2" style={{ background: 'rgba(0,24,109,0.06)' }} />
-        <div className="h-3 w-64 rounded" style={{ background: 'rgba(0,24,109,0.04)' }} />
+      <div className="min-w-0 flex-1">
+        <div className="h-4 w-48 max-w-full rounded-lg mb-2" style={{ background: 'rgba(0,24,109,0.06)' }} />
+        <div className="h-3 w-64 max-w-full rounded" style={{ background: 'rgba(0,24,109,0.04)' }} />
       </div>
     </div>
   )
