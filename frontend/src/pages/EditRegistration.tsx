@@ -97,6 +97,18 @@ export function EditRegistration() {
   const [method, setMethod]                     = useState('')
   const [initialMethod, setInitialMethod]       = useState('')
   const [payment, setPayment]                   = useState<Registration['payment']>(null)
+  /**
+   * O que já vinha preenchido quando a inscrição foi carregada. Só esses campos
+   * são obrigatórios: a edição não pode apagar um dado existente, mas também não
+   * força a completar o que o evento nunca chegou a coletar (inscrição antiga,
+   * ou lançada pelo organizador sem campos extras).
+   */
+  const [filledOnLoad, setFilledOnLoad] = useState({
+    phone: false,
+    birthDate: false,
+    qualMedicamento: false,
+    extra: new Set<string>(),
+  })
 
   useEffect(() => {
     if (!eventId || !regId) return
@@ -125,15 +137,24 @@ export function EditRegistration() {
           const loadedMethod = reg.payment?.method ?? ''
           setMethod(loadedMethod)
           setInitialMethod(loadedMethod)
+          let parsedExtra: Record<string, string> = {}
           if (reg.extraFields) {
             try {
-              const parsed = JSON.parse(reg.extraFields) as Record<string, string>
-              const { 'Usa Medicamento': usaMed, 'Qual Medicamento': qualMed, ...rest } = parsed
-              setExtraMap(rest)
-              if (usaMed) setUsaMedicamento(usaMed as 'sim' | 'nao')
-              if (qualMed) setQualMedicamento(qualMed)
+              parsedExtra = JSON.parse(reg.extraFields) as Record<string, string>
             } catch { /* invalid JSON */ }
           }
+          const { 'Usa Medicamento': usaMed, 'Qual Medicamento': qualMed, ...rest } = parsedExtra
+          setExtraMap(rest)
+          if (usaMed) setUsaMedicamento(usaMed as 'sim' | 'nao')
+          if (qualMed) setQualMedicamento(qualMed)
+          setFilledOnLoad({
+            phone:           !!reg.phone,
+            birthDate:       !!reg.birthDate,
+            qualMedicamento: !!qualMed?.trim(),
+            extra: new Set(
+              Object.entries(rest).filter(([, v]) => v?.trim()).map(([key]) => key),
+            ),
+          })
         }
         setLoading(false)
       })
@@ -159,21 +180,16 @@ export function EditRegistration() {
   const legacyKeys    = Object.keys(extraMap).filter((k) => !formFieldKeys.includes(k) && k !== 'Qual Medicamento')
   const allExtraKeys  = [...new Set([...extraFormKeys, ...legacyKeys])]
   const showUsaMed    = formFieldKeys.includes('Usa Medicamento')
-  // Obrigatórios são só os campos que o evento ainda pede, menos os opcionais.
-  // legacyKeys ficam de fora de propósito: são resquícios de campos que o
-  // organizador já removeu do formulário, e exigi-los travaria a edição por um
-  // dado que o evento nem coleta mais.
-  const requiredExtraKeys = new Set(extraFormKeys.filter((k) => !OPTIONAL_FIELDS.has(k)))
+  // Obrigatório aqui significa "não pode ser apagado", não "precisa ser
+  // preenchido": só entram os campos que já vinham com valor. Campos que o
+  // evento pede mas nunca foram coletados seguem editáveis e vazios, senão uma
+  // correção de nome ficaria travada atrás de um endereço que ninguém tem.
+  const requiredExtraKeys = new Set(
+    [...filledOnLoad.extra].filter((k) => !OPTIONAL_FIELDS.has(k)),
+  )
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // Os inputs são cobertos pelo required nativo, que barra o submit antes
-    // daqui. "Faz uso de medicamento?" é um par de botões, não um controle de
-    // formulário, então precisa de checagem própria.
-    if (showUsaMed && !usaMedicamento) {
-      setError('Informe se o participante faz uso de medicamento.')
-      return
-    }
     setError('')
     setSaving(true)
     try {
@@ -297,21 +313,19 @@ export function EditRegistration() {
               Dados complementares
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Os dois inputs existem sempre, mas só viram obrigatórios se o
-                  evento pede o campo correspondente no formulário. */}
-              <WizardField label="Celular" required={formFieldKeys.includes('Celular')}>
+              <WizardField label="Celular" required={filledOnLoad.phone}>
                 <WizardInput
                   value={form.phone}
                   onChange={(e) => setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))}
                   placeholder="(00) 00000-0000"
-                  required={formFieldKeys.includes('Celular')}
+                  required={filledOnLoad.phone}
                 />
               </WizardField>
-              <WizardField label="Data de nascimento" required={formFieldKeys.includes('Data de Nascimento')}>
+              <WizardField label="Data de nascimento" required={filledOnLoad.birthDate}>
                 <WizardInput
                   type="date" name="birthDate" value={form.birthDate}
                   onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
-                  required={formFieldKeys.includes('Data de Nascimento')}
+                  required={filledOnLoad.birthDate}
                 />
               </WizardField>
             </div>
@@ -393,7 +407,6 @@ export function EditRegistration() {
                   <div className="sm:col-span-2 flex flex-col gap-2">
                     <p className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'Inter, sans-serif' }}>
                       Faz uso de medicamento?
-                      <span style={{ color: '#D4B16A', marginLeft: '0.2rem' }}>*</span>
                     </p>
                     <div className="flex gap-2">
                       {(['sim', 'nao'] as const).map((op) => (
@@ -416,12 +429,12 @@ export function EditRegistration() {
                       ))}
                     </div>
                     {usaMedicamento === 'sim' && (
-                      <WizardField label="Qual medicamento?" required>
+                      <WizardField label="Qual medicamento?" required={filledOnLoad.qualMedicamento}>
                         <WizardInput
                           value={qualMedicamento}
                           onChange={(e) => setQualMedicamento(e.target.value)}
                           placeholder="Ex: Ritalina 10mg"
-                          required
+                          required={filledOnLoad.qualMedicamento}
                         />
                       </WizardField>
                     )}
