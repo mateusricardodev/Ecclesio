@@ -95,7 +95,7 @@ export class RegistrationsService {
         include: {
           event: { select: { id: true, title: true, date: true, location: true } },
           ticket: { select: { id: true, name: true, price: true } },
-          payment: { select: { id: true, status: true, amount: true, method: true } },
+          payment: { select: { id: true, status: true, amount: true, method: true, provider: true } },
         },
       }),
       this.prisma.db.registration.count({ where: { userId } }),
@@ -120,7 +120,7 @@ export class RegistrationsService {
         include: {
           user: { select: { id: true, name: true, email: true } },
           ticket: { select: { id: true, name: true, price: true } },
-          payment: { select: { id: true, status: true, amount: true, method: true } },
+          payment: { select: { id: true, status: true, amount: true, method: true, provider: true } },
         },
       }),
       this.prisma.db.registration.count({ where: { eventId } }),
@@ -165,7 +165,7 @@ export class RegistrationsService {
       include: {
         user: { select: { id: true, name: true, email: true } },
         ticket: { select: { id: true, name: true, price: true } },
-        payment: { select: { id: true, status: true, amount: true, method: true } },
+        payment: { select: { id: true, status: true, amount: true, method: true, provider: true } },
       },
     });
 
@@ -295,7 +295,7 @@ export class RegistrationsService {
   async update(id: string, userId: string, dto: UpdateRegistrationDto) {
     const registration = await this.prisma.db.registration.findUnique({
       where: { id },
-      include: { user: true, event: true },
+      include: { user: true, event: true, payment: true },
     });
     if (!registration) throw new NotFoundException('Inscrição não encontrada');
     if (registration.event.createdBy !== userId)
@@ -309,6 +309,10 @@ export class RegistrationsService {
         where: { id: registration.userId },
         data: { name: dto.name },
       });
+    }
+
+    if (dto.amount !== undefined) {
+      await this.setRegistrationAmount(registration, dto.amount);
     }
 
     return this.prisma.db.registration.update({
@@ -327,7 +331,51 @@ export class RegistrationsService {
       include: {
         user: { select: { id: true, name: true, email: true } },
         ticket: { select: { id: true, name: true, price: true } },
-        payment: { select: { id: true, status: true, amount: true, method: true } },
+        payment: { select: { id: true, status: true, amount: true, method: true, provider: true } },
+      },
+    });
+  }
+
+  /**
+   * Grava o valor da inscrição. Não há coluna de valor na Registration — ele
+   * vive em `Payment.amount`, então aqui é um upsert do Payment vinculado.
+   */
+  private async setRegistrationAmount(
+    registration: {
+      id: string;
+      status: string;
+      payment: { id: string; status: string; providerPaymentId: string | null } | null;
+    },
+    amount: number,
+  ) {
+    const { payment } = registration;
+
+    // Uma cobrança em aberto no gateway já foi emitida com o valor antigo (o
+    // QR do Pix carrega o valor embutido). Trocar só o registro local faria o
+    // webhook confirmar um valor diferente do que ficou gravado aqui.
+    if (payment && payment.status === 'pending' && payment.providerPaymentId) {
+      throw new BadRequestException(
+        'Há uma cobrança em aberto no gateway para esta inscrição. Aguarde o pagamento ou o vencimento para alterar o valor.',
+      );
+    }
+
+    if (payment) {
+      await this.prisma.db.payment.update({
+        where: { id: payment.id },
+        data: { amount },
+      });
+      return;
+    }
+
+    await this.prisma.db.payment.create({
+      data: {
+        registrationId: registration.id,
+        amount,
+        // Inscrição já confirmada = o valor lançado agora é um recebimento
+        // registrado à mão; nos demais casos segue pendente e continua
+        // disponível para a confirmação manual do organizador.
+        status: registration.status === 'confirmed' ? 'paid' : 'pending',
+        provider: 'manual',
       },
     });
   }
@@ -366,7 +414,7 @@ export class RegistrationsService {
         user: { select: { id: true, name: true, email: true } },
         ticket: { select: { id: true, name: true, price: true } },
         event: { select: { id: true, title: true } },
-        payment: { select: { id: true, status: true, amount: true, method: true } },
+        payment: { select: { id: true, status: true, amount: true, method: true, provider: true } },
       },
     });
   }

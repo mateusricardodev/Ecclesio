@@ -14,6 +14,33 @@ interface Registration {
   extraFields: string | null
   user: { id: string; name: string; email: string }
   ticket: { id: string; name: string; price: string } | null
+  payment: {
+    id: string
+    status: string
+    amount: string
+    method: string | null
+    provider: string
+  } | null
+}
+
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  pending: 'Pendente',
+  paid: 'Pago',
+  failed: 'Falhou',
+}
+
+/**
+ * Uma cobrança emitida por gateway (Pix/cartão) e ainda em aberto carrega o
+ * valor antigo no QR — o backend recusa a alteração até ela ser paga ou
+ * vencer, então o campo aparece travado.
+ */
+function hasOpenGatewayCharge(payment: Registration['payment']): boolean {
+  return (
+    !!payment &&
+    payment.status === 'pending' &&
+    payment.provider !== 'manual' &&
+    payment.provider !== 'cash'
+  )
 }
 
 const FIELD_LABELS: Record<string, string> = {
@@ -55,6 +82,9 @@ export function EditRegistration() {
   const [extraMap, setExtraMap]                 = useState<Record<string, string>>({})
   const [usaMedicamento, setUsaMedicamento]     = useState<'sim' | 'nao' | ''>('')
   const [qualMedicamento, setQualMedicamento]   = useState('')
+  const [amount, setAmount]                     = useState('')
+  const [initialAmount, setInitialAmount]       = useState('')
+  const [payment, setPayment]                   = useState<Registration['payment']>(null)
 
   useEffect(() => {
     if (!eventId || !regId) return
@@ -76,6 +106,10 @@ export function EditRegistration() {
             phone:     reg.phone ? reg.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : '',
             birthDate: reg.birthDate ? reg.birthDate.split('T')[0] : '',
           })
+          setPayment(reg.payment)
+          const loadedAmount = reg.payment ? Number(reg.payment.amount).toFixed(2) : ''
+          setAmount(loadedAmount)
+          setInitialAmount(loadedAmount)
           if (reg.extraFields) {
             try {
               const parsed = JSON.parse(reg.extraFields) as Record<string, string>
@@ -100,6 +134,9 @@ export function EditRegistration() {
       .replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2')
   }
 
+  const amountLocked  = hasOpenGatewayCharge(payment)
+  const amountChanged = !amountLocked && Number(amount || 0) !== Number(initialAmount || 0)
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
@@ -120,6 +157,9 @@ export function EditRegistration() {
         phone:     form.phone.replace(/\D/g,'') || undefined,
         birthDate: form.birthDate || undefined,
         ...(Object.keys(updatedExtra).length > 0 && { extraFields: updatedExtra }),
+        // Só vai no payload se o organizador mexeu no campo — enviar sempre
+        // criaria um Payment de R$ 0 em toda edição de inscrição sem valor.
+        ...(amountChanged && { amount: Math.round(Number(amount || 0) * 100) / 100 }),
       })
       setSuccess(true)
       setTimeout(() => navigate(`/events/${eventId}`), 2000)
@@ -240,6 +280,49 @@ export function EditRegistration() {
                 />
               </WizardField>
             </div>
+          </WizardCard>
+
+          <WizardCard>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'Cinzel, serif' }}>
+              Pagamento
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <WizardField label="Valor da inscrição">
+                <div className="relative">
+                  <span
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
+                    style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}
+                  >
+                    R$
+                  </span>
+                  <WizardInput
+                    type="number" min={0} step="0.01" inputMode="decimal"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0,00"
+                    disabled={amountLocked}
+                    style={{
+                      paddingLeft: '2.25rem',
+                      ...(amountLocked ? { cursor: 'not-allowed', opacity: 0.55 } : {}),
+                    }}
+                  />
+                </div>
+              </WizardField>
+              <WizardField label="Status do pagamento">
+                <WizardInput
+                  value={payment ? (PAYMENT_STATUS_LABELS[payment.status] ?? payment.status) : 'Sem lançamento'}
+                  disabled
+                  style={{ cursor: 'not-allowed', opacity: 0.55 }}
+                />
+              </WizardField>
+            </div>
+            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'Inter, sans-serif' }}>
+              {amountLocked
+                ? 'Há uma cobrança em aberto no gateway com o valor atual. Só é possível alterá-lo depois que ela for paga ou vencer.'
+                : payment?.status === 'paid'
+                  ? 'Pagamento já confirmado. Alterar o valor corrige apenas o registro — não gera cobrança nem estorno.'
+                  : 'Valor cobrado desta inscrição. Fica registrado como recebido se a inscrição já estiver confirmada, ou como pendente até a confirmação do pagamento.'}
+            </p>
           </WizardCard>
 
           {(allExtraKeys.length > 0 || showUsaMed) && (

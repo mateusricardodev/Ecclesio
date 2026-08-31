@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsObject } from 'class-validator';
+import { IsOptional, IsString, IsObject, IsNumber, Min } from 'class-validator';
 import { IsCpf } from '../../common/validators/is-cpf.validator.js';
 
 export class UpdateRegistrationDto {
@@ -30,4 +30,13 @@ export class UpdateRegistrationDto {
   @IsObject()
   @IsOptional()
   extraFields?: Record<string, string>;
+
+  /**
+   * Valor da inscrição em reais. Não existe coluna própria na Registration —
+   * o valor vive em `Payment.amount`, então o service faz upsert do Payment.
+   */
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  @IsOptional()
+  amount?: number;
 }

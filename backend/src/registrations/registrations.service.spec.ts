@@ -7,6 +7,10 @@ import { MailService } from '../mail/mail.service.js';
 const mockDb: any = {
   event: { findUnique: jest.fn() },
   ticket: { findUnique: jest.fn() },
+  payment: {
+    create: jest.fn(),
+    update: jest.fn(),
+  },
   registration: {
     findUnique: jest.fn(),
     findFirst: jest.fn(),
@@ -220,6 +224,67 @@ describe('RegistrationsService', () => {
       mockDb.registration.findUnique.mockResolvedValue(null);
 
       await expect(service.update('fake', OWNER_ID, { cpf: '12345678900' })).rejects.toThrow(NotFoundException);
+    });
+
+    it('atualiza o valor no Payment existente', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'pending',
+        payment: { id: 'p1', status: 'pending', providerPaymentId: null },
+      });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { amount: 120.5 });
+
+      expect(mockDb.payment.update).toHaveBeenCalledWith({
+        where: { id: 'p1' },
+        data: { amount: 120.5 },
+      });
+      expect(mockDb.payment.create).not.toHaveBeenCalled();
+    });
+
+    it('cria Payment manual pendente quando a inscrição ainda não tem valor', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({ ...reg, status: 'pending', payment: null });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { amount: 80 });
+
+      expect(mockDb.payment.create).toHaveBeenCalledWith({
+        data: { registrationId: 'r1', amount: 80, status: 'pending', provider: 'manual' },
+      });
+    });
+
+    it('cria Payment manual já pago quando a inscrição está confirmada', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({ ...reg, status: 'confirmed', payment: null });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { amount: 80 });
+
+      expect(mockDb.payment.create).toHaveBeenCalledWith({
+        data: { registrationId: 'r1', amount: 80, status: 'paid', provider: 'manual' },
+      });
+    });
+
+    it('recusa alterar o valor com cobrança em aberto no gateway', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...reg,
+        status: 'pending',
+        payment: { id: 'p1', status: 'pending', providerPaymentId: 'mp-123' },
+      });
+
+      await expect(service.update('r1', OWNER_ID, { amount: 10 })).rejects.toThrow(BadRequestException);
+      expect(mockDb.payment.update).not.toHaveBeenCalled();
+      expect(mockDb.registration.update).not.toHaveBeenCalled();
+    });
+
+    it('não mexe no Payment quando o valor não foi enviado', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({ ...reg, status: 'pending', payment: null });
+      mockDb.registration.update.mockResolvedValue(reg);
+
+      await service.update('r1', OWNER_ID, { name: 'Novo nome' });
+
+      expect(mockDb.payment.create).not.toHaveBeenCalled();
+      expect(mockDb.payment.update).not.toHaveBeenCalled();
     });
   });
 
