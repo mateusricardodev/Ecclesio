@@ -168,6 +168,13 @@ export function PublicRegistration() {
       setError('Você deve aceitar os termos para continuar.')
       return
     }
+    // Os campos de texto/data são cobertos pelo required nativo, que barra o
+    // submit antes daqui. "Faz uso de medicamento?" é um par de botões, não um
+    // controle de formulário, então precisa de checagem própria.
+    if (enabled.has('Usa Medicamento') && !usaMedicamento) {
+      setError('Informe se faz uso de medicamento para continuar.')
+      return
+    }
     if (!paymentMethodId) {
       setError('Selecione uma forma de pagamento para continuar.')
       return
@@ -278,6 +285,10 @@ export function PublicRegistration() {
   const hasAddress     = ADDRESS_FIELDS.some(f => enabled.has(f))
   const hasResponsible = RESPONSIBLE_FIELDS.some(f => enabled.has(f))
 
+  // Todo campo que o organizador habilitou em formFields é obrigatório. A única
+  // exceção é "Qual Medicamento", que só é exigido quando a pessoa responde
+  // "sim" — e aí o próprio input só existe nesse caso, então o required nativo
+  // já dá conta.
   function renderField(fieldName: string) {
     const config = FIELD_CONFIG[fieldName]
     if (!config || !enabled.has(fieldName) || EXTRA_SKIP.has(fieldName)) return null
@@ -285,17 +296,18 @@ export function PublicRegistration() {
     if (isBirthDate) {
       return (
         <div key={fieldName}>
-          <label style={labelStyle}>{config.label}</label>
-          <input type="date" value={form.birthDate} onChange={e => setForm(f => ({ ...f, birthDate: e.target.value }))} style={inputStyle} />
+          <label style={labelStyle}>{config.label} *</label>
+          <input type="date" value={form.birthDate} required onChange={e => setForm(f => ({ ...f, birthDate: e.target.value }))} style={inputStyle} />
         </div>
       )
     }
     return (
       <div key={fieldName}>
-        <label style={labelStyle}>{config.label}</label>
+        <label style={labelStyle}>{config.label} *</label>
         <input
           type="text"
           value={form.extra[fieldName] ?? ''}
+          required
           onChange={e => setExtra(fieldName, config.format ? config.format(e.target.value) : e.target.value)}
           placeholder={config.placeholder}
           style={inputStyle}
@@ -355,8 +367,10 @@ export function PublicRegistration() {
                 </div>
               </div>
               <div>
-                <label style={labelStyle}>Telefone / WhatsApp</label>
-                <input type="text" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }))} placeholder="(00) 00000-0000" style={inputStyle} />
+                {/* O input existe sempre, mas só vira obrigatório se o
+                    organizador marcou "Celular" entre os campos do formulário. */}
+                <label style={labelStyle}>Telefone / WhatsApp{enabled.has('Celular') ? ' *' : ''}</label>
+                <input type="text" value={form.phone} required={enabled.has('Celular')} onChange={e => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }))} placeholder="(00) 00000-0000" style={inputStyle} />
               </div>
             </div>
 
@@ -385,7 +399,7 @@ export function PublicRegistration() {
               <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
                 <p style={sectionLabelStyle}>Saúde</p>
                 <div>
-                  <label style={labelStyle}>Faz uso de medicamento?</label>
+                  <label style={labelStyle}>Faz uso de medicamento? *</label>
                   <div className="flex gap-2 mt-1">
                     {(['sim', 'nao'] as const).map((opcao) => (
                       <button
@@ -406,8 +420,8 @@ export function PublicRegistration() {
                 </div>
                 {usaMedicamento === 'sim' && (
                   <div>
-                    <label style={labelStyle}>Qual medicamento?</label>
-                    <input type="text" value={qualMedicamento} onChange={e => setQualMedicamento(e.target.value)} placeholder="Ex: Ritalina 10mg" style={inputStyle} />
+                    <label style={labelStyle}>Qual medicamento? *</label>
+                    <input type="text" value={qualMedicamento} required onChange={e => setQualMedicamento(e.target.value)} placeholder="Ex: Ritalina 10mg" style={inputStyle} />
                   </div>
                 )}
               </div>
@@ -420,11 +434,12 @@ export function PublicRegistration() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {enabled.has('CEP') && (
                     <div key="CEP">
-                      <label style={labelStyle}>CEP</label>
+                      <label style={labelStyle}>CEP *</label>
                       <div className="relative">
                         <input
                           type="text"
                           value={form.extra['CEP'] ?? ''}
+                          required
                           onChange={e => handleCepChange(e.target.value)}
                           placeholder="00000-000"
                           style={inputStyle}
