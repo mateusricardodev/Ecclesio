@@ -120,7 +120,7 @@ O sistema possui uma área específica para check-in:
 O projeto utiliza uma arquitetura monorepo com duas aplicações independentes:
 
 ```text
-Event-Register/
+Ecclesio/
 │
 ├── backend/
 │   ├── src/
@@ -249,8 +249,8 @@ O sistema utiliza PostgreSQL como banco de dados e Prisma como camada de acesso.
 ### 1. Clone o projeto
 
 ```bash
-git clone https://github.com/mateusricardodev/Event-Register.git
-cd Event-Register
+git clone https://github.com/mateusricardodev/Ecclesio.git
+cd Ecclesio
 ```
 
 ---
