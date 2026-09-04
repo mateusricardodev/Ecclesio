@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Plus, MapPin, Users, Pencil, Trash2 } from 'lucide-react'
+import { Calendar, Plus, MapPin, Users, Pencil, Trash2, ScanLine } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import api from '../api/axios'
 
@@ -273,6 +273,20 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
 
       {/* Ações — linha própria no mobile, encostadas à direita */}
       <div className="flex items-center gap-2 justify-end shrink-0">
+        {/* Atalho para o credenciamento deste evento no app do voluntário */}
+        <Link
+          to={`/app/evento/${event.id}`}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all"
+          style={{
+            background: 'rgba(0,24,109,0.06)',
+            color: '#00186D',
+            fontFamily: 'var(--font-sans)',
+          }}
+          title="Abrir o credenciamento deste evento no app"
+        >
+          <ScanLine size={13} />
+          Ir para o App
+        </Link>
         <Link
           to={`/events/${event.id}`}
           className="text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all"
