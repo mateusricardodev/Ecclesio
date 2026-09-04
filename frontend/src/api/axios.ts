@@ -21,7 +21,8 @@ api.interceptors.response.use(
     if (err.response?.status === 401) {
       useAuthStore.getState().logout()
       if (window.location.pathname !== '/login') {
-        window.location.href = '/login'
+        const from = `${window.location.pathname}${window.location.search}`
+        window.location.href = `/login?redirect=${encodeURIComponent(from)}`
       }
     }
     return Promise.reject(err)

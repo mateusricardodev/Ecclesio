@@ -1,10 +1,17 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, Users } from 'lucide-react'
 import api from '../api/axios'
 import { useAuthStore } from '../store/auth.store'
 
 type Mode = 'login' | 'register'
+
+// Só aceita caminhos internos ("/app/eventos"), nunca URLs absolutas ou "//host"
+function safeRedirect(raw: string | null): string {
+  if (!raw) return '/dashboard'
+  if (!raw.startsWith('/') || raw.startsWith('//')) return '/dashboard'
+  return raw
+}
 
 export function Login() {
   const [mode, setMode] = useState<Mode>('login')
@@ -23,6 +30,8 @@ export function Login() {
 
   const { setAuth } = useAuthStore()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = safeRedirect(searchParams.get('redirect'))
 
   function switchMode(next: Mode) {
     setMode(next)
@@ -40,7 +49,7 @@ export function Login() {
         headers: { Authorization: `Bearer ${data.access_token}` },
       })
       setAuth(me.data, data.access_token)
-      navigate('/dashboard')
+      navigate(redirectTo, { replace: true })
     } catch {
       setError('E-mail ou senha inválidos')
     } finally {
