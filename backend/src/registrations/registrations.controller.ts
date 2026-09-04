@@ -94,6 +94,12 @@ export class RegistrationsController {
   }
 
   @UseGuards(JwtGuard)
+  @Post('registrations/:id/resend-confirmation')
+  resendConfirmation(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+    return this.registrationsService.resendConfirmation(id, user.id);
+  }
+
+  @UseGuards(JwtGuard)
   @Patch('registrations/:id/cancel')
   cancel(@Param('id') id: string, @CurrentUser() user: { id: string }) {
     return this.registrationsService.cancel(id, user.id);

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Clock, XCircle, Download } from 'lucide-react'
+import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Clock, XCircle, Download, FileDown, Mail } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { useAuthStore } from '../store/auth.store'
 import api from '../api/axios'
+import { downloadTicketPdf } from '../lib/ticketPdf'
 
 interface Registration {
   id: string
   status: 'pending' | 'confirmed' | 'canceled'
   createdAt: string
+  code: string | null
   cpf: string | null
   phone: string | null
   birthDate: string | null
@@ -47,6 +49,10 @@ const STATUS: Record<Registration['status'], { label: string; bg: string; color:
   canceled:  { label: 'Cancelado',  bg: '#FEF2F2', color: '#991B1B' },
 }
 
+function formatCpf(cpf: string) {
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+}
+
 function initials(name: string) {
   return name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?'
 }
@@ -72,6 +78,11 @@ export function EventDetail() {
   const [confirmingPayment, setConfirmingPayment]      = useState(false)
   const [confirmError, setConfirmError]                = useState('')
   const [exporting, setExporting]     = useState(false)
+  const [resendModal, setResendModal] = useState<string | null>(null)
+  const [resending, setResending]     = useState(false)
+  const [resendError, setResendError] = useState('')
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
+  const [toast, setToast]             = useState('')
 
   useEffect(() => {
     if (!id) return
@@ -109,6 +120,55 @@ export function EventDetail() {
       setConfirmError(message)
     } finally {
       setConfirmingPayment(false)
+    }
+  }
+
+  // O aviso de sucesso some sozinho — nada aqui exige confirmação do usuário.
+  useEffect(() => {
+    if (!toast) return
+    const timer = setTimeout(() => setToast(''), 5000)
+    return () => clearTimeout(timer)
+  }, [toast])
+
+  /** Gera o mesmo ingresso em PDF que o participante baixa ao se inscrever. */
+  async function handleDownloadTicket(reg: Registration) {
+    if (!event) return
+    setDownloadingId(reg.id)
+    try {
+      await downloadTicketPdf({
+        code: reg.code,
+        registrationId: reg.id,
+        eventTitle: event.title,
+        eventDate: event.date,
+        eventLocation: event.location,
+        participantName: reg.user.name,
+        participantCpf: reg.cpf ? formatCpf(reg.cpf) : null,
+        email: reg.user.email,
+        // "Valor pago" no ingresso só faz sentido com o pagamento quitado —
+        // inscrição pendente sai sem a linha de valor.
+        amount: reg.payment?.status === 'paid' ? Number(reg.payment.amount) : null,
+      })
+    } catch {
+      setToast('Não foi possível gerar o PDF do ingresso.')
+    } finally {
+      setDownloadingId(null)
+    }
+  }
+
+  async function handleResend(regId: string) {
+    setResending(true)
+    setResendError('')
+    try {
+      const { data } = await api.post(`/registrations/${regId}/resend-confirmation`)
+      setResendModal(null)
+      setToast(`E-mail de confirmação reenviado para ${data.email}.`)
+    } catch (err) {
+      setResendError(
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+          'Não foi possível reenviar o e-mail.',
+      )
+    } finally {
+      setResending(false)
     }
   }
 
@@ -359,7 +419,7 @@ export function EventDetail() {
               { label: 'Tipo',        cls: 'hidden md:block w-28 shrink-0' },
               { label: 'Status',      cls: 'w-24 text-center shrink-0' },
               { label: 'Valor',       cls: 'w-24 text-right shrink-0' },
-              { label: '',            cls: 'w-[130px] shrink-0' },
+              { label: '',            cls: 'w-[190px] shrink-0' },
             ].map((col) => (
               <span
                 key={col.label}
@@ -410,7 +470,7 @@ export function EventDetail() {
                     </div>
 
                     <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                      {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '—'}
+                      {reg.cpf ? formatCpf(reg.cpf) : '—'}
                     </span>
 
                     <span
@@ -445,7 +505,7 @@ export function EventDetail() {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:w-[130px] sm:justify-end">
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:w-[190px] sm:justify-end">
                       <Link
                         to={`/events/${id}/registrations/${reg.id}/edit`}
                         className="p-1.5 rounded-lg transition-all"
@@ -454,6 +514,33 @@ export function EventDetail() {
                       >
                         <Pencil size={14} />
                       </Link>
+                      <button
+                        onClick={() => handleDownloadTicket(reg)}
+                        disabled={!reg.code || downloadingId === reg.id}
+                        className="p-1.5 rounded-lg transition-all"
+                        style={{
+                          color: '#00186D',
+                          opacity: reg.code ? (downloadingId === reg.id ? 0.5 : 1) : 0.35,
+                          cursor: reg.code ? 'pointer' : 'not-allowed',
+                        }}
+                        title={
+                          reg.code
+                            ? 'Baixar PDF da inscrição'
+                            : 'Inscrição sem código de credenciamento'
+                        }
+                      >
+                        <FileDown size={14} />
+                      </button>
+                      {reg.status === 'confirmed' && (
+                        <button
+                          onClick={() => { setResendError(''); setResendModal(reg.id) }}
+                          className="p-1.5 rounded-lg transition-all"
+                          style={{ color: '#D4B16A' }}
+                          title="Reenviar e-mail de confirmação"
+                        >
+                          <Mail size={14} />
+                        </button>
+                      )}
                       {reg.status === 'pending' && (
                         <button
                           onClick={() => { setConfirmError(''); setConfirmPaymentModal(reg.id) }}
@@ -574,6 +661,69 @@ export function EventDetail() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {/* ── Modal de reenvio do e-mail de confirmação ── */}
+      {resendModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50 px-4"
+          style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl p-7"
+            style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
+          >
+            <h3
+              className="font-semibold mb-2"
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
+            >
+              Reenviar e-mail
+            </h3>
+            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+              O e-mail de confirmação, com o QR code de credenciamento, será enviado novamente para{' '}
+              <span style={{ color: '#33425C', fontWeight: 600 }}>
+                {registrations.find((r) => r.id === resendModal)?.user.email}
+              </span>
+              .
+            </p>
+            {resendError && (
+              <p className="text-sm mb-2" style={{ color: '#DC2626', fontFamily: 'var(--font-sans)' }}>
+                {resendError}
+              </p>
+            )}
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => setResendModal(null)}
+                className="px-4 py-2 text-sm rounded-xl"
+                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
+              >
+                Voltar
+              </button>
+              <button
+                onClick={() => handleResend(resendModal)}
+                disabled={resending}
+                className="px-4 py-2 text-sm font-semibold rounded-xl"
+                style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: resending ? 0.7 : 1 }}
+              >
+                {resending ? 'Enviando...' : 'Reenviar e-mail'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Aviso flutuante (reenvio / falha ao gerar PDF) ── */}
+      {toast && (
+        <div
+          className="fixed bottom-6 right-6 z-50 max-w-xs rounded-xl px-4 py-3 text-sm"
+          style={{
+            background: '#00186D',
+            color: '#FFFFFF',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
+            fontFamily: 'var(--font-sans)',
+          }}
+        >
+          {toast}
         </div>
       )}
     </DashboardLayout>

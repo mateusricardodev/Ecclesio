@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, CheckCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, FileDown, Mail } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { WizardCard, WizardField, WizardInput, WizardSelect, wizardPrimaryBtn } from '../components/WizardShared'
 import api from '../api/axios'
+import { downloadTicketPdf } from '../lib/ticketPdf'
 
 interface Registration {
   id: string
   status: string
+  code: string | null
   cpf: string | null
   phone: string | null
   birthDate: string | null
@@ -97,6 +99,18 @@ export function EditRegistration() {
   const [method, setMethod]                     = useState('')
   const [initialMethod, setInitialMethod]       = useState('')
   const [payment, setPayment]                   = useState<Registration['payment']>(null)
+  /** Dados que alimentam o ingresso em PDF e o reenvio do e-mail. */
+  const [ticket, setTicket] = useState<{
+    code: string | null
+    status: string
+    eventTitle: string
+    eventDate: string
+    eventLocation: string | null
+    amountPaid: number | null
+  } | null>(null)
+  const [downloading, setDownloading] = useState(false)
+  const [resending, setResending]     = useState(false)
+  const [ticketMsg, setTicketMsg]     = useState<{ type: 'ok' | 'erro'; text: string } | null>(null)
   /**
    * O que já vinha preenchido quando a inscrição foi carregada. Só esses campos
    * são obrigatórios: a edição não pode apagar um dado existente, mas também não
@@ -123,6 +137,15 @@ export function EditRegistration() {
           try { setFormFieldKeys(JSON.parse(eventData.formFields) as string[]) } catch { /* invalid JSON */ }
         }
         if (reg) {
+          setTicket({
+            code: reg.code,
+            status: reg.status,
+            eventTitle: eventData.title,
+            eventDate: eventData.date,
+            eventLocation: eventData.location ?? null,
+            // O ingresso só anuncia "valor pago" quando o pagamento está quitado.
+            amountPaid: reg.payment?.status === 'paid' ? Number(reg.payment.amount) : null,
+          })
           setForm({
             name:      reg.user.name,
             email:     reg.user.email,
@@ -187,6 +210,46 @@ export function EditRegistration() {
   const requiredExtraKeys = new Set(
     [...filledOnLoad.extra].filter((k) => !OPTIONAL_FIELDS.has(k)),
   )
+
+  async function handleDownloadTicket() {
+    if (!ticket) return
+    setDownloading(true)
+    setTicketMsg(null)
+    try {
+      await downloadTicketPdf({
+        code: ticket.code,
+        registrationId: regId,
+        eventTitle: ticket.eventTitle,
+        eventDate: ticket.eventDate,
+        eventLocation: ticket.eventLocation,
+        participantName: form.name,
+        participantCpf: form.cpf || null,
+        email: form.email,
+        amount: ticket.amountPaid,
+      })
+    } catch {
+      setTicketMsg({ type: 'erro', text: 'Não foi possível gerar o PDF do ingresso.' })
+    } finally {
+      setDownloading(false)
+    }
+  }
+
+  async function handleResend() {
+    setResending(true)
+    setTicketMsg(null)
+    try {
+      const { data } = await api.post(`/registrations/${regId}/resend-confirmation`)
+      setTicketMsg({ type: 'ok', text: `E-mail de confirmação reenviado para ${data.email}.` })
+    } catch (err) {
+      const e = err as { response?: { data?: { message?: string } } }
+      setTicketMsg({
+        type: 'erro',
+        text: e?.response?.data?.message ?? 'Não foi possível reenviar o e-mail.',
+      })
+    } finally {
+      setResending(false)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -384,6 +447,66 @@ export function EditRegistration() {
                 : payment?.status === 'paid'
                   ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro — não gera cobrança nem estorno.'
                   : 'Valor e forma de pagamento desta inscrição. Ficam registrados como recebidos se a inscrição já estiver confirmada, ou como pendentes até a confirmação do pagamento.'}
+            </p>
+          </WizardCard>
+
+          <WizardCard>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+              Ingresso e confirmação
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={handleDownloadTicket}
+                disabled={downloading || !ticket?.code}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl"
+                style={{
+                  border: '1px solid rgba(0,24,109,0.15)',
+                  color: '#00186D',
+                  background: '#FFFFFF',
+                  fontFamily: 'var(--font-sans)',
+                  cursor: ticket?.code ? 'pointer' : 'not-allowed',
+                  opacity: ticket?.code ? (downloading ? 0.6 : 1) : 0.5,
+                }}
+              >
+                <FileDown size={15} />
+                {downloading ? 'Gerando...' : 'Baixar PDF da inscrição'}
+              </button>
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={resending || ticket?.status !== 'confirmed'}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl"
+                style={{
+                  border: '1px solid rgba(0,24,109,0.15)',
+                  color: '#00186D',
+                  background: '#FFFFFF',
+                  fontFamily: 'var(--font-sans)',
+                  cursor: ticket?.status === 'confirmed' ? 'pointer' : 'not-allowed',
+                  opacity: ticket?.status === 'confirmed' ? (resending ? 0.6 : 1) : 0.5,
+                }}
+              >
+                <Mail size={15} />
+                {resending ? 'Enviando...' : 'Reenviar e-mail de confirmação'}
+              </button>
+            </div>
+            {ticketMsg && (
+              <p
+                className="text-xs"
+                style={{
+                  color: ticketMsg.type === 'ok' ? '#166534' : '#DC2626',
+                  fontFamily: 'var(--font-sans)',
+                }}
+              >
+                {ticketMsg.text}
+              </p>
+            )}
+            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+              {!ticket?.code
+                ? 'Esta inscrição não tem código de credenciamento, então não é possível gerar o ingresso em PDF.'
+                : ticket.status !== 'confirmed'
+                  ? 'O e-mail de confirmação só pode ser reenviado depois que a inscrição estiver confirmada. O PDF já pode ser baixado e enviado por outro canal.'
+                  : 'O PDF traz o QR code de credenciamento — útil para quem não recebeu o e-mail. O reenvio dispara a mesma mensagem de confirmação para o e-mail cadastrado.'}
             </p>
           </WizardCard>
 

@@ -3,6 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
   ForbiddenException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
@@ -421,6 +422,60 @@ export class RegistrationsService {
         provider: 'manual',
       },
     });
+  }
+
+  /**
+   * Reenvia o e-mail de confirmação de uma inscrição — participante que não
+   * recebeu, perdeu ou apagou o original.
+   *
+   * Diferente dos disparos automáticos (fire-and-forget), aqui o envio é
+   * aguardado: o organizador clicou no botão e precisa saber se a mensagem saiu
+   * ou falhou. Só vale para inscrição confirmada — o e-mail anuncia "inscrição
+   * confirmada", então mandá-lo para quem ainda não pagou seria mentira.
+   */
+  async resendConfirmation(id: string, userId: string) {
+    const registration = await this.prisma.db.registration.findUnique({
+      where: { id },
+      include: {
+        event: true,
+        user: { select: { name: true, email: true } },
+        ticket: { select: { name: true } },
+        payment: { select: { amount: true, status: true } },
+      },
+    });
+    if (!registration) throw new NotFoundException('Inscrição não encontrada');
+    if (registration.event.createdBy !== userId)
+      throw new ForbiddenException('Sem permissão para reenviar o e-mail desta inscrição');
+    if (registration.status !== 'confirmed')
+      throw new BadRequestException(
+        'Só é possível reenviar a confirmação de inscrições confirmadas.',
+      );
+
+    const sent = await this.mail.sendRegistrationConfirmation({
+      participantName: registration.user.name,
+      participantEmail: registration.user.email,
+      eventTitle: registration.event.title,
+      eventDate: registration.event.date,
+      eventLocation: registration.event.location,
+      registrationId: registration.id,
+      registrationCode: registration.code,
+      ticketName: registration.ticket?.name ?? null,
+      amountPaid:
+        registration.payment?.status === 'paid' ? Number(registration.payment.amount) : null,
+    });
+
+    if (!sent)
+      throw new ServiceUnavailableException(
+        'Não foi possível enviar o e-mail agora. Tente novamente em instantes.',
+      );
+
+    const sentAt = new Date();
+    await this.prisma.db.registration.update({
+      where: { id },
+      data: { confirmationEmailSentAt: sentAt },
+    });
+
+    return { sent: true, email: registration.user.email, sentAt };
   }
 
   async cancel(id: string, userId: string) {

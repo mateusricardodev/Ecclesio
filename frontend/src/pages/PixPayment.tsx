@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import QRCode from 'qrcode'
-import jsPDF from 'jspdf'
 import api, { API_BASE_URL } from '../api/axios'
+import { downloadTicketPdf } from '../lib/ticketPdf'
 
 /**
  * MODO MOCK — como testar sem Mercado Pago real:
@@ -124,102 +124,15 @@ export function PixPayment() {
   async function handleDownload() {
     setDownloading(true)
     try {
-      // garante QR code disponível
-      let qr = qrDataUrl
-      if (!qr && state?.code) {
-        qr = await QRCode.toDataURL(state.code, { width: 300, margin: 2, color: { dark: '#1B2B5E', light: '#F2EDE4' } })
-      }
-
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
-      const W = pdf.internal.pageSize.getWidth()
-      const H = pdf.internal.pageSize.getHeight()
-
-      // fundo creme
-      pdf.setFillColor(242, 237, 228)
-      pdf.rect(0, 0, W, H, 'F')
-
-      // header azul
-      pdf.setFillColor(27, 43, 94)
-      pdf.rect(0, 0, W, 48, 'F')
-
-      // label "INGRESSO" dourado — sem charSpace para centralizar corretamente
-      pdf.setTextColor(201, 168, 76)
-      pdf.setFontSize(9)
-      pdf.setFont('helvetica', 'bold')
-      pdf.text('I N G R E S S O', W / 2, 17, { align: 'center' })
-
-      // nome do evento
-      pdf.setTextColor(255, 255, 255)
-      pdf.setFontSize(17)
-      const title = state?.eventTitle ?? 'Evento'
-      const titleLines = pdf.splitTextToSize(title, W - 30) as string[]
-      pdf.text(titleLines, W / 2, 32, { align: 'center' })
-
-      // card branco
-      const cX = 18, cY = 58, cW = W - 36, cH = 190
-      pdf.setFillColor(255, 255, 255)
-      pdf.setDrawColor(220, 220, 220)
-      pdf.setLineWidth(0.3)
-      pdf.roundedRect(cX, cY, cW, cH, 4, 4, 'FD')
-
-      // QR code centrado
-      if (qr) {
-        const qrSize = 68
-        pdf.addImage(qr, 'PNG', (W - qrSize) / 2, cY + 10, qrSize, qrSize)
-      }
-
-      // label "CÓDIGO DE CREDENCIAMENTO"
-      pdf.setTextColor(201, 168, 76)
-      pdf.setFontSize(7)
-      pdf.setFont('helvetica', 'bold')
-      pdf.text('CÓDIGO DE CREDENCIAMENTO', W / 2, cY + 90, { align: 'center' })
-
-      // código em destaque
-      pdf.setTextColor(27, 43, 94)
-      pdf.setFontSize(20)
-      pdf.text(state?.code ?? '-', W / 2, cY + 104, { align: 'center' })
-
-      // linha divisória
-      pdf.setDrawColor(230, 230, 230)
-      pdf.line(cX + 10, cY + 114, cX + cW - 10, cY + 114)
-
-      // detalhes
-      let dy = cY + 128
-      const labelColor: [number, number, number] = [130, 130, 130]
-      const valueColor: [number, number, number] = [30, 30, 30]
-
-      const addRow = (label: string, value: string) => {
-        pdf.setFont('helvetica', 'normal')
-        pdf.setFontSize(8.5)
-        pdf.setTextColor(...labelColor)
-        pdf.text(label, cX + 10, dy)
-        pdf.setFont('helvetica', 'bold')
-        pdf.setTextColor(...valueColor)
-        pdf.text(value, cX + cW - 10, dy, { align: 'right' })
-        dy += 14
-      }
-
-      if (state?.participantName) addRow('Participante', state.participantName)
-      if (state?.participantCpf)  addRow('Documento', state.participantCpf)
-      if (state?.eventTitle)      addRow('Evento', state.eventTitle)
-      if (state?.email)           addRow('E-mail', state.email)
-      if (amount > 0)             addRow('Valor pago', `R$ ${Number(amount).toFixed(2).replace('.', ',')}`)
-
-      // rodapé
-      pdf.setFont('helvetica', 'normal')
-      pdf.setFontSize(7.5)
-      pdf.setTextColor(150, 150, 150)
-      pdf.text('Apresente este documento no credenciamento do evento.', W / 2, H - 12, { align: 'center' })
-
-      const blob = pdf.output('blob')
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `ingresso-${state?.code ?? state?.registrationId}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
+      await downloadTicketPdf({
+        code: state?.code,
+        registrationId: state?.registrationId,
+        eventTitle: state?.eventTitle,
+        participantName: state?.participantName,
+        participantCpf: state?.participantCpf,
+        email: state?.email,
+        amount,
+      })
     } catch (err) {
       console.error('Erro ao gerar ingresso:', err)
       alert('Não foi possível gerar o PDF. Tente novamente.')
@@ -227,7 +140,6 @@ export function PixPayment() {
       setDownloading(false)
     }
   }
-
   async function handleCopy() {
     if (!state?.qrCodeCopiaECola) return
     try {

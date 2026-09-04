@@ -1,5 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  NotFoundException,
+  BadRequestException,
+  ForbiddenException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { RegistrationsService } from './registrations.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MailService } from '../mail/mail.service.js';
@@ -34,7 +39,7 @@ const mockDb: any = {
 const OWNER_ID = 'owner-uuid';
 
 const mockPrisma = { db: mockDb };
-const mockMail = { sendRegistrationConfirmation: jest.fn().mockResolvedValue(undefined) };
+const mockMail = { sendRegistrationConfirmation: jest.fn().mockResolvedValue(true) };
 
 const EVENT_ID = 'event-uuid';
 const TICKET_ID = 'ticket-uuid';
@@ -428,6 +433,91 @@ describe('RegistrationsService', () => {
     it('lança NotFoundException para inscrição inexistente', async () => {
       mockDb.registration.findUnique.mockResolvedValue(null);
       await expect(service.cancel('fake', OWNER_ID)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  // ─── resendConfirmation ─────────────────────────────────────────────────────
+
+  describe('resendConfirmation', () => {
+    const confirmedReg = {
+      id: 'r1',
+      status: 'confirmed',
+      code: 'ABC123',
+      event: { ...baseEvent, createdBy: OWNER_ID },
+      user: { name: 'João', email: 'joao@test.com' },
+      ticket: { name: 'Geral' },
+      payment: { amount: 50, status: 'paid' },
+    };
+
+    it('reenvia o e-mail e registra a data do envio', async () => {
+      mockDb.registration.findUnique.mockResolvedValue(confirmedReg);
+      mockDb.registration.update.mockResolvedValue({ id: 'r1' });
+
+      const result = await service.resendConfirmation('r1', OWNER_ID);
+
+      expect(result.sent).toBe(true);
+      expect(result.email).toBe('joao@test.com');
+      expect(mockMail.sendRegistrationConfirmation).toHaveBeenCalledWith(
+        expect.objectContaining({
+          participantEmail: 'joao@test.com',
+          registrationCode: 'ABC123',
+          ticketName: 'Geral',
+          amountPaid: 50,
+        }),
+      );
+      expect(mockDb.registration.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'r1' },
+          data: { confirmationEmailSentAt: expect.any(Date) },
+        }),
+      );
+    });
+
+    it('não informa valor pago quando o pagamento ainda não foi quitado', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({
+        ...confirmedReg,
+        payment: { amount: 50, status: 'pending' },
+      });
+      mockDb.registration.update.mockResolvedValue({ id: 'r1' });
+
+      await service.resendConfirmation('r1', OWNER_ID);
+
+      expect(mockMail.sendRegistrationConfirmation).toHaveBeenCalledWith(
+        expect.objectContaining({ amountPaid: null }),
+      );
+    });
+
+    it('lança ForbiddenException quando não é o dono do evento', async () => {
+      mockDb.registration.findUnique.mockResolvedValue(confirmedReg);
+
+      await expect(service.resendConfirmation('r1', 'outro-user')).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(mockMail.sendRegistrationConfirmation).not.toHaveBeenCalled();
+    });
+
+    it('recusa reenvio de inscrição não confirmada', async () => {
+      mockDb.registration.findUnique.mockResolvedValue({ ...confirmedReg, status: 'pending' });
+
+      await expect(service.resendConfirmation('r1', OWNER_ID)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(mockMail.sendRegistrationConfirmation).not.toHaveBeenCalled();
+    });
+
+    it('lança NotFoundException para inscrição inexistente', async () => {
+      mockDb.registration.findUnique.mockResolvedValue(null);
+      await expect(service.resendConfirmation('fake', OWNER_ID)).rejects.toThrow(NotFoundException);
+    });
+
+    it('propaga falha do envio e não marca a inscrição como notificada', async () => {
+      mockDb.registration.findUnique.mockResolvedValue(confirmedReg);
+      mockMail.sendRegistrationConfirmation.mockResolvedValueOnce(false);
+
+      await expect(service.resendConfirmation('r1', OWNER_ID)).rejects.toThrow(
+        ServiceUnavailableException,
+      );
+      expect(mockDb.registration.update).not.toHaveBeenCalled();
     });
   });
 

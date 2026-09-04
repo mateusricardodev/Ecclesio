@@ -59,7 +59,13 @@ export class MailService {
     return this.transporterPromise;
   }
 
-  async sendRegistrationConfirmation(data: RegistrationConfirmationData): Promise<void> {
+  /**
+   * Envia o e-mail de confirmação. Retorna `true` se o SMTP aceitou a mensagem
+   * e `false` se o envio falhou — os disparos automáticos são fire-and-forget e
+   * ignoram o retorno, mas o reenvio manual pelo organizador precisa saber se
+   * saiu para poder avisar na tela.
+   */
+  async sendRegistrationConfirmation(data: RegistrationConfirmationData): Promise<boolean> {
     const from = this.config.get<string>('MAIL_FROM', 'inscrições.app <noreply@inscricoes.app>');
 
     const formattedDate = new Date(data.eventDate).toLocaleDateString('pt-BR', {
@@ -108,8 +114,11 @@ export class MailService {
       } else {
         this.logger.log(`Email de confirmação enviado para ${data.participantEmail}`);
       }
+
+      return true;
     } catch (err) {
       this.logger.error(`Falha ao enviar email para ${data.participantEmail}: ${err}`);
+      return false;
     }
   }
 
