@@ -20,6 +20,16 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
   const logout = useAuthStore((s) => s.logout)
   const navigate = useNavigate()
 
+  const fullName = user?.name ?? 'Voluntário'
+  const initials =
+    fullName
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase() || '?'
+
   function handleLogout() {
     logout()
     navigate('/login', { replace: true })
@@ -31,7 +41,7 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
       <div
         onClick={onClose}
         className={
-          'fixed inset-0 z-30 bg-black/60 transition-opacity duration-200 ' +
+          'fixed inset-0 z-30 bg-ecc-ink/40 backdrop-blur-sm transition-opacity duration-200 ' +
           (open ? 'opacity-100' : 'pointer-events-none opacity-0')
         }
       />
@@ -39,46 +49,58 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
       <aside
         className={
           'fixed inset-y-0 left-0 z-40 flex w-[84%] max-w-[330px] flex-col ' +
-          'bg-[#0A0A12] text-white shadow-2xl transition-transform duration-200 ease-out ' +
+          'bg-ecc-navy text-white shadow-2xl transition-transform duration-200 ease-out ' +
           'pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] ' +
           (open ? 'translate-x-0' : '-translate-x-full')
         }
       >
-        <div className="px-5 pt-6">
-          <p className="text-lg font-bold leading-tight">
-            {user?.name ?? 'Voluntário'}
-          </p>
-          <p className="mt-1 text-sm text-[#9CA3AF] break-all">
-            {user?.email ?? ''}
-          </p>
+        <div className="border-b border-white/10 px-5 pb-5 pt-6">
+          <img
+            src="/logo-ecclesio.png"
+            alt="Ecclesio"
+            className="h-7 object-contain"
+          />
+          <div className="mt-5 flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ecc-gold text-sm font-bold text-ecc-navy">
+              {initials}
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-[15px] font-semibold leading-tight">
+                {fullName}
+              </p>
+              <p className="mt-0.5 truncate text-xs text-white/50">
+                {user?.email ?? 'Voluntário'}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <nav className="mt-6 flex flex-col">
+        <nav className="mt-3 flex flex-col px-2">
           {items.map(({ icon: Icon, label }) => (
             <button
               key={label}
-              className="flex items-center gap-4 px-5 py-4 text-left active:bg-white/5"
+              className="flex items-center gap-4 rounded-xl px-3 py-3.5 text-left transition-colors active:bg-white/10"
             >
-              <Icon className="w-6 h-6 text-[#D1D5DB]" />
+              <Icon className="h-5 w-5 text-white/60" />
               <span className="text-[15px]">{label}</span>
             </button>
           ))}
         </nav>
 
-        <div className="mt-auto px-5 pb-5">
+        <div className="mt-auto px-2 pb-4">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-4 py-4 text-left active:opacity-70"
+            className="flex w-full items-center gap-4 rounded-xl px-3 py-3.5 text-left transition-colors active:bg-white/10"
           >
-            <LogOut className="w-6 h-6 text-[#D1D5DB]" />
+            <LogOut className="h-5 w-5 text-ecc-gold" />
             <span className="text-[15px]">Sair</span>
           </button>
-          <div className="mt-2 flex items-center justify-between text-xs text-[#6B7280]">
+          <div className="mt-2 flex items-center justify-between px-3 text-[11px] text-white/40">
             <span className="flex items-center gap-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#22C55E]" />
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-ecc-gold" />
               Sincronizado em {formatSyncStamp(new Date())}
             </span>
-            <span>Versão: {APP_VERSION}</span>
+            <span>v{APP_VERSION}</span>
           </div>
         </div>
       </aside>

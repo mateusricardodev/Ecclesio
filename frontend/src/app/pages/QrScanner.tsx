@@ -94,33 +94,37 @@ export function QrScanner() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <div className="fixed inset-0 z-50 bg-ecc-navy-deep">
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         playsInline
         muted
       />
-      {/* escurecimento */}
-      <div className="absolute inset-0 bg-black/45" />
+      {/* Véu navy: escurece a câmera sem sair da identidade. Leve, para não
+          atrapalhar quem precisa enxergar o QR na tela do participante. */}
+      <div className="absolute inset-0 bg-ecc-navy/40" />
 
       {/* header */}
-      <div className="absolute inset-x-0 top-0 z-10 bg-[#7C3AED] pt-[env(safe-area-inset-top)]">
-        <div className="flex h-14 items-center px-4">
+      <div className="absolute inset-x-0 top-0 z-10 bg-ecc-navy pt-[env(safe-area-inset-top)] shadow-[0_2px_12px_rgba(0,24,109,0.35)]">
+        <div className="flex h-14 items-center gap-3 px-4">
           <button
             onClick={() => navigate(`/app/evento/${id}`)}
             aria-label="Voltar"
-            className="-ml-1 p-1 text-white active:bg-white/15 rounded-lg"
+            className="-ml-1 rounded-lg p-1 text-white active:bg-white/15"
           >
             <ArrowLeft className="h-6 w-6" />
           </button>
+          <span className="text-lg font-semibold text-white">Ler QR Code</span>
         </div>
       </div>
 
       {/* conteúdo central */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-8">
         {cameraError ? (
-          <p className="max-w-xs text-center text-white">{cameraError}</p>
+          <p className="max-w-xs rounded-2xl bg-white/95 px-5 py-4 text-center text-sm text-ecc-ink">
+            {cameraError}
+          </p>
         ) : (
           <>
             <p className="mb-8 max-w-xs text-center text-[15px] leading-relaxed text-white">
@@ -128,13 +132,24 @@ export function QrScanner() {
               <br />A leitura é automática
             </p>
 
-            <div className="relative h-64 w-64 rounded-2xl border-2 border-white/80" />
+            {/* Moldura com cantos dourados */}
+            <div className="relative h-64 w-64">
+              <span className="absolute left-0 top-0 h-10 w-10 rounded-tl-2xl border-l-[3px] border-t-[3px] border-ecc-gold" />
+              <span className="absolute right-0 top-0 h-10 w-10 rounded-tr-2xl border-r-[3px] border-t-[3px] border-ecc-gold" />
+              <span className="absolute bottom-0 left-0 h-10 w-10 rounded-bl-2xl border-b-[3px] border-l-[3px] border-ecc-gold" />
+              <span className="absolute bottom-0 right-0 h-10 w-10 rounded-br-2xl border-b-[3px] border-r-[3px] border-ecc-gold" />
+            </div>
 
             {torchSupported && (
               <button
                 onClick={toggleTorch}
                 aria-label="Lanterna"
-                className="mt-8 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white active:bg-white/20"
+                className={
+                  'mt-8 flex h-12 w-12 items-center justify-center rounded-full transition-colors ' +
+                  (torchOn
+                    ? 'bg-ecc-gold text-ecc-navy'
+                    : 'bg-white/15 text-white active:bg-white/25')
+                }
               >
                 {torchOn ? <Zap className="h-6 w-6" /> : <ZapOff className="h-6 w-6" />}
               </button>
@@ -145,18 +160,18 @@ export function QrScanner() {
 
       {/* feedback */}
       {feedback && (
-        <div className="absolute inset-x-0 bottom-0 z-20 p-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
-          <div
-            className={
-              'flex items-center gap-3 rounded-2xl px-4 py-4 text-white shadow-lg ' +
-              (feedback.type === 'success'
-                ? 'bg-[#22C55E]'
-                : feedback.type === 'warning'
-                  ? 'bg-[#D97706]'
-                  : 'bg-[#DC2626]')
-            }
-          >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/25">
+        <div className="absolute inset-x-0 bottom-0 z-20 p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+          <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
+            <span
+              className={
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white ' +
+                (feedback.type === 'success'
+                  ? 'bg-ecc-green'
+                  : feedback.type === 'warning'
+                    ? 'bg-ecc-gold-dark'
+                    : 'bg-ecc-red')
+              }
+            >
               {feedback.type === 'success' ? (
                 <Check className="h-5 w-5" strokeWidth={3} />
               ) : feedback.type === 'warning' ? (
@@ -166,9 +181,20 @@ export function QrScanner() {
               )}
             </span>
             <div className="min-w-0">
-              <p className="truncate font-semibold">{feedback.title}</p>
+              <p className="truncate font-semibold text-ecc-ink">{feedback.title}</p>
               {feedback.subtitle && (
-                <p className="truncate text-sm text-white/90">{feedback.subtitle}</p>
+                <p
+                  className={
+                    'truncate text-sm ' +
+                    (feedback.type === 'success'
+                      ? 'text-ecc-green'
+                      : feedback.type === 'warning'
+                        ? 'text-ecc-amber'
+                        : 'text-ecc-red')
+                  }
+                >
+                  {feedback.subtitle}
+                </p>
               )}
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search } from 'lucide-react'
+import { Calendar, ChevronRight, Search, Users } from 'lucide-react'
 import { AppHeader } from '../components/AppHeader'
 import { AppDrawer } from '../components/AppDrawer'
 import { useAppUser } from '../useAppUser'
@@ -35,7 +35,7 @@ export function EventsList() {
   const organization = events[0]?.organization ?? 'Credenciamento'
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-[#0A0A12] text-white">
+    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-ecc-cream text-ecc-ink">
       <AppHeader title={organization} onMenu={() => setDrawerOpen(true)}>
         <div className="flex">
           <TabButton
@@ -51,45 +51,48 @@ export function EventsList() {
         </div>
       </AppHeader>
 
-      <main className="flex-1 px-5 pb-[env(safe-area-inset-bottom)]">
-        {loading && <StateMessage>Carregando eventos…</StateMessage>}
+      <main className="flex-1 px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)]">
+        {loading && (
+          <div className="mt-6 flex flex-col gap-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+        )}
 
         {!loading && error && (
           <StateMessage>
-            <span className="text-red-400">{error}</span>
+            <span className="text-ecc-red">{error}</span>
           </StateMessage>
         )}
 
         {!loading && !error && (
           <>
-            {tab === 'ended' && list.length > 0 && (
-              <div className="pt-6">
-                <h2 className="text-2xl font-bold">Eventos</h2>
-                <p className="mt-1 text-[#9CA3AF]">Veja seus eventos encerrados</p>
-              </div>
-            )}
+            <div className="pt-6">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ecc-gold-dark">
+                Credenciamento
+              </p>
+              <h2 className="mt-1 font-display text-[1.6rem] font-semibold leading-tight text-ecc-navy">
+                Seus eventos
+              </h2>
+              <p className="mt-1 text-sm text-ecc-muted">
+                {tab === 'ongoing'
+                  ? 'Escolha um evento para credenciar participantes.'
+                  : 'Consulte o histórico dos seus eventos.'}
+              </p>
+            </div>
 
             {list.length === 0 ? (
-              <EmptyState
-                tab={tab}
-                onSeeEnded={() => setTab('ended')}
-              />
+              <EmptyState tab={tab} onSeeEnded={() => setTab('ended')} />
             ) : (
-              <ul className="mt-6 space-y-7">
+              <ul className="mt-5 flex flex-col gap-3">
                 {list.map((ev) => (
                   <li key={ev.id}>
-                    <button
+                    <EventCard
+                      event={ev}
+                      muted={tab === 'ended'}
                       onClick={() => navigate(`/app/evento/${ev.id}`)}
-                      className="block w-full text-left active:opacity-80"
-                    >
-                      <p className="text-lg font-semibold">{ev.title}</p>
-                      <p className="mt-1 text-white/90">
-                        {formatPeriod(ev.startDate, ev.endDate)}
-                      </p>
-                      <p className="mt-1 text-sm text-[#6B7280]">
-                        Participantes credenciados {ev.credentialed} de {ev.total}
-                      </p>
-                    </button>
+                    />
                   </li>
                 ))}
               </ul>
@@ -100,6 +103,63 @@ export function EventsList() {
 
       <AppDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </div>
+  )
+}
+
+function EventCard({
+  event: ev,
+  muted,
+  onClick,
+}: {
+  event: CheckinEvent
+  muted?: boolean
+  onClick: () => void
+}) {
+  const pct = ev.total > 0 ? Math.round((ev.credentialed / ev.total) * 100) : 0
+
+  return (
+    <button
+      onClick={onClick}
+      className={
+        'block w-full rounded-2xl border border-ecc-navy/10 bg-white p-4 text-left ' +
+        'shadow-[0_1px_4px_rgba(0,0,0,0.04)] transition-transform active:scale-[0.99] ' +
+        (muted ? 'opacity-70' : '')
+      }
+    >
+      <div className="flex items-center gap-3">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ecc-navy/[0.06]">
+          <Calendar className="h-[19px] w-[19px] text-ecc-navy" />
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-semibold leading-snug text-ecc-ink">
+            {ev.title}
+          </p>
+          <p className="mt-0.5 truncate text-xs text-ecc-muted">
+            {formatPeriod(ev.startDate, ev.endDate)}
+          </p>
+        </div>
+
+        <ChevronRight className="h-[18px] w-[18px] shrink-0 text-ecc-faint" />
+      </div>
+
+      {/* Progresso de credenciamento */}
+      <div className="mt-3.5">
+        <div className="flex items-center justify-between text-xs">
+          <span className="inline-flex items-center gap-1.5 text-ecc-muted">
+            <Users className="h-3.5 w-3.5" />
+            {ev.credentialed} de {ev.total} credenciados
+          </span>
+          <span className="font-semibold text-ecc-navy">{pct}%</span>
+        </div>
+        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-ecc-navy/[0.08]">
+          <div
+            className="h-full rounded-full bg-ecc-gold transition-[width] duration-500"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </div>
+    </button>
   )
 }
 
@@ -116,10 +176,10 @@ function TabButton({
     <button
       onClick={onClick}
       className={
-        'flex-1 pb-3 pt-2 text-center text-[15px] transition-colors ' +
+        'flex-1 border-b-2 pb-3 pt-2 text-center text-[15px] transition-colors ' +
         (active
-          ? 'border-b-2 border-white font-medium text-white'
-          : 'border-b-2 border-transparent text-white/60')
+          ? 'border-ecc-gold font-semibold text-white'
+          : 'border-transparent text-white/55')
       }
     >
       {label}
@@ -127,30 +187,24 @@ function TabButton({
   )
 }
 
-function EmptyState({
-  tab,
-  onSeeEnded,
-}: {
-  tab: Tab
-  onSeeEnded: () => void
-}) {
+function EmptyState({ tab, onSeeEnded }: { tab: Tab; onSeeEnded: () => void }) {
   if (tab === 'ended') {
-    return (
-      <StateMessage>Você não possui eventos encerrados.</StateMessage>
-    )
+    return <StateMessage>Você não possui eventos encerrados.</StateMessage>
   }
   return (
-    <div className="flex flex-col items-center px-2 pt-24 text-center">
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#1A1D2B]">
-        <Search className="h-8 w-8 text-[#9CA3AF]" />
-      </div>
-      <h3 className="mt-6 text-lg font-bold">Nenhum evento encontrado</h3>
-      <p className="mt-2 text-[#9CA3AF]">
+    <div className="mt-5 rounded-2xl border border-ecc-navy/10 bg-white p-8 text-center shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-ecc-navy/[0.06]">
+        <Search className="h-5 w-5 text-ecc-navy" />
+      </span>
+      <h3 className="mt-4 font-display text-[1.35rem] font-semibold text-ecc-navy">
+        Nenhum evento encontrado
+      </h3>
+      <p className="mt-1.5 text-sm text-ecc-muted">
         Você não possui nenhum evento em andamento no momento.
       </p>
       <button
         onClick={onSeeEnded}
-        className="mt-6 w-full rounded-xl border border-white/15 py-4 text-[#9CA3AF] active:bg-white/5"
+        className="mt-5 w-full rounded-xl border border-ecc-navy/20 py-3 text-sm font-semibold text-ecc-navy transition-colors active:bg-ecc-navy/5"
       >
         Ver eventos encerrados
       </button>
@@ -158,9 +212,24 @@ function EmptyState({
   )
 }
 
+function CardSkeleton() {
+  return (
+    <div className="animate-pulse rounded-2xl border border-ecc-navy/10 bg-white p-4">
+      <div className="flex items-center gap-3">
+        <span className="h-11 w-11 shrink-0 rounded-xl bg-ecc-navy/[0.06]" />
+        <div className="flex-1 space-y-2">
+          <div className="h-3.5 w-2/3 rounded bg-ecc-navy/[0.08]" />
+          <div className="h-2.5 w-2/5 rounded bg-ecc-navy/[0.06]" />
+        </div>
+      </div>
+      <div className="mt-4 h-1.5 rounded-full bg-ecc-navy/[0.06]" />
+    </div>
+  )
+}
+
 function StateMessage({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center pt-24 text-center text-[#9CA3AF]">
+    <div className="flex flex-col items-center pt-20 text-center text-sm text-ecc-muted">
       {children}
     </div>
   )

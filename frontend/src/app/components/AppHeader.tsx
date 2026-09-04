@@ -17,29 +17,29 @@ export function AppHeader({
   children,
 }: AppHeaderProps) {
   return (
-    <header className="bg-[#7C3AED] text-white pt-[env(safe-area-inset-top)] sticky top-0 z-20">
+    <header className="sticky top-0 z-20 bg-ecc-navy text-white pt-[env(safe-area-inset-top)] shadow-[0_2px_12px_rgba(0,24,109,0.20)]">
       <div className="flex items-center gap-3 px-4 h-14">
         {onBack && (
           <button
             onClick={onBack}
             aria-label="Voltar"
-            className="-ml-1 p-1 rounded-lg active:bg-white/15"
+            className="-ml-1 rounded-lg p-1 active:bg-white/15"
           >
-            <ArrowLeft className="w-6 h-6" />
+            <ArrowLeft className="h-6 w-6" />
           </button>
         )}
         {onMenu && (
           <button
             onClick={onMenu}
             aria-label="Abrir menu"
-            className="-ml-1 p-1 rounded-lg active:bg-white/15"
+            className="-ml-1 rounded-lg p-1 active:bg-white/15"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="h-6 w-6" />
           </button>
         )}
         <span
           className={
-            'text-lg font-semibold truncate ' +
+            'truncate text-lg font-semibold ' +
             (centerTitle ? 'flex-1 text-center' : '')
           }
         >

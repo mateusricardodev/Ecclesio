@@ -17,51 +17,65 @@ export function ParticipantCard({
   onViewData,
 }: ParticipantCardProps) {
   return (
-    <div className="flex items-start gap-3 px-5 py-4">
+    <div className="flex items-start gap-3 px-4 py-4">
+      {/* Selo de credenciado — verde do painel, só quando já fez check-in. */}
       {p.checkedIn && (
-        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#22C55E]">
-          <Check className="h-4 w-4 text-white" strokeWidth={3} />
+        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ecc-green">
+          <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
         </span>
       )}
 
       <div className="min-w-0 flex-1">
-        <p className="font-semibold leading-snug">{p.name}</p>
-        <p className="mt-1 text-[15px] text-white/90">CPF: {p.cpf ?? '—'}</p>
-        <p className="mt-0.5 text-[15px] text-[#6B7280]">
-          Inscrição: {p.code ?? '—'}
+        <p className="truncate font-semibold leading-snug text-ecc-ink">
+          {p.name}
         </p>
-        <p className="mt-0.5 text-[15px] text-white/90">
-          Categoria: {p.category ?? '—'}
-        </p>
+
+        <div className="mt-1.5 flex flex-col gap-0.5">
+          <MetaLine label="CPF" value={p.cpf} />
+          <MetaLine label="Inscrição" value={p.code} />
+          <MetaLine label="Categoria" value={p.category} />
+        </div>
+
         <button
           onClick={onViewData}
-          className="mt-1 text-[15px] font-medium text-[#A78BFA] active:opacity-70"
+          className="mt-2 text-[13px] font-semibold text-ecc-gold-dark active:opacity-70"
         >
           Ver dados
         </button>
       </div>
 
-      <div className="shrink-0 pt-1">
+      {/* Coluna de ação com largura fixa: o rótulo quebra em duas linhas em vez
+          de espremer o nome e o CPF, que são o que o voluntário precisa ler. */}
+      <div className="w-[108px] shrink-0 pt-0.5">
         {p.checkedIn ? (
           <button
             onClick={onUndo}
             disabled={busy}
-            className="flex items-center gap-2 rounded-lg border border-[#7C3AED] px-3 py-2.5 text-[13px] font-semibold text-[#A78BFA] active:bg-[#7C3AED]/10 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-ecc-navy/20 px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-ecc-navy transition-colors active:bg-ecc-navy/5 disabled:opacity-50"
           >
-            <RotateCcw className="h-4 w-4" />
+            <RotateCcw className="h-3.5 w-3.5 shrink-0" />
             Desfazer Check-in
           </button>
         ) : (
           <button
             onClick={onCheckIn}
             disabled={busy}
-            className="flex items-center gap-2 rounded-lg bg-[#7C3AED] px-3 py-2.5 text-[13px] font-semibold text-white active:bg-[#6D28D9] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-ecc-navy px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-white shadow-[0_2px_12px_rgba(0,24,109,0.20)] transition-colors active:bg-ecc-navy-deep disabled:opacity-50"
           >
-            <Check className="h-4 w-4" strokeWidth={3} />
+            <Check className="h-3.5 w-3.5 shrink-0" strokeWidth={3} />
             Fazer Check-in
           </button>
         )}
       </div>
     </div>
+  )
+}
+
+function MetaLine({ label, value }: { label: string; value: string | null }) {
+  return (
+    <p className="truncate text-[13px] text-ecc-muted">
+      <span className="text-ecc-faint">{label}: </span>
+      {value ?? '—'}
+    </p>
   )
 }
