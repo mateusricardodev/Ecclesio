@@ -64,6 +64,7 @@ export class CheckinService {
       cpf: reg.cpf,
       code: reg.code,
       category: reg.ticket?.name ?? null,
+      status: reg.status,
       paymentStatus: reg.payment?.status ?? null,
       paymentProvider: reg.payment?.provider ?? null,
       checkedIn: reg.checkedIn,

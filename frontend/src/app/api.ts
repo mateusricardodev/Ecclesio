@@ -20,6 +20,7 @@ export interface CheckinParticipant {
   cpf: string | null
   code: string | null
   category: string | null
+  status: string
   paymentStatus: string | null
   paymentProvider: string | null
   checkedIn: boolean

@@ -28,3 +28,16 @@ export function groupLetter(name: string): string {
   const first = name.trim().charAt(0).toUpperCase()
   return first.normalize('NFD').replace(/[̀-ͯ]/g, '') || '#'
 }
+
+const REGISTRATION_STATUS_LABELS: Record<string, string> = {
+  pending: 'Pendente',
+  confirmed: 'Confirmado',
+  canceled: 'Cancelado',
+  overbooked: 'Pago (sem vaga)',
+}
+
+/** Rótulo do status da inscrição ("pending" → "Pendente"). */
+export function formatRegistrationStatus(status: string | null): string | null {
+  if (!status) return null
+  return REGISTRATION_STATUS_LABELS[status] ?? status
+}

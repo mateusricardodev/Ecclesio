@@ -1,5 +1,6 @@
 import { Check, RotateCcw } from 'lucide-react'
 import type { CheckinParticipant } from '../api'
+import { formatRegistrationStatus } from '../format'
 
 interface ParticipantCardProps {
   participant: CheckinParticipant
@@ -33,7 +34,7 @@ export function ParticipantCard({
         <div className="mt-1.5 flex flex-col gap-0.5">
           <MetaLine label="CPF" value={p.cpf} />
           <MetaLine label="Inscrição" value={p.code} />
-          <MetaLine label="Categoria" value={p.category} />
+          <MetaLine label="Status" value={formatRegistrationStatus(p.status)} />
         </div>
 
         <button
