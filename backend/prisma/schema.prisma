@@ -58,6 +58,10 @@ model Event {
   isPublished     Boolean              @default(false)
   about           String?
   formFields      String?
+  // Itens avaliados na pesquisa pós-evento (JSON de strings). null = lista padrão.
+  feedbackItems   String?
+  // Pesquisa aceitando respostas — o organizador abre quando o evento termina.
+  feedbackOpen    Boolean              @default(false)
   createdBy       String
   createdAt       DateTime             @default(now())
   user            User                 @relation(fields: [createdBy], references: [id])
@@ -65,6 +69,7 @@ model Event {
   registrations   Registration[]
   paymentMethods  EventPaymentMethod[]
   volunteers      EventVolunteer[]
+  feedbacks       EventFeedback[]
 }
 
 model EventVolunteer {
@@ -124,6 +129,7 @@ model Registration {
   ticket      Ticket?            @relation(fields: [ticketId], references: [id])
   payment     Payment?
   checkinLogs CheckinLog[]
+  feedback    EventFeedback?
 }
 
 model CheckinLog {
@@ -153,4 +159,24 @@ model Payment {
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   registration      Registration  @relation(fields: [registrationId], references: [id])
+}
+
+/// Resposta da pesquisa de satisfação pós-evento. `registrationId` só existe
+/// quando o participante abriu o link individual enviado por e-mail — o link
+/// público genérico gera respostas anônimas (várias linhas com NULL, que o
+/// índice único do Postgres não conflita entre si).
+model EventFeedback {
+  id             String        @id @default(uuid())
+  eventId        String
+  registrationId String?       @unique
+  respondentName String?
+  // JSON: [{ item, score (0-10 ou null quando "não avaliei"), comment }]
+  ratings        String
+  improvements   String?
+  negatives      String?
+  createdAt      DateTime      @default(now())
+  event          Event         @relation(fields: [eventId], references: [id])
+  registration   Registration? @relation(fields: [registrationId], references: [id])
+
+  @@index([eventId])
 }

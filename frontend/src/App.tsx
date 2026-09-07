@@ -14,6 +14,8 @@ import { EventSetupPage } from './pages/EventSetupPage'
 import { EventPublic } from './pages/EventPublic'
 import { PublicRegistration } from './pages/PublicRegistration'
 import { PixPayment } from './pages/PixPayment'
+import { PublicFeedback } from './pages/PublicFeedback'
+import { EventFeedback } from './pages/EventFeedback'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LandingPage } from './pages/LandingPage'
 import { EventsList } from './app/pages/EventsList'
@@ -31,6 +33,7 @@ export default function App() {
         <Route path="/evento/:slug" element={<EventPublic />} />
         <Route path="/evento/:slug/inscricao" element={<PublicRegistration />} />
         <Route path="/evento/:slug/pagamento-pix" element={<PixPayment />} />
+        <Route path="/evento/:slug/avaliacao" element={<PublicFeedback />} />
         <Route
           path="/dashboard"
           element={
@@ -92,6 +95,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <EventDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/:id/avaliacao"
+          element={
+            <ProtectedRoute>
+              <EventFeedback />
             </ProtectedRoute>
           }
         />

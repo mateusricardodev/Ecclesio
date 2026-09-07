@@ -10,6 +10,7 @@ import { RegistrationsModule } from './registrations/registrations.module.js';
 import { PaymentsModule } from './payments/payments.module.js';
 import { CheckinModule } from './checkin/checkin.module.js';
 import { PublicModule } from './public/public.module.js';
+import { FeedbackModule } from './feedback/feedback.module.js';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PublicModule } from './public/public.module.js';
     PaymentsModule,
     CheckinModule,
     PublicModule,
+    FeedbackModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

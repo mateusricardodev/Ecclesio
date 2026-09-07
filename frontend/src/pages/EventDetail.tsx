@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Clock, XCircle, Download, FileDown, Mail } from 'lucide-react'
+import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Clock, XCircle, Download, FileDown, Mail, Star } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { useAuthStore } from '../store/auth.store'
 import api from '../api/axios'
@@ -280,18 +280,32 @@ export function EventDetail() {
         </div>
 
         {event && user?.id === event.createdBy && (
-          <Link
-            to={`/events/${id}/edit`}
-            className="shrink-0 inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
-            style={{
-              border: '1.5px solid rgba(0,24,109,0.25)',
-              color: '#00186D',
-              fontFamily: 'var(--font-sans)',
-            }}
-          >
-            <Pencil size={15} />
-            Editar evento
-          </Link>
+          <div className="shrink-0 flex items-center gap-2">
+            <Link
+              to={`/events/${id}/avaliacao`}
+              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+              style={{
+                border: '1.5px solid rgba(212,177,106,0.55)',
+                color: '#8A6D2F',
+                fontFamily: 'var(--font-sans)',
+              }}
+            >
+              <Star size={15} />
+              Avaliação
+            </Link>
+            <Link
+              to={`/events/${id}/edit`}
+              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+              style={{
+                border: '1.5px solid rgba(0,24,109,0.25)',
+                color: '#00186D',
+                fontFamily: 'var(--font-sans)',
+              }}
+            >
+              <Pencil size={15} />
+              Editar evento
+            </Link>
+          </div>
         )}
       </div>
 

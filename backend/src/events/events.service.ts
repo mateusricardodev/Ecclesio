@@ -116,6 +116,7 @@ export class EventsService {
 
       await tx.payment.deleteMany({ where: { registrationId: { in: regIds } } });
       await tx.checkinLog.deleteMany({ where: { registrationId: { in: regIds } } });
+      await tx.eventFeedback.deleteMany({ where: { eventId: id } });
       await tx.registration.deleteMany({ where: { eventId: id } });
       await tx.eventPaymentMethod.deleteMany({ where: { eventId: id } });
       await tx.eventVolunteer.deleteMany({ where: { eventId: id } });

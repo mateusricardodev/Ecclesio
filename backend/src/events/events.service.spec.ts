@@ -18,6 +18,7 @@ const mockDb: any = {
   },
   payment: { deleteMany: jest.fn() },
   checkinLog: { deleteMany: jest.fn() },
+  eventFeedback: { deleteMany: jest.fn() },
   eventVolunteer: { deleteMany: jest.fn() },
   ticket: { deleteMany: jest.fn() },
   eventPaymentMethod: {
