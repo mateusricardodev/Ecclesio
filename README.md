@@ -223,14 +223,37 @@ User
  ├── Event
  │    ├── EventPaymentMethod
  │    ├── Registration
- │    │     └── Payment
- │    ├── Ticket
- │    └── CheckinLog
- │
+ │    │     └── Payment ──┐
+ │    ├── Ticket          │
+ │    └── CheckinLog      │
+ │                        │
+ ├── LedgerEntry ◄────────┘
+ ├── PayoutRequest
  └── EventVolunteer
 ```
 
 O sistema utiliza PostgreSQL como banco de dados e Prisma como camada de acesso.
+
+### Carteira do organizador
+
+Pagamentos online caem na conta da plataforma. O que pertence ao organizador é
+registrado como crédito em `LedgerEntry` e resgatado via `PayoutRequest`:
+
+- `Payment.amount` é o total cobrado; `baseAmount` é a parte do organizador e
+  `feeAmount` a taxa de serviço que fica com a plataforma.
+- **O saldo nunca é uma coluna** — é sempre a soma de `LedgerEntry`. Uma linha
+  entra no saldo sacável quando `availableAt <= agora`; vendas ficam retidas até
+  `PAYOUT_HOLD_DAYS` depois do fim do evento, que é a proteção contra estornar
+  um PIX já resgatado.
+- O crédito nasce no `confirmPayment` do webhook, dentro da mesma transação que
+  marca o pagamento como pago. O índice único de `LedgerEntry.paymentId` é a
+  garantia de que um webhook repetido não credita duas vezes.
+- Pagamento em dinheiro e confirmação manual **não** geram crédito: o valor foi
+  direto para o organizador e nunca passou pela plataforma.
+- Pedir um resgate debita o razão na mesma transação serializável que confere o
+  saldo. Recusar gera uma linha de estorno, em vez de apagar o débito.
+- O repasse em si é manual na v1: o admin envia o PIX e marca como pago em
+  `/admin/saques`.
 
 ---
 
@@ -275,6 +298,18 @@ PAYMENT_PROVIDER=mock
 
 MERCADOPAGO_ACCESS_TOKEN=""
 MERCADOPAGO_WEBHOOK_SECRET=""
+
+# Taxa de serviço da plataforma, cobrada POR CIMA do valor da inscrição
+# (inscrição de R$ 100 + 5% = participante paga R$ 105 e o organizador
+# recebe R$ 100). Um evento pode sobrescrever via Event.feePercent/feeFixed.
+PLATFORM_FEE_PERCENT=5
+PLATFORM_FEE_FIXED=0
+PLATFORM_FEE_MIN=0
+
+# Carteira: dias de retenção do saldo contados a partir do fim do evento,
+# e valor mínimo de um pedido de resgate.
+PAYOUT_HOLD_DAYS=7
+MIN_PAYOUT_AMOUNT=10
 
 MAIL_HOST="smtp-relay.brevo.com"
 MAIL_PORT=587
@@ -401,6 +436,13 @@ npm run test:e2e
 /events/:id/edit
 /events/:id/registrations/new
 /buscar-inscricoes
+/financeiro
+```
+
+### Admin da plataforma
+
+```text
+/admin/saques
 ```
 
 ### Credenciamento
