@@ -12,6 +12,7 @@ import { CheckinModule } from './checkin/checkin.module.js';
 import { PublicModule } from './public/public.module.js';
 import { FeedbackModule } from './feedback/feedback.module.js';
 import { WalletModule } from './wallet/wallet.module.js';
+import { VolunteersModule } from './volunteers/volunteers.module.js';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { WalletModule } from './wallet/wallet.module.js';
     PublicModule,
     FeedbackModule,
     WalletModule,
+    VolunteersModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
