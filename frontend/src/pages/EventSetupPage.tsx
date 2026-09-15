@@ -123,10 +123,10 @@ export function EventSetupPage() {
     <DashboardLayout active="eventos">
       <EventWizardHeader active="page" eventId={id} />
 
-      <div className="max-w-4xl mx-auto flex gap-6 pb-8">
+      <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-4 md:gap-6 pb-8">
 
-        {/* Sidebar de seções */}
-        <aside className="w-52 shrink-0">
+        {/* Sidebar de seções — vira faixa de largura cheia no mobile */}
+        <aside className="w-full md:w-52 md:shrink-0">
           <WizardCard>
             <p
               className="text-[10px] font-semibold uppercase tracking-[0.1em]"
@@ -144,7 +144,7 @@ export function EventSetupPage() {
         </aside>
 
         {/* Conteúdo principal */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 min-w-0 flex flex-col gap-4">
 
           {/* Nome */}
           <WizardCard>
@@ -225,7 +225,7 @@ export function EventSetupPage() {
                 className="flex items-center gap-2 rounded-xl px-3 py-2.5"
                 style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.1)' }}
               >
-                <span className="flex-1 text-xs truncate" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <span className="flex-1 min-w-0 text-xs truncate" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                   {publicUrl}
                 </span>
                 <button onClick={copyLink} className="p-1 rounded transition-all" style={{ color: copied ? '#00186D' : '#6B7280' }} title="Copiar link">
@@ -242,7 +242,7 @@ export function EventSetupPage() {
               </p>
             )}
 
-            <div className="flex items-center gap-3 pt-1" style={{ borderTop: '1px solid rgba(0,24,109,0.07)' }}>
+            <div className="flex items-center flex-wrap gap-x-3 gap-y-2 pt-1" style={{ borderTop: '1px solid rgba(0,24,109,0.07)' }}>
               <span className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
                 Publicar evento
               </span>
@@ -252,7 +252,7 @@ export function EventSetupPage() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center flex-wrap gap-3">
               <button onClick={handleSave} disabled={saving} style={wizardSecondaryBtn()}>
                 {saving ? 'Salvando...' : 'Salvar'}
               </button>
