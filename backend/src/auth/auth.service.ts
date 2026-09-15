@@ -23,11 +23,24 @@ export class AuthService {
         where: { email: dto.email },
       });
 
-      if (exists) {
-        throw new ConflictException('E-mail já cadastrado');
-      }
-
       const hashed = await bcrypt.hash(dto.password, 10);
+
+      if (exists) {
+        // Conta-sombra: criada automaticamente quando a pessoa se inscreveu
+        // num evento, com senha aleatória que ninguém nunca soube. Sem isso o
+        // e-mail dela ficaria permanentemente bloqueado — não conseguiria se
+        // cadastrar (o e-mail "já existe") nem entrar (não tem a senha).
+        // Assumir a conta preserva o histórico de inscrições dela.
+        if (!exists.isShadow) {
+          throw new ConflictException('E-mail já cadastrado');
+        }
+
+        return await this.prisma.db.user.update({
+          where: { id: exists.id },
+          data: { name: dto.name, password: hashed, isShadow: false },
+          select: { id: true, name: true, email: true, role: true, createdAt: true },
+        });
+      }
 
       const user = await this.prisma.db.user.create({
         data: { name: dto.name, email: dto.email, password: hashed },
