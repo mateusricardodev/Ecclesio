@@ -5,6 +5,7 @@ import { EventWizardHeader } from '../components/EventWizardHeader'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { WizardField, WizardCard, WizardInput, WizardSelect, wizardNavBtn, wizardPrimaryBtn, wizardSecondaryBtn } from '../components/WizardShared'
 import api from '../api/axios'
+import { computeCharge, formatBRL, type FeeConfig } from '../lib/money'
 
 interface PaymentMethod {
   id: string
@@ -14,6 +15,10 @@ interface PaymentMethod {
   description: string | null
   startDate: string | null
   endDate: string | null
+  /** Taxa de serviço calculada pelo backend (0 para dinheiro). */
+  feeAmount: number
+  /** Quanto o participante paga: valor da modalidade + taxa. */
+  totalAmount: number
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -28,6 +33,7 @@ export function EventSetupPayment() {
   const navigate = useNavigate()
 
   const [methods, setMethods] = useState<PaymentMethod[]>([])
+  const [feeConfig, setFeeConfig] = useState<FeeConfig | null>(null)
   const [saving, setSaving]   = useState(false)
   const [form, setForm]       = useState({
     type: 'pix', value: '', installments: '1', description: '', startDate: '', endDate: '',
@@ -36,7 +42,16 @@ export function EventSetupPayment() {
   useEffect(() => {
     if (!id) return
     api.get(`/events/${id}/payment-methods`).then(({ data }) => setMethods(data))
+    api.get(`/events/${id}/fee-config`).then(({ data }) => setFeeConfig(data))
   }, [id])
+
+  // Preview enquanto digita. Dinheiro é recebido direto pelo organizador, sem
+  // passar pela plataforma — por isso não tem taxa.
+  const previewBase = Number(form.value)
+  const previewCharge =
+    feeConfig && form.type !== 'cash' && previewBase > 0
+      ? computeCharge(previewBase, feeConfig)
+      : null
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
@@ -104,6 +119,11 @@ export function EventSetupPayment() {
                         {TYPE_LABELS[m.type] ?? m.type}
                       </span>
                     </div>
+                    {m.feeAmount > 0 && (
+                      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                        Participante paga {formatBRL(m.totalAmount)} &middot; taxa de serviço {formatBRL(m.feeAmount)}
+                      </p>
+                    )}
                     {m.description && (
                       <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{m.description}</p>
                     )}
@@ -158,6 +178,36 @@ export function EventSetupPayment() {
               </div>
             </WizardField>
           </div>
+
+          {previewCharge && (
+            <div
+              className="rounded-xl px-4 py-3 flex flex-col gap-1"
+              style={{ background: 'rgba(212,177,106,0.12)', border: '1px solid rgba(212,177,106,0.35)' }}
+            >
+              <div className="flex items-center justify-between text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
+                <span style={{ color: '#33425C' }}>Você recebe</span>
+                <span className="font-semibold" style={{ color: '#0A0A09' }}>{formatBRL(previewCharge.base)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
+                <span style={{ color: '#6B7280' }}>Taxa de serviço</span>
+                <span style={{ color: '#6B7280' }}>+ {formatBRL(previewCharge.fee)}</span>
+              </div>
+              <div
+                className="flex items-center justify-between text-sm pt-1 mt-1"
+                style={{ fontFamily: 'var(--font-sans)', borderTop: '1px solid rgba(0,24,109,0.1)' }}
+              >
+                <span className="font-semibold" style={{ color: '#00186D' }}>Participante paga</span>
+                <span className="font-bold" style={{ color: '#00186D' }}>{formatBRL(previewCharge.total)}</span>
+              </div>
+            </div>
+          )}
+
+          {form.type === 'cash' && Number(form.value) > 0 && (
+            <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+              Pagamento em dinheiro é recebido direto por você, sem taxa de serviço e sem entrar no
+              saldo da plataforma.
+            </p>
+          )}
 
           <WizardField label="Descrição">
             <WizardInput name="description" type="text" value={form.description} onChange={handleChange} placeholder="Ex: R$ 50 na inscrição + R$ 50 no dia do evento" />

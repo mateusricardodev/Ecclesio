@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import api from '../api/axios'
+import { formatBRL } from '../lib/money'
 
 interface PaymentMethod {
   id: string
@@ -8,6 +9,10 @@ interface PaymentMethod {
   value: string
   installments: number
   description: string | null
+  /** Taxa de serviço da plataforma, já calculada no backend (0 para dinheiro). */
+  feeAmount: number
+  /** Total efetivamente cobrado: valor da inscrição + taxa. */
+  totalAmount: number
 }
 
 interface EventInfo {
@@ -518,6 +523,8 @@ export function PublicRegistration() {
                 event.paymentMethods.map(method => {
                   const selected = method.id === paymentMethodId
                   const value    = Number(method.value)
+                  const fee      = Number(method.feeAmount ?? 0)
+                  const total    = Number(method.totalAmount ?? value)
                   return (
                     <button
                       key={method.id}
@@ -535,9 +542,14 @@ export function PublicRegistration() {
                           {TYPE_LABELS[method.type] ?? method.type}
                         </span>
                         <span className="font-bold" style={{ color: selected ? '#00186D' : '#33425C', fontFamily: 'var(--font-sans)' }}>
-                          {value === 0 ? 'Grátis' : `R$ ${value.toFixed(2).replace('.', ',')}`}
+                          {value === 0 ? 'Grátis' : formatBRL(total)}
                         </span>
                       </div>
+                      {fee > 0 && (
+                        <p className="text-xs mt-1" style={{ color: selected ? 'rgba(0,24,109,0.6)' : '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                          {formatBRL(value)} de inscrição + {formatBRL(fee)} de taxa de serviço
+                        </p>
+                      )}
                       {method.description && (
                         <p className="text-xs mt-1" style={{ color: selected ? 'rgba(0,24,109,0.6)' : '#6B7280', fontFamily: 'var(--font-sans)' }}>
                           {method.description}
