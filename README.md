@@ -435,6 +435,7 @@ npm run test:e2e
 /events/:id
 /events/:id/edit
 /events/:id/registrations/new
+/events/:id/equipe
 /buscar-inscricoes
 /financeiro
 ```
