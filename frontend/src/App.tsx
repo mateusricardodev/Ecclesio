@@ -16,6 +16,7 @@ import { PublicRegistration } from './pages/PublicRegistration'
 import { PixPayment } from './pages/PixPayment'
 import { PublicFeedback } from './pages/PublicFeedback'
 import { EventFeedback } from './pages/EventFeedback'
+import { EventVolunteers } from './pages/EventVolunteers'
 import { Wallet } from './pages/Wallet'
 import { AdminPayouts } from './pages/AdminPayouts'
 import { ProtectedRoute } from './components/ProtectedRoute'
@@ -105,6 +106,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <EventFeedback />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/:id/equipe"
+          element={
+            <ProtectedRoute>
+              <EventVolunteers />
             </ProtectedRoute>
           }
         />

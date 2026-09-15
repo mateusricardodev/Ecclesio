@@ -282,6 +282,18 @@ export function EventDetail() {
         {event && user?.id === event.createdBy && (
           <div className="shrink-0 flex items-center gap-2">
             <Link
+              to={`/events/${id}/equipe`}
+              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+              style={{
+                border: '1.5px solid rgba(0,24,109,0.25)',
+                color: '#00186D',
+                fontFamily: 'var(--font-sans)',
+              }}
+            >
+              <Users size={15} />
+              Equipe
+            </Link>
+            <Link
               to={`/events/${id}/avaliacao`}
               className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
               style={{
