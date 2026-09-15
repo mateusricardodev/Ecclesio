@@ -10,6 +10,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { PaymentsService } from '../payments/payments.service.js';
 import { MailService } from '../mail/mail.service.js';
 import { generateUniqueRegistrationCode } from '../common/registration-code.js';
+import { computeCharge, resolveFeeConfig } from '../common/platform-fee.js';
 import { PublicRegistrationDto } from './dto/public-registration.dto.js';
 
 /**
@@ -53,6 +54,8 @@ export class PublicService {
         organizerPhone: true,
         isPublished: true,
         formFields: true,
+        feePercent: true,
+        feeFixed: true,
         paymentMethods: {
           select: {
             id: true, type: true, value: true, installments: true, description: true,
@@ -66,12 +69,24 @@ export class PublicService {
 
     if (!event || !event.isPublished) throw new NotFoundException('Evento não encontrado');
 
-    // Expõe apenas modalidades dentro da janela de vigência (lotes ativos)
+    const feeConfig = resolveFeeConfig(event);
+    const { feePercent: _fp, feeFixed: _ff, ...eventFields } = event;
+
+    // Expõe apenas modalidades dentro da janela de vigência (lotes ativos),
+    // já com a taxa de serviço calculada para a tela pública mostrar o total
+    // antes do participante decidir. Dinheiro não passa pela plataforma, então
+    // não tem taxa.
     return {
-      ...event,
+      ...eventFields,
       paymentMethods: event.paymentMethods
         .filter((m) => isPaymentMethodActive(m))
-        .map(({ startDate: _s, endDate: _e, ...rest }) => rest),
+        .map(({ startDate: _s, endDate: _e, ...rest }) => {
+          const charge =
+            rest.type === 'cash'
+              ? { base: Number(rest.value), fee: 0, total: Number(rest.value) }
+              : computeCharge(Number(rest.value), feeConfig);
+          return { ...rest, feeAmount: charge.fee, totalAmount: charge.total };
+        }),
     };
   }
 
@@ -108,7 +123,10 @@ export class PublicService {
 
     const event = await this.prisma.db.event.findUnique({
       where: { slug },
-      select: { id: true, title: true, isPublished: true, date: true, endDate: true, location: true, maxParticipants: true },
+      select: {
+        id: true, title: true, isPublished: true, date: true, endDate: true,
+        location: true, maxParticipants: true, feePercent: true, feeFixed: true,
+      },
     });
 
     if (!event || !event.isPublished) throw new NotFoundException('Evento não encontrado');
@@ -125,11 +143,18 @@ export class PublicService {
     if (!isPaymentMethodActive(paymentMethod))
       throw new BadRequestException('Esta modalidade não está mais disponível');
 
-    const amount = Number(paymentMethod.value);
+    const baseAmount = Number(paymentMethod.value);
     // Dinheiro (valor > 0): vaga garantida, mas a inscrição fica pendente até o
     // organizador registrar o recebimento presencial (confirmação manual).
-    const isCashPayment = amount > 0 && paymentMethod.type === 'cash';
-    const requiresOnlinePayment = amount > 0 && !isCashPayment;
+    const isCashPayment = baseAmount > 0 && paymentMethod.type === 'cash';
+    const requiresOnlinePayment = baseAmount > 0 && !isCashPayment;
+
+    // Taxa de serviço por cima do valor da inscrição: o participante paga
+    // base + taxa, o organizador recebe a base cheia. Só incide sobre
+    // pagamento online — em dinheiro o valor nunca passa pela plataforma.
+    const charge = requiresOnlinePayment
+      ? computeCharge(baseAmount, resolveFeeConfig(event))
+      : { base: baseAmount, fee: 0, total: baseAmount };
 
     // CPF já tem inscrição confirmada neste evento
     const alreadyConfirmed = await this.prisma.db.registration.findFirst({
@@ -147,13 +172,19 @@ export class PublicService {
           status: 'pending',
           payment: { provider: 'cash', status: 'pending' },
         },
-        select: { id: true, code: true, payment: { select: { amount: true } } },
+        select: {
+          id: true,
+          code: true,
+          payment: { select: { amount: true, baseAmount: true } },
+        },
       });
       if (existing) {
         return {
           registrationId: existing.id,
           code: existing.code,
-          amount: Number(existing.payment?.amount ?? amount),
+          amount: Number(existing.payment?.amount ?? charge.total),
+          baseAmount: Number(existing.payment?.baseAmount ?? charge.base),
+          feeAmount: 0, // dinheiro nunca passa pela plataforma
           status: 'pending' as const,
           paymentType: 'cash' as const,
           reused: true,
@@ -179,6 +210,8 @@ export class PublicService {
               qrCodeCopiaECola: true,
               expiresAt: true,
               amount: true,
+              baseAmount: true,
+              feeAmount: true,
             },
           },
         },
@@ -194,6 +227,8 @@ export class PublicService {
           qrCodeCopiaECola: existing.payment.qrCodeCopiaECola,
           expiresAt: existing.payment.expiresAt,
           amount: existing.payment.amount,
+          baseAmount: existing.payment.baseAmount,
+          feeAmount: existing.payment.feeAmount,
           status: 'pending' as const,
           reused: true,
         };
@@ -238,7 +273,9 @@ export class PublicService {
         await tx.payment.create({
           data: {
             registrationId: created.id,
-            amount,
+            amount: charge.total,
+            baseAmount: charge.base,
+            feeAmount: charge.fee,
             status: 'pending',
             method: paymentMethod.type,
             provider: 'cash',
@@ -255,7 +292,9 @@ export class PublicService {
       return {
         registrationId: registration.id,
         code: registration.code,
-        amount,
+        amount: charge.total,
+        baseAmount: charge.base,
+        feeAmount: charge.fee,
         status: 'pending' as const,
         paymentType: 'cash' as const,
       };
@@ -292,7 +331,7 @@ export class PublicService {
     const pix = await this.payments.createPixForRegistration(
       registration.id,
       registration.userId,
-      amount,
+      charge,
       paymentMethod.type,
     );
 

@@ -197,10 +197,12 @@ describe('PublicService', () => {
       expect(result.status).toBe('pending');
       expect(result.qrCodeBase64).toBe('base64==');
       expect(result.qrCodeCopiaECola).toBe('0002...');
+      // Taxa de serviço por cima: R$ 99,90 + 5% = R$ 104,90 cobrados, com os
+      // R$ 99,90 cheios indo para o organizador.
       expect(mockPayments.createPixForRegistration).toHaveBeenCalledWith(
         'reg-1',
         SHADOW_USER_ID,
-        99.9,
+        { base: 99.9, fee: 5, total: 104.9 },
         'pix',
       );
     });

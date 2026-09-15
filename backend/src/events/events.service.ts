@@ -10,6 +10,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateEventDto } from './dto/create-event.dto.js';
 import { UpdateEventDto } from './dto/update-event.dto.js';
 import { CreatePaymentMethodDto } from './dto/create-payment-method.dto.js';
+import { computeCharge, resolveFeeConfig } from '../common/platform-fee.js';
 
 @Injectable()
 export class EventsService {
@@ -170,12 +171,37 @@ export class EventsService {
     return { bannerUrl };
   }
 
+  /**
+   * Modalidades do evento já com a taxa de serviço calculada, para o
+   * organizador ver quanto o participante paga e quanto ele recebe.
+   */
   async getPaymentMethods(eventId: string, userId: string) {
-    await this.checkOwnership(eventId, userId);
-    return this.prisma.db.eventPaymentMethod.findMany({
+    const event = await this.checkOwnership(eventId, userId);
+    const feeConfig = resolveFeeConfig(event);
+
+    const methods = await this.prisma.db.eventPaymentMethod.findMany({
       where: { eventId },
       orderBy: { createdAt: 'asc' },
     });
+
+    return methods.map((method) => {
+      // Dinheiro é recebido direto pelo organizador, sem passar pela
+      // plataforma — logo, sem taxa.
+      const charge =
+        method.type === 'cash'
+          ? { base: Number(method.value), fee: 0, total: Number(method.value) }
+          : computeCharge(Number(method.value), feeConfig);
+      return { ...method, feeAmount: charge.fee, totalAmount: charge.total };
+    });
+  }
+
+  /**
+   * Taxa vigente do evento, para a tela de cadastro simular o total antes de
+   * salvar a modalidade. O valor autoritativo continua vindo do backend.
+   */
+  async getFeeConfig(eventId: string, userId: string) {
+    const event = await this.checkOwnership(eventId, userId);
+    return resolveFeeConfig(event);
   }
 
   private async checkOwnership(id: string, userId: string) {
@@ -183,5 +209,6 @@ export class EventsService {
     if (!event) throw new NotFoundException('Evento não encontrado');
     if (event.createdBy !== userId)
       throw new ForbiddenException('Apenas o criador pode modificar este evento');
+    return event;
   }
 }

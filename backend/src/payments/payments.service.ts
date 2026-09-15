@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MailService } from '../mail/mail.service.js';
+import type { Charge } from '../common/platform-fee.js';
 import type { IPaymentProvider } from './providers/payment-provider.interface.js';
 import { PAYMENT_PROVIDER_TOKEN } from './providers/payment-provider.factory.js';
 
@@ -22,10 +23,15 @@ export class PaymentsService {
     @Inject(PAYMENT_PROVIDER_TOKEN) private readonly provider: IPaymentProvider,
   ) {}
 
+  /**
+   * Gera o PIX de uma inscrição. `charge` chega decomposto (valor da inscrição
+   * + taxa de serviço) no fluxo público; num retry autenticado ele é recuperado
+   * da tentativa anterior, para que a taxa cobrada não mude entre tentativas.
+   */
   async createPixForRegistration(
     registrationId: string,
     userId: string,
-    amount?: number,
+    charge?: Charge,
     method?: string,
   ) {
     const registration = await this.prisma.db.registration.findUnique({
@@ -39,8 +45,16 @@ export class PaymentsService {
     if (registration.payment?.status === 'paid')
       throw new ConflictException('Pagamento já confirmado');
 
-    // Amount: explicit (public flow) ou do pagamento anterior (retry autenticado)
-    const effectiveAmount = amount ?? Number(registration.payment?.amount ?? 0);
+    // Cobrança: a informada agora (fluxo público) ou a da tentativa anterior
+    // (retry autenticado). Pagamentos antigos, anteriores à taxa, têm
+    // baseAmount = amount e feeAmount = 0 pelo backfill da migration.
+    const previous = registration.payment;
+    const effectiveCharge: Charge = charge ?? {
+      base: Number(previous?.baseAmount ?? 0),
+      fee: Number(previous?.feeAmount ?? 0),
+      total: Number(previous?.amount ?? 0),
+    };
+    const effectiveAmount = effectiveCharge.total;
     if (effectiveAmount <= 0)
       throw new ConflictException('Não foi possível determinar o valor do pagamento');
 
@@ -65,6 +79,8 @@ export class PaymentsService {
       data: {
         registrationId,
         amount: effectiveAmount,
+        baseAmount: effectiveCharge.base,
+        feeAmount: effectiveCharge.fee,
         status: 'pending',
         method: effectiveMethod,
         provider: process.env.PAYMENT_PROVIDER ?? 'mock',
@@ -82,6 +98,8 @@ export class PaymentsService {
       qrCodeCopiaECola: result.qrCodeCopiaECola,
       expiresAt: result.expiresAt,
       amount: effectiveAmount,
+      baseAmount: effectiveCharge.base,
+      feeAmount: effectiveCharge.fee,
     };
   }
 

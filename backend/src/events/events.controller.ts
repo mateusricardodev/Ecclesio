@@ -88,6 +88,13 @@ export class EventsController {
     return this.eventsService.getPaymentMethods(id, user.id);
   }
 
+  /** Taxa de serviço vigente para este evento (percentual, fixo e piso). */
+  @UseGuards(JwtGuard)
+  @Get(':id/fee-config')
+  getFeeConfig(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+    return this.eventsService.getFeeConfig(id, user.id);
+  }
+
   @UseGuards(JwtGuard)
   @Post(':id/payment-methods')
   addPaymentMethod(

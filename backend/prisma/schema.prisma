@@ -26,21 +26,36 @@ enum PaymentStatus {
   failed
 }
 
+enum PayoutStatus {
+  requested // organizador solicitou, aguardando a plataforma pagar
+  processing // plataforma assumiu o saque e está executando o PIX
+  paid // PIX enviado e comprovado
+  rejected // recusado — o débito no razão é estornado
+}
+
 model User {
-  id              String           @id @default(uuid())
-  name            String
-  email           String           @unique
-  password        String
-  role            Role             @default(user)
+  id                String           @id @default(uuid())
+  name              String
+  email             String           @unique
+  password          String
+  role              Role             @default(user)
   // Conta-placeholder criada automaticamente para um participante sem login
   // (inscrição pública ou lançada pelo organizador) — senha é hash de bytes
   // aleatórios, nunca escolhida por alguém. Só contas com isShadow=true têm
   // o nome propagado quando o organizador edita uma inscrição vinculada.
-  isShadow        Boolean          @default(false)
-  createdAt       DateTime         @default(now())
-  events          Event[]
-  registrations   Registration[]
-  volunteerEvents EventVolunteer[]
+  isShadow          Boolean          @default(false)
+  // Conta de recebimento do organizador, usada nos saques da carteira. A chave
+  // é dado pessoal (LGPD): nunca logue nem exponha fora das rotas do dono.
+  pixKey            String?
+  pixKeyType        String? // 'cpf' | 'cnpj' | 'email' | 'phone' | 'random'
+  pixHolderName     String?
+  pixHolderDocument String?
+  createdAt         DateTime         @default(now())
+  events            Event[]
+  registrations     Registration[]
+  volunteerEvents   EventVolunteer[]
+  ledgerEntries     LedgerEntry[]
+  payoutRequests    PayoutRequest[]
 }
 
 model Event {
@@ -62,6 +77,10 @@ model Event {
   feedbackItems   String?
   // Pesquisa aceitando respostas — o organizador abre quando o evento termina.
   feedbackOpen    Boolean              @default(false)
+  // Override da taxa de serviço da plataforma para este evento. null = usa o
+  // padrão global (PLATFORM_FEE_*). 0 é um valor válido e significa isento.
+  feePercent      Decimal?
+  feeFixed        Decimal?
   createdBy       String
   createdAt       DateTime             @default(now())
   user            User                 @relation(fields: [createdBy], references: [id])
@@ -70,6 +89,7 @@ model Event {
   paymentMethods  EventPaymentMethod[]
   volunteers      EventVolunteer[]
   feedbacks       EventFeedback[]
+  ledgerEntries   LedgerEntry[]
 }
 
 model EventVolunteer {
@@ -109,27 +129,27 @@ model Ticket {
 }
 
 model Registration {
-  id          String             @id @default(uuid())
-  userId      String
-  eventId     String
-  ticketId    String?
-  status      RegistrationStatus @default(pending)
-  cpf         String?
-  phone       String?
-  birthDate   DateTime?
-  extraFields String?
-  code        String?            @unique
+  id                      String             @id @default(uuid())
+  userId                  String
+  eventId                 String
+  ticketId                String?
+  status                  RegistrationStatus @default(pending)
+  cpf                     String?
+  phone                   String?
+  birthDate               DateTime?
+  extraFields             String?
+  code                    String?            @unique
   checkedIn               Boolean            @default(false)
   checkedInAt             DateTime?
   checkedInBy             String?
   confirmationEmailSentAt DateTime?
   createdAt               DateTime           @default(now())
-  user        User               @relation(fields: [userId], references: [id])
-  event       Event              @relation(fields: [eventId], references: [id])
-  ticket      Ticket?            @relation(fields: [ticketId], references: [id])
-  payment     Payment?
-  checkinLogs CheckinLog[]
-  feedback    EventFeedback?
+  user                    User               @relation(fields: [userId], references: [id])
+  event                   Event              @relation(fields: [eventId], references: [id])
+  ticket                  Ticket?            @relation(fields: [ticketId], references: [id])
+  payment                 Payment?
+  checkinLogs             CheckinLog[]
+  feedback                EventFeedback?
 }
 
 model CheckinLog {
@@ -145,7 +165,13 @@ model CheckinLog {
 model Payment {
   id                String        @id @default(uuid())
   registrationId    String        @unique
+  // Total cobrado do participante = baseAmount + feeAmount. É este o valor que
+  // vai para o provider e aparece no QR Code.
   amount            Decimal
+  // Parte que pertence ao organizador (vira crédito na carteira dele quando o
+  // pagamento é confirmado) e parte que fica com a plataforma.
+  baseAmount        Decimal       @default(0)
+  feeAmount         Decimal       @default(0)
   status            PaymentStatus @default(pending)
   // Modalidade escolhida pelo participante (EventPaymentMethod.type):
   // 'pix' | 'credit_card' | 'debit_card' | 'cash'. Diferente de `provider`,
@@ -159,6 +185,7 @@ model Payment {
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   registration      Registration  @relation(fields: [registrationId], references: [id])
+  ledgerEntry       LedgerEntry?
 }
 
 /// Resposta da pesquisa de satisfação pós-evento. `registrationId` só existe
@@ -179,4 +206,60 @@ model EventFeedback {
   registration   Registration? @relation(fields: [registrationId], references: [id])
 
   @@index([eventId])
+}
+
+/// Livro-razão da carteira do organizador. O saldo NUNCA é uma coluna mutável —
+/// é sempre a soma destas linhas, para não haver como dessincronizar.
+///
+/// Sinal do `amount`: positivo credita o organizador, negativo debita.
+/// `availableAt` é quando a linha passa a contar no saldo sacável — vendas
+/// ficam retidas até alguns dias depois do fim do evento (PAYOUT_HOLD_DAYS),
+/// que é a única proteção contra estorno de um PIX já sacado.
+model LedgerEntry {
+  id          String         @id @default(uuid())
+  userId      String
+  eventId     String?
+  /// Único por pagamento: é esta constraint, e não a checagem de status, que
+  /// garante que um webhook repetido não credite o organizador duas vezes.
+  paymentId   String?        @unique
+  payoutId    String?
+  type        String // 'sale' | 'payout' | 'payout_reversal' | 'refund' | 'adjustment'
+  amount      Decimal
+  description String?
+  availableAt DateTime
+  createdAt   DateTime       @default(now())
+  user        User           @relation(fields: [userId], references: [id])
+  event       Event?         @relation(fields: [eventId], references: [id])
+  payment     Payment?       @relation(fields: [paymentId], references: [id])
+  payout      PayoutRequest? @relation(fields: [payoutId], references: [id])
+
+  @@index([userId, availableAt])
+  @@index([userId, createdAt])
+}
+
+/// Pedido de resgate do saldo. O débito no razão nasce junto com o pedido
+/// (transação serializável), então o dinheiro já sai do saldo disponível no
+/// instante da solicitação — uma rejeição gera uma linha de estorno.
+model PayoutRequest {
+  id                String        @id @default(uuid())
+  userId            String
+  amount            Decimal
+  status            PayoutStatus  @default(requested)
+  /// Snapshot da chave no momento do pedido: se o organizador trocar a chave
+  /// depois, o histórico continua mostrando para onde o dinheiro realmente foi.
+  pixKey            String
+  pixKeyType        String
+  pixHolderName     String
+  pixHolderDocument String
+  notes             String?
+  receiptUrl        String?
+  processedBy       String?
+  processedAt       DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  user              User          @relation(fields: [userId], references: [id])
+  entries           LedgerEntry[]
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
 }
