@@ -18,6 +18,7 @@ const mockDb = {
     updateMany: jest.fn(),
   },
   payment: { create: jest.fn(), delete: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
+  ledgerEntry: { create: jest.fn() },
   $transaction: jest.fn(),
   $executeRaw: jest.fn(),
 };
@@ -41,6 +42,7 @@ const USER_ID = 'user-uuid';
 const REG_ID = 'reg-uuid';
 const EVENT_ID = 'event-uuid';
 const TICKET_ID = 'ticket-uuid';
+const ORGANIZER_ID = 'organizer-uuid';
 
 const baseRegistration = {
   id: REG_ID,
@@ -59,12 +61,21 @@ const baseRegistration = {
 const makePaymentWithIncludes = (overrides: Record<string, unknown> = {}) => ({
   id: 'pay-1',
   registrationId: REG_ID,
-  amount: 50,
+  amount: 52.5, // 50 de inscrição + 2,50 de taxa de serviço
+  baseAmount: 50,
+  feeAmount: 2.5,
   registration: {
     id: REG_ID,
     ticketId: TICKET_ID,
     ticket: { id: TICKET_ID, name: 'Inteira' },
-    event: { title: 'Congresso 2026', date: new Date('2026-09-01'), location: 'São Paulo' },
+    event: {
+      id: EVENT_ID,
+      title: 'Congresso 2026',
+      date: new Date('2026-09-01'),
+      endDate: null,
+      location: 'São Paulo',
+      createdBy: ORGANIZER_ID,
+    },
     user: { name: 'João', email: 'joao@email.com' },
   },
   ...overrides,
@@ -77,6 +88,7 @@ const mockTx = (paymentFixture: unknown, executeRawResult = 1) => {
     mockDb.$executeRaw.mockResolvedValue(executeRawResult);
     mockDb.payment.update.mockResolvedValue({});
     mockDb.registration.update.mockResolvedValue({});
+    mockDb.ledgerEntry.create.mockResolvedValue({});
     return fn(mockDb);
   });
 };
@@ -217,7 +229,7 @@ describe('PaymentsService', () => {
           participantEmail: 'joao@email.com',
           eventTitle: 'Congresso 2026',
           ticketName: 'Inteira',
-          amountPaid: 50,
+          amountPaid: 52.5,
         }),
       );
     });
@@ -261,13 +273,68 @@ describe('PaymentsService', () => {
       expect(mockMail.sendRegistrationConfirmation).not.toHaveBeenCalled();
     });
 
+    // ─── crédito na carteira do organizador ──────────────────────────────
+
+    it('credita o organizador com o valor da inscrição, não com o total cobrado', async () => {
+      mockTx(makePaymentWithIncludes(), 1);
+      mockDb.registration.updateMany.mockResolvedValue({ count: 1 });
+
+      await service.confirmPayment('mock_abc-123');
+
+      // Cobrados R$ 52,50; os R$ 2,50 de taxa ficam com a plataforma.
+      expect(mockDb.ledgerEntry.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          userId: ORGANIZER_ID,
+          eventId: EVENT_ID,
+          paymentId: 'pay-1',
+          type: 'sale',
+          amount: 50,
+        }),
+      });
+    });
+
+    it('retém o crédito até 7 dias depois do evento', async () => {
+      mockTx(makePaymentWithIncludes(), 1);
+      mockDb.registration.updateMany.mockResolvedValue({ count: 1 });
+
+      await service.confirmPayment('mock_abc-123');
+
+      const { availableAt } = mockDb.ledgerEntry.create.mock.calls[0][0].data;
+      expect(availableAt).toEqual(new Date('2026-09-08T00:00:00.000Z'));
+    });
+
+    it('não credita quando a inscrição fica overbooked — valor aguarda reembolso', async () => {
+      mockTx(makePaymentWithIncludes(), 0);
+      mockDb.registration.updateMany.mockResolvedValue({ count: 0 });
+
+      await service.confirmPayment('mock_abc-123');
+
+      expect(mockDb.ledgerEntry.create).not.toHaveBeenCalled();
+    });
+
+    it('não credita pagamento sem valor de inscrição (legado ou gratuito)', async () => {
+      mockTx(makePaymentWithIncludes({ amount: 0, baseAmount: 0, feeAmount: 0 }), 1);
+      mockDb.registration.updateMany.mockResolvedValue({ count: 1 });
+
+      await service.confirmPayment('mock_abc-123');
+
+      expect(mockDb.ledgerEntry.create).not.toHaveBeenCalled();
+    });
+
     it('sem ticketId: pula decremento de estoque e confirma normalmente', async () => {
       const paymentWithoutTicket = makePaymentWithIncludes({
         registration: {
           id: REG_ID,
           ticketId: null,
           ticket: null,
-          event: { title: 'Congresso 2026', date: new Date('2026-09-01'), location: null },
+          event: {
+            id: EVENT_ID,
+            title: 'Congresso 2026',
+            date: new Date('2026-09-01'),
+            endDate: null,
+            location: null,
+            createdBy: ORGANIZER_ID,
+          },
           user: { name: 'João', email: 'joao@email.com' },
         },
       });
@@ -326,6 +393,18 @@ describe('PaymentsService', () => {
         expect.objectContaining({ data: { status: 'confirmed' } }),
       );
       expect(mockMail.sendRegistrationConfirmation).toHaveBeenCalledTimes(1);
+    });
+
+    it('não credita a carteira: o dinheiro foi direto ao organizador', async () => {
+      mockDb.registration.findUnique.mockResolvedValue(baseRegForManual);
+      mockManualTx(1);
+      mockDb.registration.updateMany.mockResolvedValue({ count: 1 });
+
+      await service.confirmManually(REG_ID, USER_ID);
+
+      // Confirmação manual cobre dinheiro e transferência direta — nesses casos
+      // o valor nunca passou pela plataforma, então não há repasse a registrar.
+      expect(mockDb.ledgerEntry.create).not.toHaveBeenCalled();
     });
 
     it('atualiza payment existente para paid/manual em vez de criar um novo', async () => {

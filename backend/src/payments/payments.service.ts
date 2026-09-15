@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { MailService } from '../mail/mail.service.js';
-import type { Charge } from '../common/platform-fee.js';
+import { saleAvailableAt, type Charge } from '../common/platform-fee.js';
 import type { IPaymentProvider } from './providers/payment-provider.interface.js';
 import { PAYMENT_PROVIDER_TOKEN } from './providers/payment-provider.factory.js';
 
@@ -112,7 +112,16 @@ export class PaymentsService {
           registration: {
             include: {
               ticket: { select: { id: true, name: true } },
-              event: { select: { title: true, date: true, location: true } },
+              event: {
+                select: {
+                  id: true,
+                  title: true,
+                  date: true,
+                  endDate: true,
+                  location: true,
+                  createdBy: true,
+                },
+              },
               user: { select: { name: true, email: true } },
             },
           },
@@ -138,6 +147,30 @@ export class PaymentsService {
 
       await tx.payment.update({ where: { id: payment.id }, data: { status: 'paid' } });
       await tx.registration.update({ where: { id: reg.id }, data: { status: newStatus } });
+
+      // Crédito na carteira do organizador — o dinheiro caiu na conta da
+      // plataforma, e o razão é o que registra quanto dela pertence a ele.
+      // Só para inscrição confirmada: `overbooked` significa que o pagamento
+      // entrou mas a vaga tinha acabado, e esse valor fica retido na
+      // plataforma aguardando o reembolso manual ao participante.
+      //
+      // O índice único de LedgerEntry.paymentId é a garantia real contra
+      // crédito em dobro: se dois webhooks passarem juntos pela checagem de
+      // status acima, o segundo estoura aqui e a transação inteira desfaz.
+      const baseAmount = Number(payment.baseAmount);
+      if (newStatus === 'confirmed' && baseAmount > 0) {
+        await tx.ledgerEntry.create({
+          data: {
+            userId: reg.event.createdBy,
+            eventId: reg.event.id,
+            paymentId: payment.id,
+            type: 'sale',
+            amount: baseAmount,
+            description: `Inscrição — ${reg.event.title}`,
+            availableAt: saleAvailableAt(reg.event),
+          },
+        });
+      }
 
       if (newStatus !== 'confirmed') return null;
 
@@ -188,6 +221,10 @@ export class PaymentsService {
    * automático — transferência direta, dinheiro, etc.). Marca o Payment como
    * pago com provider 'manual' e confirma a inscrição, disparando o mesmo
    * e-mail de confirmação do fluxo automático.
+   *
+   * NÃO gera crédito na carteira: nesses casos o dinheiro foi direto para o
+   * organizador e nunca passou pela plataforma, então não há o que repassar
+   * (e, pela mesma razão, não há taxa de serviço a cobrar).
    */
   async confirmManually(registrationId: string, userId: string): Promise<void> {
     const registration = await this.prisma.db.registration.findUnique({

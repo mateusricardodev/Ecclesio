@@ -1,5 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
+import {
+  NotFoundException,
+  ForbiddenException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { EventsService } from './events.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -21,6 +26,7 @@ const mockDb: any = {
   eventFeedback: { deleteMany: jest.fn() },
   eventVolunteer: { deleteMany: jest.fn() },
   ticket: { deleteMany: jest.fn() },
+  ledgerEntry: { count: jest.fn() },
   eventPaymentMethod: {
     findFirst: jest.fn(),
     findMany: jest.fn(),
@@ -143,6 +149,7 @@ describe('EventsService', () => {
   describe('remove', () => {
     it('remove evento e dados cascata quando é o dono', async () => {
       mockDb.event.findUnique.mockResolvedValue(baseEvent);
+      mockDb.ledgerEntry.count.mockResolvedValue(0);
       mockDb.registration.findMany.mockResolvedValue([{ id: 'r1' }]);
       mockDb.payment.deleteMany.mockResolvedValue({});
       mockDb.checkinLog.deleteMany.mockResolvedValue({});
@@ -163,6 +170,14 @@ describe('EventsService', () => {
       mockDb.event.findUnique.mockResolvedValue(baseEvent);
 
       await expect(service.remove(EVENT_ID, OTHER_ID)).rejects.toThrow(ForbiddenException);
+      expect(mockDb.event.delete).not.toHaveBeenCalled();
+    });
+
+    it('recusa excluir evento que já tem lançamentos na carteira', async () => {
+      mockDb.event.findUnique.mockResolvedValue(baseEvent);
+      mockDb.ledgerEntry.count.mockResolvedValue(3);
+
+      await expect(service.remove(EVENT_ID, OWNER_ID)).rejects.toThrow(BadRequestException);
       expect(mockDb.event.delete).not.toHaveBeenCalled();
     });
   });

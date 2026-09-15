@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   ForbiddenException,
@@ -107,6 +108,17 @@ export class EventsService {
 
   async remove(id: string, userId: string) {
     await this.checkOwnership(id, userId);
+
+    // Um evento que já movimentou dinheiro não pode ser apagado: o razão da
+    // carteira ficaria com créditos sem origem rastreável, e o organizador
+    // perderia a comprovação de onde veio o saldo que ele vai resgatar.
+    const ledgerCount = await this.prisma.db.ledgerEntry.count({
+      where: { eventId: id },
+    });
+    if (ledgerCount > 0)
+      throw new BadRequestException(
+        'Este evento tem pagamentos lançados na carteira e não pode ser excluído. Despublique-o em vez disso.',
+      );
 
     await this.prisma.db.$transaction(async (tx) => {
       const registrations = await tx.registration.findMany({
