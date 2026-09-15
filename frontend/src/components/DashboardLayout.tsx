@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Calendar, Users, Settings, Search, Menu, X, LogOut, Bell,
+  Wallet, Banknote,
 } from 'lucide-react'
 import { useAuthStore } from '../store/auth.store'
 
@@ -9,10 +10,16 @@ const NAV_ITEMS = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', key: 'dashboard' },
   { label: 'Eventos', icon: Calendar, to: '/eventos', key: 'eventos' },
   { label: 'Inscrições', icon: Users, to: '/buscar-inscricoes', key: 'inscricoes' },
+  { label: 'Financeiro', icon: Wallet, to: '/financeiro', key: 'financeiro' },
   { label: 'Configurações', icon: Settings, to: '/dashboard', key: 'config' },
 ]
 
-type NavKey = 'dashboard' | 'eventos' | 'inscricoes' | 'config'
+/** Item exclusivo do admin da plataforma — a fila de resgates a pagar. */
+const ADMIN_NAV_ITEM = {
+  label: 'Saques', icon: Banknote, to: '/admin/saques', key: 'saques',
+}
+
+type NavKey = 'dashboard' | 'eventos' | 'inscricoes' | 'financeiro' | 'config' | 'saques'
 
 export function DashboardLayout({
   active,
@@ -25,6 +32,7 @@ export function DashboardLayout({
   const { user, logout } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const isAdmin = user?.role === 'admin'
   const fullName = user?.name ?? 'Organizador'
   const initials = fullName
     .split(' ')
@@ -133,7 +141,7 @@ export function DashboardLayout({
             borderRight: '1px solid rgba(0,24,109,0.08)',
           }}
         >
-          <SidebarContent active={active} />
+          <SidebarContent active={active} isAdmin={isAdmin} />
         </aside>
 
         {/* ── SIDEBAR mobile drawer ──────────────────────────────────────── */}
@@ -154,7 +162,7 @@ export function DashboardLayout({
                   <X size={18} />
                 </button>
               </div>
-              <SidebarContent active={active} onNavigate={() => setSidebarOpen(false)} />
+              <SidebarContent active={active} isAdmin={isAdmin} onNavigate={() => setSidebarOpen(false)} />
             </aside>
           </div>
         )}
@@ -170,11 +178,15 @@ export function DashboardLayout({
 
 function SidebarContent({
   active,
+  isAdmin,
   onNavigate,
 }: {
   active: string
+  isAdmin?: boolean
   onNavigate?: () => void
 }) {
+  const items = isAdmin ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS
+
   return (
     <nav className="flex flex-col gap-0.5 p-3 flex-1">
       <p
@@ -184,7 +196,7 @@ function SidebarContent({
         Principal
       </p>
 
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const isActive = item.key === active
         return (
           <Link

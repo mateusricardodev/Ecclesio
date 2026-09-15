@@ -16,6 +16,8 @@ import { PublicRegistration } from './pages/PublicRegistration'
 import { PixPayment } from './pages/PixPayment'
 import { PublicFeedback } from './pages/PublicFeedback'
 import { EventFeedback } from './pages/EventFeedback'
+import { Wallet } from './pages/Wallet'
+import { AdminPayouts } from './pages/AdminPayouts'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LandingPage } from './pages/LandingPage'
 import { EventsList } from './app/pages/EventsList'
@@ -127,6 +129,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <SearchRegistrations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/financeiro"
+          element={
+            <ProtectedRoute>
+              <Wallet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/saques"
+          element={
+            <ProtectedRoute>
+              <AdminPayouts />
             </ProtectedRoute>
           }
         />
