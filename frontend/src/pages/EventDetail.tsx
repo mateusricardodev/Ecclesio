@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Clock, XCircle, Download, FileDown, Mail, Star } from 'lucide-react'
+import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Circle, Clock, XCircle, Download, FileDown, Mail, Star } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { useAuthStore } from '../store/auth.store'
 import api from '../api/axios'
@@ -14,6 +14,8 @@ interface Registration {
   cpf: string | null
   phone: string | null
   birthDate: string | null
+  checkedIn: boolean
+  checkedInAt: string | null
   user: { id: string; name: string; email: string }
   ticket: { id: string; name: string; price: string } | null
   payment: { id: string; status: string; amount: string; method: string | null } | null
@@ -444,6 +446,7 @@ export function EventDetail() {
               { label: 'CPF',         cls: 'hidden lg:block w-32 shrink-0' },
               { label: 'Tipo',        cls: 'hidden md:block w-28 shrink-0' },
               { label: 'Status',      cls: 'w-24 text-center shrink-0' },
+              { label: 'Check-in',    cls: 'w-20 text-center shrink-0' },
               { label: 'Valor',       cls: 'w-24 text-right shrink-0' },
               { label: '',            cls: 'w-[190px] shrink-0' },
             ].map((col) => (
@@ -512,6 +515,21 @@ export function EventDetail() {
                       style={{ background: badge.bg, color: badge.color, fontFamily: 'var(--font-sans)' }}
                     >
                       {badge.label}
+                    </span>
+
+                    {/* Check-in: no mobile só o ícone (verde = feito), em sm+ vira
+                        coluna com Sim/Não — mesmo rótulo da planilha exportada. */}
+                    <span
+                      className="inline-flex items-center justify-center gap-1 text-xs font-medium shrink-0 sm:w-20"
+                      style={{ color: reg.checkedIn ? '#166534' : '#9CA3AF', fontFamily: 'var(--font-sans)' }}
+                      title={
+                        reg.checkedIn
+                          ? `Check-in realizado${reg.checkedInAt ? ` em ${new Date(reg.checkedInAt).toLocaleString('pt-BR')}` : ''}`
+                          : 'Check-in não realizado'
+                      }
+                    >
+                      {reg.checkedIn ? <CheckCircle size={14} /> : <Circle size={14} />}
+                      <span className="hidden sm:inline">{reg.checkedIn ? 'Sim' : 'Não'}</span>
                     </span>
                   </div>
 
