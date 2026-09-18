@@ -221,13 +221,15 @@ export class RegistrationsService {
       { header: 'Data de nascimento', key: 'birthDate', width: 16 },
       { header: 'Código da inscrição', key: 'code', width: 16 },
       { header: 'Status', key: 'status', width: 16 },
+      // Check-in logo depois de Status, na mesma ordem da tela do evento: na
+      // 13ª coluna ninguém enxergava sem rolar para a direita.
+      { header: 'Check-in realizado', key: 'checkedIn', width: 16 },
+      { header: 'Data/hora do check-in', key: 'checkedInAt', width: 18 },
       { header: 'Data da inscrição', key: 'createdAt', width: 18 },
       { header: 'Tipo de ingresso', key: 'ticket', width: 22 },
       { header: 'Valor', key: 'amount', width: 12 },
       { header: 'Forma de pagamento', key: 'paymentMethod', width: 16 },
       { header: 'Status do pagamento', key: 'paymentStatus', width: 16 },
-      { header: 'Check-in realizado', key: 'checkedIn', width: 16 },
-      { header: 'Data/hora do check-in', key: 'checkedInAt', width: 18 },
       ...extraKeys.map((key) => ({ header: key, key: `extra:${key}`, width: 20 })),
     ];
     sheet.getRow(1).font = { bold: true };

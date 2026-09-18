@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import ExcelJS from 'exceljs';
 import {
   NotFoundException,
   BadRequestException,
@@ -200,6 +201,61 @@ describe('RegistrationsService', () => {
       await expect(service.exportToXlsx(EVENT_ID, 'outro-user', {})).rejects.toThrow(
         ForbiddenException,
       );
+    });
+
+    it('coloca o check-in logo depois de Status e preenche Sim/Não', async () => {
+      // Na 13ª coluna ninguém enxergava sem rolar — a posição é parte do
+      // contrato da planilha, por isso o teste trava a ordem.
+      mockDb.registration.findMany.mockResolvedValue([
+        {
+          id: 'reg-1',
+          status: 'confirmed',
+          cpf: '52998224725',
+          phone: null,
+          birthDate: null,
+          code: 'ABC-123',
+          extraFields: null,
+          createdAt: new Date('2026-09-01T10:00:00Z'),
+          checkedIn: true,
+          checkedInAt: new Date('2026-09-04T08:30:00Z'),
+          user: { id: 'u1', name: 'Ana Lima', email: 'ana@email.com' },
+          ticket: null,
+          payment: { id: 'p1', status: 'paid', amount: 100, method: 'pix', provider: 'mercadopago' },
+        },
+        {
+          id: 'reg-2',
+          status: 'confirmed',
+          cpf: null,
+          phone: null,
+          birthDate: null,
+          code: 'DEF-456',
+          extraFields: null,
+          createdAt: new Date('2026-09-01T11:00:00Z'),
+          checkedIn: false,
+          checkedInAt: null,
+          user: { id: 'u2', name: 'Bruno Souza', email: 'bruno@email.com' },
+          ticket: null,
+          payment: null,
+        },
+      ]);
+
+      const { buffer } = await service.exportToXlsx(EVENT_ID, OWNER_ID, {});
+
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer as unknown as ExcelJS.Buffer);
+      const sheet = workbook.getWorksheet('Inscritos')!;
+      const headers = (sheet.getRow(1).values as string[]).slice(1); // ExcelJS indexa a partir de 1
+
+      const statusCol = headers.indexOf('Status');
+      expect(statusCol).toBeGreaterThan(-1);
+      expect(headers[statusCol + 1]).toBe('Check-in realizado');
+      expect(headers[statusCol + 2]).toBe('Data/hora do check-in');
+
+      const checkinIdx = statusCol + 1 + 1; // +1 pelo índice base 1 do ExcelJS
+      expect(sheet.getRow(2).getCell(checkinIdx).value).toBe('Sim');
+      expect(sheet.getRow(3).getCell(checkinIdx).value).toBe('Não');
+      expect(sheet.getRow(2).getCell(checkinIdx + 1).value).not.toBe('');
+      expect(sheet.getRow(3).getCell(checkinIdx + 1).value).toBe('');
     });
   });
 
