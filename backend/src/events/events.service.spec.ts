@@ -69,7 +69,7 @@ describe('EventsService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── findOne ───────────────────────────────────────────────────────────────
+  // findOne
 
   describe('findOne', () => {
     it('retorna o evento quando encontrado pelo dono', async () => {
@@ -89,7 +89,7 @@ describe('EventsService', () => {
     });
   });
 
-  // ─── create ────────────────────────────────────────────────────────────────
+  // create
 
   describe('create', () => {
     it('cria evento e associa ao userId', async () => {
@@ -115,7 +115,7 @@ describe('EventsService', () => {
     });
   });
 
-  // ─── update ────────────────────────────────────────────────────────────────
+  // update
 
   describe('update', () => {
     it('atualiza evento quando usuário é o dono', async () => {
@@ -144,7 +144,7 @@ describe('EventsService', () => {
     });
   });
 
-  // ─── remove ────────────────────────────────────────────────────────────────
+  // remove
 
   describe('remove', () => {
     it('remove evento e dados cascata quando é o dono', async () => {
@@ -182,7 +182,7 @@ describe('EventsService', () => {
     });
   });
 
-  // ─── uploadBanner ──────────────────────────────────────────────────────────
+  // uploadBanner
 
   describe('uploadBanner', () => {
     it('salva bannerUrl e retorna o caminho', async () => {

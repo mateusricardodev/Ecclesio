@@ -231,10 +231,10 @@ export function EventSetupForm() {
 
         <div className="flex items-center justify-between pb-8">
           <button onClick={() => navigate(`/events/${id}/setup/payment`)} style={wizardNavBtn()}>
-            ← Passo anterior
+            Passo anterior
           </button>
           <button onClick={handleNext} disabled={saving} style={wizardPrimaryBtn(saving)}>
-            {saving ? 'Salvando...' : 'Próximo passo →'}
+            {saving ? 'Salvando...' : 'Próximo passo'}
           </button>
         </div>
       </div>

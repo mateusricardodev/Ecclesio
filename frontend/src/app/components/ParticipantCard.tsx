@@ -19,7 +19,7 @@ export function ParticipantCard({
 }: ParticipantCardProps) {
   return (
     <div className="flex items-start gap-3 px-4 py-4">
-      {/* Selo de credenciado — verde do painel, só quando já fez check-in. */}
+      {/* Selo de credenciado (verde do painel), só quando já fez check-in. */}
       {p.checkedIn && (
         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ecc-green">
           <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
@@ -76,7 +76,7 @@ function MetaLine({ label, value }: { label: string; value: string | null }) {
   return (
     <p className="truncate text-[13px] text-ecc-muted">
       <span className="text-ecc-faint">{label}: </span>
-      {value ?? '—'}
+      {value ?? '-'}
     </p>
   )
 }

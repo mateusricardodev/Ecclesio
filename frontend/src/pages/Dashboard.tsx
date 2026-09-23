@@ -100,7 +100,7 @@ export function Dashboard() {
 
   return (
     <DashboardLayout active="dashboard">
-      {/* ── Cabeçalho ──────────────────────────────────────────────────── */}
+      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <p
@@ -140,7 +140,7 @@ export function Dashboard() {
         </Link>
       </div>
 
-      {/* ── Métricas ───────────────────────────────────────────────────── */}
+      {/* Métricas */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => <MetricSkeleton key={i} />)
@@ -174,7 +174,7 @@ export function Dashboard() {
             ))}
       </div>
 
-      {/* ── Estado vazio OU seções ─────────────────────────────────────── */}
+      {/* Estado vazio OU seções */}
       {loading ? null : totalEvents === 0 ? (
         <EmptyState onCreate={() => navigate('/events/new')} />
       ) : (
@@ -259,7 +259,7 @@ export function Dashboard() {
   )
 }
 
-// ── Componentes auxiliares ────────────────────────────────────────────────
+// Componentes auxiliares
 
 function MetricSkeleton() {
   return (

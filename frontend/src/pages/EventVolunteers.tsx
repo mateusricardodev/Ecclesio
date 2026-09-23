@@ -132,7 +132,7 @@ export function EventVolunteers() {
     <DashboardLayout active="eventos">
       <div className="max-w-3xl mx-auto flex flex-col gap-6">
 
-        {/* ── Cabeçalho ─────────────────────────────────────────────────── */}
+        {/* Cabeçalho */}
         <div>
           <Link
             to={`/events/${id}`}
@@ -154,7 +154,7 @@ export function EventVolunteers() {
           </p>
         </div>
 
-        {/* ── O que o voluntário pode fazer ─────────────────────────────── */}
+        {/* O que o voluntário pode fazer */}
         <div
           className="rounded-xl px-4 py-3 flex gap-3"
           style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.1)' }}
@@ -167,7 +167,7 @@ export function EventVolunteers() {
           </p>
         </div>
 
-        {/* ── Adicionar ─────────────────────────────────────────────────── */}
+        {/* Adicionar */}
         <div className="rounded-2xl p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Adicionar à equipe
@@ -218,7 +218,7 @@ export function EventVolunteers() {
           )}
         </div>
 
-        {/* ── Lista ─────────────────────────────────────────────────────── */}
+        {/* Lista */}
         <div className="rounded-2xl p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Na equipe {volunteers.length > 0 && `(${volunteers.length})`}

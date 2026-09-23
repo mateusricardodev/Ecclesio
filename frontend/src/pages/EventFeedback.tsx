@@ -68,7 +68,7 @@ function scoreColor(score: number | null): string {
 }
 
 function formatAverage(value: number | null): string {
-  return value === null ? '—' : value.toFixed(1).replace('.', ',')
+  return value === null ? '-' : value.toFixed(1).replace('.', ',')
 }
 
 export function EventFeedback() {
@@ -166,7 +166,7 @@ export function EventFeedback() {
       setInviteModal(false)
       setToast(
         data.total === 0
-          ? 'Todos os inscritos confirmados já responderam — nenhum e-mail enviado.'
+          ? 'Todos os inscritos confirmados já responderam. Nenhum e-mail foi enviado.'
           : `Convite enviado para ${data.sent} de ${data.total} participante(s).` +
               (data.failed > 0 ? ` ${data.failed} falhou(aram).` : ''),
       )
@@ -193,7 +193,7 @@ export function EventFeedback() {
   return (
     <DashboardLayout active="eventos">
 
-      {/* ── Cabeçalho ── */}
+      {/* Cabeçalho */}
       <div className="mb-7">
         <Link
           to={`/events/${id}`}
@@ -213,11 +213,11 @@ export function EventFeedback() {
           className="leading-tight"
           style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
         >
-          Avaliação — {eventTitle || '...'}
+          Avaliação: {eventTitle || '...'}
         </h1>
       </div>
 
-      {/* ── Status e envio ── */}
+      {/* Status e envio */}
       <div className="rounded-2xl p-5 mb-6 flex flex-col gap-4" style={CARD}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -226,7 +226,7 @@ export function EventFeedback() {
             </p>
             <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               {open
-                ? 'A pesquisa está aberta — quem tiver o link consegue responder.'
+                ? 'A pesquisa está aberta. Quem tiver o link consegue responder.'
                 : 'A pesquisa está fechada. Ative para liberar o formulário.'}
             </p>
           </div>
@@ -283,7 +283,7 @@ export function EventFeedback() {
         )}
       </div>
 
-      {/* ── Abas ── */}
+      {/* Abas */}
       <div className="flex gap-1 mb-5">
         {([['resultados', 'Resultados'], ['configuracao', 'Itens avaliados']] as const).map(
           ([key, label]) => (
@@ -309,7 +309,7 @@ export function EventFeedback() {
           Carregando...
         </p>
       ) : tab === 'configuracao' ? (
-        /* ── Configuração dos itens ── */
+        /* Configuração dos itens */
         <div className="rounded-2xl p-5 flex flex-col gap-3 max-w-2xl" style={CARD}>
           <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
             Cada item vira uma nota de 0 a 10 no formulário, com espaço para comentário. As duas
@@ -363,7 +363,7 @@ export function EventFeedback() {
           </div>
         </div>
       ) : (
-        /* ── Resultados ── */
+        /* Resultados */
         <div className="flex flex-col gap-6">
           {/* Métricas */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -512,7 +512,7 @@ export function EventFeedback() {
         </div>
       )}
 
-      {/* ── Modal de envio ── */}
+      {/* Modal de envio */}
       {inviteModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
@@ -524,7 +524,7 @@ export function EventFeedback() {
             </h3>
             <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
               Cada inscrito confirmado que ainda não respondeu recebe um e-mail com o link
-              individual da pesquisa. Quem já respondeu não recebe de novo — dá para reenviar
+              individual da pesquisa. Quem já respondeu não recebe de novo. Dá para reenviar
               quantas vezes precisar.
             </p>
             {inviteError && (

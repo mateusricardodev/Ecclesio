@@ -21,12 +21,12 @@ export function PublicFormPreview() {
             O que o inscrito vê
           </h2>
           <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-            Uma página limpa, profissional e fácil de usar — sem cadastro, sem complicação.
+            Uma página limpa, profissional e fácil de usar. O participante não precisa criar conta.
           </p>
         </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-12 justify-center">
-          {/* Mockup — formulário */}
+          {/* Mockup: formulário */}
           <div className="relative w-[300px] shrink-0">
             <div className="rounded-[2.5rem] p-2.5 shadow-2xl" style={{ background: '#1C1C1E' }}>
               <div className="rounded-[2rem] overflow-hidden h-[580px] flex flex-col" style={{ background: '#FFFFFF' }}>
@@ -42,7 +42,7 @@ export function PublicFormPreview() {
                     Vagas disponíveis
                   </div>
                   <div>
-                    <p className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-sans)' }}>Paróquia São Pedro — SP</p>
+                    <p className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-sans)' }}>Paróquia São Pedro, SP</p>
                     <h3 className="font-bold text-base leading-tight" style={{ color: '#FFFFFF', fontFamily: 'var(--font-display)' }}>
                       Retiro de Jovens 2025
                     </h3>
@@ -89,7 +89,7 @@ export function PublicFormPreview() {
             </div>
           </div>
 
-          {/* Mockup — confirmação */}
+          {/* Mockup: confirmação */}
           <div className="relative w-[300px] shrink-0">
             <div className="rounded-[2.5rem] p-2.5 shadow-2xl" style={{ background: '#1C1C1E' }}>
               <div
@@ -159,7 +159,7 @@ export function PublicFormPreview() {
                 'Funciona em qualquer celular ou computador',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-2 text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
-                  <span style={{ color: '#D4B16A', fontSize: '0.65rem' }}>✦</span>
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#D4B16A' }} />
                   {item}
                 </li>
               ))}

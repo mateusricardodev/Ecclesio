@@ -53,7 +53,7 @@ export function Events() {
 
   return (
     <DashboardLayout active="eventos">
-      {/* ── Cabeçalho ── */}
+      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <p
@@ -88,7 +88,7 @@ export function Events() {
         </Link>
       </div>
 
-      {/* ── Conteúdo ── */}
+      {/* Conteúdo */}
       {loading ? (
         <div className="grid gap-4">
           {Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
@@ -141,7 +141,7 @@ export function Events() {
         </div>
       )}
 
-      {/* ── Modal de confirmação ── */}
+      {/* Modal de confirmação */}
       {confirmId && (
         <div className="fixed inset-0 flex items-center justify-center z-50 px-4" style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}>
           <div
@@ -184,7 +184,7 @@ export function Events() {
   )
 }
 
-// ── Componentes auxiliares ────────────────────────────────────────────────
+// Componentes auxiliares
 
 function Section({ title, count, muted, children }: { title: string; count: number; muted?: boolean; children: React.ReactNode }) {
   return (
@@ -271,7 +271,7 @@ function EventCard({ event, muted, onDelete }: { event: EventItem; muted?: boole
         </div>
       </div>
 
-      {/* Ações — linha própria no mobile, encostadas à direita */}
+      {/* Ações: linha própria no mobile, encostadas à direita */}
       <div className="flex items-center gap-2 justify-end shrink-0">
         {/* Atalho para o credenciamento deste evento no app do voluntário */}
         <Link

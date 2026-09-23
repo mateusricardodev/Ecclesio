@@ -6,7 +6,7 @@ const before = [
   'Link de inscrição confuso e sem identidade visual',
   'Participante liga perguntando se foi inscrito',
   'Dificuldade de saber quantas vagas restam',
-  'Sem controle de capacidade — evento superlota',
+  'Sem controle de capacidade, o evento superlota',
 ]
 
 const after = [

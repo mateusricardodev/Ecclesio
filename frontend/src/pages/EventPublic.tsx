@@ -93,11 +93,7 @@ export function EventPublic() {
             >
               {event.title}
             </h1>
-            <div className="flex items-center gap-3">
-              <div style={{ height: '1px', width: '48px', background: '#D4B16A' }} />
-              <span style={{ color: '#D4B16A', fontSize: '1rem' }}>✦</span>
-              <div style={{ height: '1px', width: '48px', background: '#D4B16A' }} />
-            </div>
+            <div style={{ height: '1px', width: '64px', background: '#D4B16A' }} />
           </div>
         )}
       </div>
@@ -114,11 +110,7 @@ export function EventPublic() {
               {event.title}
             </h1>
           )}
-          <div className="flex items-center gap-3">
-            <div style={{ height: '1px', width: '40px', background: '#D4B16A' }} />
-            <span style={{ color: '#D4B16A', fontSize: '0.875rem' }}>✦</span>
-            <div style={{ height: '1px', width: '40px', background: '#D4B16A' }} />
-          </div>
+          <div style={{ height: '1px', width: '56px', background: '#D4B16A' }} />
         </div>
 
         {/* Info card */}
@@ -134,7 +126,7 @@ export function EventPublic() {
               <Calendar size={16} style={{ color: '#00186D' }} />
             </div>
             <p className="text-sm font-semibold capitalize" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
-              {formatDate(startDate)}{endDate && ` — ${formatDate(endDate)}`}
+              {formatDate(startDate)}{endDate && ` a ${formatDate(endDate)}`}
             </p>
           </div>
           {event.location && (
@@ -163,7 +155,7 @@ export function EventPublic() {
               boxShadow:  '0 4px 14px rgba(0,24,109,0.25)',
             }}
           >
-            Inscreva-se agora →
+            Inscreva-se agora
           </button>
         ) : (
           <div

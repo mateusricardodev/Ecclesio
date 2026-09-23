@@ -43,7 +43,7 @@ export class FeedbackService {
     private readonly mail: MailService,
   ) {}
 
-  // ─── Organizador ───────────────────────────────────────────────────────────
+  // Organizador
 
   async getConfig(eventId: string, userId: string) {
     const event = await this.checkOwnership(eventId);
@@ -115,7 +115,7 @@ export class FeedbackService {
     }));
 
     // Itens configurados hoje + os que aparecem em respostas antigas (a lista
-    // pode ter mudado depois que alguém respondeu — nada se perde na tela).
+    // pode ter mudado depois que alguém respondeu; nada se perde na tela).
     const configured = parseFeedbackItems(event.feedbackItems);
     const seen = new Set(configured);
     for (const r of responses)
@@ -207,7 +207,7 @@ export class FeedbackService {
     return { total: registrations.length, sent, failed: registrations.length - sent };
   }
 
-  // ─── Público ───────────────────────────────────────────────────────────────
+  // Público
 
   async getPublicForm(slug: string, registrationId?: string) {
     const event = await this.prisma.db.event.findUnique({

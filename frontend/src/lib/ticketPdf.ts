@@ -2,7 +2,7 @@ import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 
 /**
- * Ingresso em PDF da inscrição — o mesmo documento que o participante baixa ao
+ * Ingresso em PDF da inscrição: o mesmo documento que o participante baixa ao
  * concluir a inscrição pública e que o organizador pode gerar de novo pelo
  * painel, para quem perdeu o e-mail de confirmação.
  */
@@ -53,7 +53,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
   const H = pdf.internal.pageSize.getHeight()
 
   // Linhas de detalhe: só entram as que têm valor, e a altura do card
-  // acompanha — inscrição lançada pelo organizador costuma ter menos dados.
+  // acompanha, porque inscrição lançada pelo organizador costuma ter menos dados.
   const rows: Array<[string, string]> = []
   if (data.participantName) rows.push(['Participante', data.participantName])
   if (data.participantCpf) rows.push(['Documento', data.participantCpf])
@@ -73,7 +73,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
   pdf.setFillColor(...NAVY)
   pdf.rect(0, 0, W, 48, 'F')
 
-  // label "INGRESSO" dourado — sem charSpace para centralizar corretamente
+  // label "INGRESSO" dourado, sem charSpace para centralizar corretamente
   pdf.setTextColor(...GOLD)
   pdf.setFontSize(9)
   pdf.setFont('helvetica', 'bold')

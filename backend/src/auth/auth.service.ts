@@ -28,7 +28,7 @@ export class AuthService {
       if (exists) {
         // Conta-sombra: criada automaticamente quando a pessoa se inscreveu
         // num evento, com senha aleatória que ninguém nunca soube. Sem isso o
-        // e-mail dela ficaria permanentemente bloqueado — não conseguiria se
+        // e-mail dela ficaria permanentemente bloqueado e não conseguiria se
         // cadastrar (o e-mail "já existe") nem entrar (não tem a senha).
         // Assumir a conta preserva o histórico de inscrições dela.
         if (!exists.isShadow) {

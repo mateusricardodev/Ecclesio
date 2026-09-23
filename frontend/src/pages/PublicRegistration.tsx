@@ -615,7 +615,7 @@ export function PublicRegistration() {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 000 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
                   </svg>
                 )}
-                {submitting ? 'Processando...' : 'Confirmar inscrição →'}
+                {submitting ? 'Processando...' : 'Confirmar inscrição'}
               </button>
 
               <Link
@@ -623,7 +623,7 @@ export function PublicRegistration() {
                 className="text-center text-sm transition-colors"
                 style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}
               >
-                ← Voltar para o evento
+                Voltar para o evento
               </Link>
             </div>
           </form>

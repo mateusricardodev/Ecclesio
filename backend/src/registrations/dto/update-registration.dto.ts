@@ -42,7 +42,7 @@ export class UpdateRegistrationDto {
   extraFields?: Record<string, string>;
 
   /**
-   * Valor da inscrição em reais. Não existe coluna própria na Registration —
+   * Valor da inscrição em reais. Não existe coluna própria na Registration;
    * o valor vive em `Payment.amount`, então o service faz upsert do Payment.
    */
   @IsNumber({ maxDecimalPlaces: 2 })

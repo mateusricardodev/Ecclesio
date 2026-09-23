@@ -5,7 +5,7 @@ import api, { API_BASE_URL } from '../api/axios'
 import { downloadTicketPdf } from '../lib/ticketPdf'
 
 /**
- * MODO MOCK — como testar sem Mercado Pago real:
+ * MODO MOCK: como testar sem Mercado Pago real:
  * 1. Faça a inscrição normalmente pelo formulário.
  * 2. Copie o `providerPaymentId` que aparece na seção "Teste (modo mock)" abaixo.
  * 3. Execute no terminal:
@@ -176,7 +176,7 @@ export function PixPayment() {
     }
   }
 
-  // ─── Stage D: Dinheiro — vaga garantida, pagamento presencial ─────────────
+  // Stage D: Dinheiro, vaga garantida, pagamento presencial
   if (stage === 'cash') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
@@ -258,7 +258,7 @@ export function PixPayment() {
     )
   }
 
-  // ─── Stage B: Confirmed ───────────────────────────────────────────────────
+  // Stage B: Confirmed
   if (stage === 'confirmed') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
@@ -324,7 +324,7 @@ export function PixPayment() {
     )
   }
 
-  // ─── Stage C: Failed / Overbooked ────────────────────────────────────────
+  // Stage C: Failed / Overbooked
   if (stage === 'failed' || stage === 'overbooked') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
@@ -356,14 +356,14 @@ export function PixPayment() {
             onClick={() => navigate(`/evento/${slug}`)}
             className="font-inter w-full text-sm text-gray-400 hover:text-gray-600 py-2"
           >
-            ← Voltar ao evento
+            Voltar ao evento
           </button>
         </div>
       </div>
     )
   }
 
-  // ─── Stage A: Pending (waiting for payment) ───────────────────────────────
+  // Stage A: Pending (waiting for payment)
   return (
     <div className="min-h-screen bg-[#F2EDE4]">
       <div className="bg-[#1B2B5E] text-white py-6">
@@ -423,7 +423,7 @@ export function PixPayment() {
                     : 'bg-[#1B2B5E] hover:bg-[#152348] text-[#F2EDE4]',
                 ].join(' ')}
               >
-                {copied ? '✓ Copiado!' : 'Copiar código PIX'}
+                {copied ? 'Copiado' : 'Copiar código PIX'}
               </button>
             </div>
           )}
@@ -458,7 +458,7 @@ export function PixPayment() {
           onClick={() => navigate(`/evento/${slug}`)}
           className="font-inter text-center text-sm text-gray-400 hover:text-gray-600 transition-colors py-2"
         >
-          ← Voltar ao evento
+          Voltar ao evento
         </button>
       </div>
     </div>

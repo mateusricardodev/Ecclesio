@@ -197,7 +197,7 @@ export function Wallet() {
           </p>
         </div>
 
-        {/* ── Saldos ──────────────────────────────────────────────────────── */}
+        {/* Saldos */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
             icon={<WalletIcon size={16} />}
@@ -218,7 +218,7 @@ export function Wallet() {
           />
         </div>
 
-        {/* ── Resgate ─────────────────────────────────────────────────────── */}
+        {/* Resgate */}
         <div className="rounded-2xl p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Resgatar saldo
@@ -298,7 +298,7 @@ export function Wallet() {
           {payoutMsg && <Message {...payoutMsg} />}
         </div>
 
-        {/* ── Chave PIX ───────────────────────────────────────────────────── */}
+        {/* Chave PIX */}
         <div className="rounded-2xl p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Conta de recebimento
@@ -384,7 +384,7 @@ export function Wallet() {
           {accountMsg && <Message {...accountMsg} />}
         </div>
 
-        {/* ── Extrato ─────────────────────────────────────────────────────── */}
+        {/* Extrato */}
         <div className="rounded-2xl p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Extrato
@@ -428,7 +428,7 @@ export function Wallet() {
           )}
         </div>
 
-        {/* ── Histórico de resgates ───────────────────────────────────────── */}
+        {/* Histórico de resgates */}
         {payouts.length > 0 && (
           <div className="rounded-2xl p-5" style={cardStyle}>
             <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
@@ -502,7 +502,7 @@ function StatCard({
           color: '#00186D',
         }}
       >
-        {value ?? '—'}
+        {value ?? '-'}
       </p>
       {hint && (
         <p className="text-xs mt-1" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>{hint}</p>

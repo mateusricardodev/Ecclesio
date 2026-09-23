@@ -25,7 +25,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator.js';
 
 /**
  * Extensão salva no disco vem SEMPRE deste mapa (derivado dos magic bytes
- * reais), nunca do nome de arquivo enviado pelo cliente — do contrário um
+ * reais), nunca do nome de arquivo enviado pelo cliente. Do contrário, um
  * arquivo polyglot (ex.: assinatura de GIF válida + payload HTML/JS, salvo
  * com nome "x.html") seria servido por /uploads com Content-Type text/html,
  * abrindo XSS armazenado no domínio da API.

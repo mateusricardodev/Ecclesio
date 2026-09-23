@@ -314,7 +314,7 @@ export function PublicFeedback() {
             />
           </div>
 
-          {/* Só no link genérico — pelo link do e-mail já sabemos quem respondeu */}
+          {/* Só no link genérico; pelo link do e-mail já sabemos quem respondeu */}
           {!form.participantName && (
             <div className="flex flex-col gap-1.5">
               <label

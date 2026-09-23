@@ -125,7 +125,7 @@ export function EventSetupPage() {
 
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-4 md:gap-6 pb-8">
 
-        {/* Sidebar de seções — vira faixa de largura cheia no mobile */}
+        {/* Sidebar de seções: vira faixa de largura cheia no mobile */}
         <aside className="w-full md:w-52 md:shrink-0">
           <WizardCard>
             <p
@@ -215,7 +215,7 @@ export function EventSetupPage() {
           <WizardCard>
             {saved && (
               <p className="text-xs font-medium" style={{ color: '#166534', fontFamily: 'var(--font-sans)' }}>
-                ✓ Alterações salvas com sucesso!
+                Alterações salvas.
               </p>
             )}
 
@@ -257,14 +257,14 @@ export function EventSetupPage() {
                 {saving ? 'Salvando...' : 'Salvar'}
               </button>
               <button onClick={handlePublish} disabled={publishing} style={wizardPrimaryBtn(publishing)}>
-                {publishing ? 'Publicando...' : 'Publicar →'}
+                {publishing ? 'Publicando...' : 'Publicar'}
               </button>
             </div>
           </WizardCard>
 
           <div className="flex">
             <button onClick={() => navigate(`/events/${id}/setup/form`)} style={wizardNavBtn()}>
-              ← Passo anterior
+              Passo anterior
             </button>
           </div>
         </div>

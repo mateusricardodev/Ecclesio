@@ -1,4 +1,4 @@
-# 🎟️ Ecclesio
+# Ecclesio
 
 > **Plataforma completa para criação, gerenciamento e credenciamento de eventos.**
 
@@ -11,7 +11,7 @@
 
 ---
 
-## 🚀 Sobre o projeto
+## Sobre o projeto
 
 O **Ecclesio** é uma plataforma full-stack desenvolvida para simplificar a criação e gerenciamento de eventos.
 
@@ -23,7 +23,7 @@ O projeto também possui um módulo específico para **credenciamento**, permiti
 
 ---
 
-## 🎯 Problema
+## Problema
 
 Gerenciar inscrições de eventos manualmente pode gerar:
 
@@ -34,7 +34,7 @@ Gerenciar inscrições de eventos manualmente pode gerar:
 * Falta de informações centralizadas
 * Processos manuais demorados
 
-### 💡 Solução
+### Solução
 
 O inscrições.app centraliza todo o fluxo:
 
@@ -58,9 +58,9 @@ Check-in no evento
 
 ---
 
-## ✨ Principais funcionalidades
+## Principais funcionalidades
 
-### 👨‍💼 Organizador
+### Organizador
 
 * Cadastro e login
 * Autenticação via JWT
@@ -77,7 +77,7 @@ Check-in no evento
 * Cancelamento de inscrições
 * Confirmação manual de pagamentos
 
-### 👤 Participante
+### Participante
 
 * Visualização pública do evento
 * Inscrição sem necessidade de login
@@ -90,7 +90,7 @@ Check-in no evento
 * Ingresso em PDF
 * QR Code para credenciamento
 
-### 📱 Credenciamento
+### Credenciamento
 
 O sistema possui uma área específica para check-in:
 
@@ -101,7 +101,7 @@ O sistema possui uma área específica para check-in:
 * Histórico de check-ins
 * Estatísticas de presença
 
-### 🔐 Segurança
+### Segurança
 
 * JWT Authentication
 * Autorização por proprietário do recurso
@@ -115,7 +115,7 @@ O sistema possui uma área específica para check-in:
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O projeto utiliza uma arquitetura monorepo com duas aplicações independentes:
 
@@ -163,7 +163,7 @@ PostgreSQL
 
 ---
 
-## 🛠️ Stack tecnológica
+## Stack tecnológica
 
 ### Frontend
 
@@ -213,7 +213,7 @@ Ubuntu
 
 ---
 
-## 🗃️ Modelo de dados
+## Modelo de dados
 
 Principais entidades:
 
@@ -241,7 +241,7 @@ registrado como crédito em `LedgerEntry` e resgatado via `PayoutRequest`:
 
 - `Payment.amount` é o total cobrado; `baseAmount` é a parte do organizador e
   `feeAmount` a taxa de serviço que fica com a plataforma.
-- **O saldo nunca é uma coluna** — é sempre a soma de `LedgerEntry`. Uma linha
+- **O saldo nunca é uma coluna**: é sempre a soma de `LedgerEntry`. Uma linha
   entra no saldo sacável quando `availableAt <= agora`; vendas ficam retidas até
   `PAYOUT_HOLD_DAYS` depois do fim do evento, que é a proteção contra estornar
   um PIX já resgatado.
@@ -257,15 +257,15 @@ registrado como crédito em `LedgerEntry` e resgatado via `PayoutRequest`:
 
 ---
 
-## ⚡ Como executar
+## Como executar
 
 ### Pré-requisitos
 
 * Node.js 20+
 * PostgreSQL 15+
 * npm
-* Conta Mercado Pago — opcional
-* Conta Brevo — opcional
+* Conta Mercado Pago (opcional)
+* Conta Brevo (opcional)
 
 ---
 
@@ -319,7 +319,7 @@ MAIL_PASS="sua-chave"
 MAIL_FROM="Ecclesio <noreply@seudominio.com>"
 ```
 
-> **Produção (`NODE_ENV=production`):** a API não sobe sem `FRONTEND_URL` (origens liberadas no CORS, separadas por vírgula) e sem `PAYMENT_PROVIDER=mercadopago` + `MERCADOPAGO_ACCESS_TOKEN` — o provider `mock` só funciona fora de produção.
+> **Produção (`NODE_ENV=production`):** a API não sobe sem `FRONTEND_URL` (origens liberadas no CORS, separadas por vírgula) e sem `PAYMENT_PROVIDER=mercadopago` + `MERCADOPAGO_ACCESS_TOKEN`. O provider `mock` só funciona fora de produção.
 
 ---
 
@@ -376,7 +376,7 @@ http://localhost:5173
 
 ---
 
-## 💳 Desenvolvimento com PIX
+## Desenvolvimento com PIX
 
 O projeto possui um provider `mock` para desenvolvimento (bloqueado em produção), permitindo testar o fluxo de pagamento sem utilizar o Mercado Pago.
 
@@ -392,7 +392,7 @@ curl -X POST http://localhost:3000/payments/mock/<providerPaymentId>/approve
 
 ---
 
-## 🧪 Testes
+## Testes
 
 ### Unitários
 
@@ -416,7 +416,7 @@ npm run test:e2e
 
 ---
 
-## 🗺️ Principais rotas
+## Principais rotas
 
 ### Público
 
@@ -459,7 +459,7 @@ npm run test:e2e
 
 ---
 
-## 📈 Roadmap
+## Roadmap
 
 * [x] Autenticação
 * [x] Criação de eventos
@@ -480,7 +480,7 @@ npm run test:e2e
 
 ---
 
-## 🌐 Deploy
+## Deploy
 
 O projeto foi estruturado para execução em ambiente Linux utilizando:
 
@@ -492,20 +492,17 @@ O frontend pode ser servido como build estático, enquanto o backend roda como p
 
 ---
 
-## 📌 Status
+## Status
 
-🟢 **Projeto funcional / Full Stack**
+**Projeto funcional / Full Stack**
 
 O projeto representa uma aplicação completa de gerenciamento de eventos, desde a criação do evento até o credenciamento do participante.
 
 ---
 
-## 👨‍💻 Autor
+## Autor
 
 **Mateus Ricardo**
 
 Desenvolvedor de Software com experiência em aplicações web, APIs REST, bancos de dados, automação e análise de dados.
 
----
-
-⭐ Gostou do projeto? Deixe uma estrela no repositório!

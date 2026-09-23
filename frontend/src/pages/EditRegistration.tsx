@@ -40,7 +40,7 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
 
 /**
  * Uma cobrança emitida por gateway (Pix/cartão) e ainda em aberto carrega o
- * valor antigo no QR — o backend recusa a alteração até ela ser paga ou
+ * valor antigo no QR. O backend recusa a alteração até ela ser paga ou
  * vencer, então o campo aparece travado.
  */
 function hasOpenGatewayCharge(payment: Registration['payment']): boolean {
@@ -271,7 +271,7 @@ export function EditRegistration() {
         phone:     form.phone.replace(/\D/g,'') || undefined,
         birthDate: form.birthDate || undefined,
         ...(Object.keys(updatedExtra).length > 0 && { extraFields: updatedExtra }),
-        // Só vão no payload se o organizador mexeu nos campos — enviar sempre
+        // Só vão no payload se o organizador mexeu nos campos; enviar sempre
         // criaria um Payment vazio em toda edição de inscrição sem pagamento.
         ...(amountChanged && { amount: Math.round(Number(amount || 0) * 100) / 100 }),
         ...(methodChanged && { method: method || null }),
@@ -445,7 +445,7 @@ export function EditRegistration() {
               {paymentLocked
                 ? 'Há uma cobrança em aberto no gateway com o valor e a forma de pagamento atuais. Só é possível alterá-los depois que ela for paga ou vencer.'
                 : payment?.status === 'paid'
-                  ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro — não gera cobrança nem estorno.'
+                  ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro. Não gera cobrança nem estorno.'
                   : 'Valor e forma de pagamento desta inscrição. Ficam registrados como recebidos se a inscrição já estiver confirmada, ou como pendentes até a confirmação do pagamento.'}
             </p>
           </WizardCard>
@@ -506,7 +506,7 @@ export function EditRegistration() {
                 ? 'Esta inscrição não tem código de credenciamento, então não é possível gerar o ingresso em PDF.'
                 : ticket.status !== 'confirmed'
                   ? 'O e-mail de confirmação só pode ser reenviado depois que a inscrição estiver confirmada. O PDF já pode ser baixado e enviado por outro canal.'
-                  : 'O PDF traz o QR code de credenciamento — útil para quem não recebeu o e-mail. O reenvio dispara a mesma mensagem de confirmação para o e-mail cadastrado.'}
+                  : 'O PDF traz o QR code de credenciamento, útil para quem não recebeu o e-mail. O reenvio dispara a mesma mensagem de confirmação para o e-mail cadastrado.'}
             </p>
           </WizardCard>
 

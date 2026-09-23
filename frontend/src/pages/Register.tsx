@@ -32,7 +32,7 @@ export function Register() {
   return (
     <div className="min-h-screen flex" style={{ background: '#F5F2E8' }}>
 
-      {/* ── Lado esquerdo — imagem ── */}
+      {/* Lado esquerdo: imagem */}
       <div className="hidden lg:flex w-[55%] relative overflow-hidden">
         <img
           src="/interior-igreja.jpg"
@@ -75,7 +75,7 @@ export function Register() {
         </div>
       </div>
 
-      {/* ── Lado direito — formulário ── */}
+      {/* Lado direito: formulário */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-[420px]">
 
@@ -193,7 +193,6 @@ export function Register() {
                 ) : (
                   <>
                     Criar conta
-                    <span style={{ color: '#D4B16A' }}>→</span>
                   </>
                 )}
               </button>

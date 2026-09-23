@@ -19,7 +19,7 @@ export class PublicController {
     return this.publicService.register(slug, dto);
   }
 
-  /** Status do pagamento consultado pelo inscrito (sem auth — registrationId é UUID não-adivinhável). */
+  /** Status do pagamento consultado pelo inscrito (sem auth: registrationId é UUID não-adivinhável). */
   @Get('payments/status/:registrationId')
   getPaymentStatus(@Param('registrationId') registrationId: string) {
     return this.publicService.getPaymentStatus(registrationId);

@@ -47,7 +47,7 @@ export async function startQrScanner(
         advanced: [{ torch: on }],
       } as unknown as MediaTrackConstraints)
     } catch {
-      /* dispositivo não aceitou — ignora */
+      /* dispositivo não aceitou, ignora */
     }
   }
 

@@ -33,7 +33,7 @@ export function EventCheckin() {
     setStats,
   )
 
-  // stats (título + contadores) — uma vez
+  // stats (título + contadores), uma vez
   useEffect(() => {
     let active = true
     fetchCheckinStats(id)

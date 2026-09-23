@@ -31,7 +31,7 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
 
 function paymentMethodLabel(reg: Registration): string {
   const method = reg.payment?.method
-  if (!method) return '—'
+  if (!method) return '-'
   return PAYMENT_METHOD_LABELS[method] ?? method
 }
 
@@ -125,7 +125,7 @@ export function EventDetail() {
     }
   }
 
-  // O aviso de sucesso some sozinho — nada aqui exige confirmação do usuário.
+  // O aviso de sucesso some sozinho; nada aqui exige confirmação do usuário.
   useEffect(() => {
     if (!toast) return
     const timer = setTimeout(() => setToast(''), 5000)
@@ -146,7 +146,7 @@ export function EventDetail() {
         participantName: reg.user.name,
         participantCpf: reg.cpf ? formatCpf(reg.cpf) : null,
         email: reg.user.email,
-        // "Valor pago" no ingresso só faz sentido com o pagamento quitado —
+        // "Valor pago" no ingresso só faz sentido com o pagamento quitado,
         // inscrição pendente sai sem a linha de valor.
         amount: reg.payment?.status === 'paid' ? Number(reg.payment.amount) : null,
       })
@@ -211,7 +211,7 @@ export function EventDetail() {
     const matchFrom   = !dateFrom || created >= new Date(dateFrom)
     const matchTo     = !dateTo   || created <= new Date(dateTo + 'T23:59:59')
     const matchStatus = statusFilter ? r.status === statusFilter : r.status !== 'canceled'
-    // 'none' cobre inscrição sem Payment e Payment sem modalidade gravada —
+    // 'none' cobre inscrição sem Payment e Payment sem modalidade gravada,
     // mesmo critério que o backend aplica na exportação.
     const matchMethod = !methodFilter
       || (methodFilter === 'none' ? !r.payment?.method : r.payment?.method === methodFilter)
@@ -246,7 +246,7 @@ export function EventDetail() {
   return (
     <DashboardLayout active="eventos">
 
-      {/* ── Cabeçalho ── */}
+      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div className="min-w-0">
           <Link
@@ -323,7 +323,7 @@ export function EventDetail() {
         )}
       </div>
 
-      {/* ── Métricas ── */}
+      {/* Métricas */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {statCards.map((c) => (
           <div
@@ -351,7 +351,7 @@ export function EventDetail() {
         ))}
       </div>
 
-      {/* ── Tabela de inscrições ── */}
+      {/* Tabela de inscrições */}
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -499,7 +499,7 @@ export function EventDetail() {
                     </div>
 
                     <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                      {reg.cpf ? formatCpf(reg.cpf) : '—'}
+                      {reg.cpf ? formatCpf(reg.cpf) : '-'}
                     </span>
 
                     <span
@@ -518,7 +518,7 @@ export function EventDetail() {
                     </span>
 
                     {/* Check-in: no mobile só o ícone (verde = feito), em sm+ vira
-                        coluna com Sim/Não — mesmo rótulo da planilha exportada. */}
+                        coluna com Sim/Não, mesmo rótulo da planilha exportada. */}
                     <span
                       className="inline-flex items-center justify-center gap-1 text-xs font-medium shrink-0 sm:w-20"
                       style={{ color: reg.checkedIn ? '#166534' : '#9CA3AF', fontFamily: 'var(--font-sans)' }}
@@ -623,7 +623,7 @@ export function EventDetail() {
         </div>
       </div>
 
-      {/* ── Modal de cancelamento ── */}
+      {/* Modal de cancelamento */}
       {cancelConfirm && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
@@ -663,7 +663,7 @@ export function EventDetail() {
         </div>
       )}
 
-      {/* ── Modal de confirmação manual de pagamento ── */}
+      {/* Modal de confirmação manual de pagamento */}
       {confirmPaymentModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
@@ -707,7 +707,7 @@ export function EventDetail() {
           </div>
         </div>
       )}
-      {/* ── Modal de reenvio do e-mail de confirmação ── */}
+      {/* Modal de reenvio do e-mail de confirmação */}
       {resendModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
@@ -756,7 +756,7 @@ export function EventDetail() {
         </div>
       )}
 
-      {/* ── Aviso flutuante (reenvio / falha ao gerar PDF) ── */}
+      {/* Aviso flutuante (reenvio / falha ao gerar PDF) */}
       {toast && (
         <div
           className="fixed bottom-6 right-6 z-50 max-w-xs rounded-xl px-4 py-3 text-sm"

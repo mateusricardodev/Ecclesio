@@ -3,7 +3,7 @@
  *
  * `computeCharge` espelha `backend/src/common/platform-fee.ts` e existe só para
  * dar preview instantâneo enquanto o organizador digita. O valor que vale é
- * sempre o que o backend devolve — nunca use este cálculo para cobrar.
+ * sempre o que o backend devolve. Nunca use este cálculo para cobrar.
  */
 
 export interface FeeConfig {

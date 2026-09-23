@@ -7,10 +7,8 @@ export function LandingCTA() {
       <div className="max-w-3xl mx-auto px-6 text-center">
 
         {/* Ornamento */}
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <div className="h-px w-10" style={{ background: '#D4B16A' }} />
-          <span style={{ color: '#D4B16A', fontSize: '1rem' }}>✦</span>
-          <div className="h-px w-10" style={{ background: '#D4B16A' }} />
+        <div className="flex justify-center mb-6">
+          <div className="h-px w-16" style={{ background: '#D4B16A' }} />
         </div>
 
         <h2

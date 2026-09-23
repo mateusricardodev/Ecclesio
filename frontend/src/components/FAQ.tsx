@@ -8,7 +8,7 @@ const items = [
   },
   {
     q: 'O participante precisa criar uma conta para se inscrever?',
-    a: 'Não. Esse é um dos principais diferenciais da plataforma. O participante recebe o link do evento, preenche o formulário e confirma a inscrição — tudo sem criar conta ou senha.',
+    a: 'Não. Esse é um dos principais diferenciais da plataforma. O participante recebe o link do evento, preenche o formulário e confirma a inscrição sem criar conta ou senha.',
   },
   {
     q: 'Posso personalizar os campos do formulário de inscrição?',

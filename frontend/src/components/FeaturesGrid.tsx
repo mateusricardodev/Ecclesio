@@ -31,7 +31,7 @@ const differentials = [
   {
     icon: Zap,
     title: 'Sem burocracia para o participante',
-    description: 'Nenhuma conta necessária. O participante abre o link e já está no formulário — zero fricção.',
+    description: 'Nenhuma conta necessária. O participante abre o link e já está no formulário.',
   },
   {
     icon: ShieldCheck,
@@ -76,7 +76,7 @@ const features = [
 export function FeaturesGrid() {
   return (
     <>
-      {/* ── Cards de recursos (logo abaixo do hero) ── */}
+      {/* Cards de recursos (logo abaixo do hero) */}
       <section style={{ background: '#F5F2E8' }} className="pb-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -111,7 +111,7 @@ export function FeaturesGrid() {
         </div>
       </section>
 
-      {/* ── Como funciona ── */}
+      {/* Como funciona */}
       <section id="como-funciona" className="py-24" style={{ background: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
@@ -172,7 +172,7 @@ export function FeaturesGrid() {
         </div>
       </section>
 
-      {/* ── Diferenciais ── */}
+      {/* Diferenciais */}
       <section id="diferenciais" className="py-24" style={{ background: '#00186D' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">

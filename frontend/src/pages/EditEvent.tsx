@@ -163,7 +163,7 @@ export function EditEvent() {
             </div>
 
             <WizardField label="Local do evento">
-              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções — São Paulo, SP" />
+              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções, São Paulo, SP" />
             </WizardField>
 
             <WizardField label="Telefone do organizador">
@@ -177,14 +177,14 @@ export function EditEvent() {
 
           <div className="flex items-center justify-between pb-8">
             <button type="button" onClick={() => navigate(`/events/${id}`)} style={wizardNavBtn()}>
-              ← Voltar ao evento
+              Voltar ao evento
             </button>
             <div className="flex items-center gap-3">
               <button type="submit" disabled={saving} style={wizardSecondaryBtn()}>
                 {saving ? 'Salvando...' : 'Salvar'}
               </button>
               <button type="button" disabled={saving} onClick={handleSaveAndNext} style={wizardPrimaryBtn(saving)}>
-                Próximo passo →
+                Próximo passo
               </button>
             </div>
           </div>

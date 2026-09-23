@@ -84,7 +84,7 @@ export function Login() {
   return (
     <div className="min-h-screen flex" style={{ background: '#F5F2E8' }}>
 
-      {/* ── LADO ESQUERDO — imagem institucional ── */}
+      {/* Lado esquerdo: imagem institucional */}
       <div className="hidden lg:flex w-[55%] relative overflow-hidden">
         <img
           src="/interior-igreja.jpg"
@@ -146,7 +146,7 @@ export function Login() {
         </div>
       </div>
 
-      {/* ── LADO DIREITO — formulário ── */}
+      {/* Lado direito: formulário */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-[420px]">
 
@@ -212,7 +212,7 @@ export function Login() {
             {/* Feedback */}
             {success && (
               <div className="text-sm rounded-xl px-4 py-3 mb-5 flex items-center gap-2" style={{ background: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0' }}>
-                <span>✓</span> {success}
+                {success}
               </div>
             )}
             {error && (
@@ -221,7 +221,7 @@ export function Login() {
               </div>
             )}
 
-            {/* ── LOGIN ── */}
+            {/* LOGIN */}
             {isLogin && (
               <form onSubmit={handleLogin} className="flex flex-col gap-5">
                 <Field label="E-mail">
@@ -266,7 +266,7 @@ export function Login() {
               </form>
             )}
 
-            {/* ── CADASTRO ── */}
+            {/* CADASTRO */}
             {!isLogin && (
               <form onSubmit={handleRegister} className="flex flex-col gap-5">
                 <Field label="Nome completo">
@@ -364,7 +364,7 @@ export function Login() {
   )
 }
 
-// ── Componentes auxiliares ────────────────────────────────────────────────
+// Componentes auxiliares
 
 const inputStyle: React.CSSProperties = {
   background: '#FAFAFA',
@@ -413,7 +413,6 @@ function PrimaryButton({ loading, label, loadingLabel }: { loading: boolean; lab
       ) : (
         <>
           {label}
-          <span style={{ color: '#D4B16A' }}>→</span>
         </>
       )}
     </button>

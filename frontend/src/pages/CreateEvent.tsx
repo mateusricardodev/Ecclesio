@@ -117,7 +117,7 @@ export function CreateEvent() {
             </div>
 
             <WizardField label="Local do evento">
-              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções — São Paulo, SP" />
+              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções, São Paulo, SP" />
             </WizardField>
 
             <WizardField label="Descrição">
@@ -135,7 +135,7 @@ export function CreateEvent() {
 
           <div className="flex justify-end pb-8">
             <button type="submit" disabled={loading} style={wizardPrimaryBtn(loading)}>
-              {loading ? 'Criando...' : 'Próximo passo →'}
+              {loading ? 'Criando...' : 'Próximo passo'}
             </button>
           </div>
         </form>

@@ -55,7 +55,7 @@ describe('WalletService', () => {
     delete process.env.MIN_PAYOUT_AMOUNT;
   });
 
-  // ─── getSummary ────────────────────────────────────────────────────────────
+  // getSummary
 
   describe('getSummary', () => {
     it('separa saldo disponível do retido', async () => {
@@ -87,7 +87,7 @@ describe('WalletService', () => {
     });
   });
 
-  // ─── updatePixAccount ──────────────────────────────────────────────────────
+  // updatePixAccount
 
   describe('updatePixAccount', () => {
     it('normaliza o documento removendo máscara', async () => {
@@ -133,7 +133,7 @@ describe('WalletService', () => {
     });
   });
 
-  // ─── requestPayout ─────────────────────────────────────────────────────────
+  // requestPayout
 
   describe('requestPayout', () => {
     it('exige chave PIX cadastrada', async () => {
@@ -223,7 +223,7 @@ describe('WalletService', () => {
     });
   });
 
-  // ─── updatePayout (admin) ──────────────────────────────────────────────────
+  // updatePayout (admin)
 
   describe('updatePayout', () => {
     it('marca como pago e registra quem processou', async () => {
@@ -241,7 +241,7 @@ describe('WalletService', () => {
         where: { id: 'payout-1' },
         data: expect.objectContaining({ status: 'paid', processedBy: ADMIN_ID }),
       });
-      // Pagar não mexe no razão — o débito já saiu quando o resgate foi pedido
+      // Pagar não mexe no razão: o débito já saiu quando o resgate foi pedido
       expect(mockDb.ledgerEntry.create).not.toHaveBeenCalled();
     });
 
@@ -292,7 +292,7 @@ describe('WalletService', () => {
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('processing não grava processedAt — o resgate ainda não terminou', async () => {
+    it('processing não grava processedAt (o resgate ainda não terminou)', async () => {
       mockDb.payoutRequest.findUnique.mockResolvedValue({
         id: 'payout-1',
         userId: USER_ID,

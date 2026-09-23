@@ -58,7 +58,7 @@ export function Footer() {
           style={{ borderTop: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-sans)' }}
         >
           <p>© {new Date().getFullYear()} Ecclesio. Todos os direitos reservados.</p>
-          <p style={{ color: '#D4B16A' }}>✦ Feito para a missão da Igreja</p>
+          <p style={{ color: '#D4B16A' }}>Feito para a missão da Igreja</p>
         </div>
       </div>
     </footer>

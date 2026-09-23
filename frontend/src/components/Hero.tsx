@@ -9,7 +9,7 @@ export function Hero() {
     >
       <div className="max-w-7xl mx-auto px-6 py-20 w-full grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* ── Esquerda ── */}
+        {/* Esquerda */}
         <div className="flex flex-col gap-7">
 
           {/* Badge */}
@@ -20,7 +20,7 @@ export function Hero() {
               border: '1px solid rgba(0,24,109,0.12)',
             }}
           >
-            <span style={{ color: '#D4B16A', fontSize: '0.65rem' }}>✦</span>
+            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#D4B16A' }} />
             <span
               className="text-xs font-semibold tracking-[0.1em]"
               style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}
@@ -52,7 +52,7 @@ export function Hero() {
             style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}
           >
             O Ecclesio é a plataforma completa para gestão de retiros, encontros, conferências e inscrições.
-            Seus participantes se inscrevem pelo link —{' '}
+            Seus participantes se inscrevem pelo link,{' '}
             <strong style={{ color: '#00186D' }}>sem precisar criar conta.</strong>
           </p>
 
@@ -93,7 +93,7 @@ export function Hero() {
               'Sem burocracia',
             ].map((text) => (
               <div key={text} className="flex items-center gap-1.5">
-                <span style={{ color: '#D4B16A', fontSize: '0.7rem' }}>✦</span>
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#D4B16A' }} />
                 <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
                   {text}
                 </span>
@@ -102,7 +102,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── Direita — imagem com card overlay ── */}
+        {/* Direita: imagem com card sobreposto */}
         <div className="hidden lg:block relative">
           {/* Imagem principal */}
           <div
@@ -120,7 +120,7 @@ export function Hero() {
               style={{ background: 'linear-gradient(180deg, rgba(0,24,109,0.12) 0%, rgba(0,24,109,0.35) 100%)' }}
             />
 
-            {/* Card flutuante — Segurança */}
+            {/* Card flutuante: segurança */}
             <div
               className="absolute bottom-6 left-6 right-6 rounded-2xl px-5 py-4 flex items-center gap-4"
               style={{
@@ -150,7 +150,7 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Badge flutuante — nova inscrição */}
+          {/* Badge flutuante: nova inscrição */}
           <div
             className="absolute -top-4 -right-4 rounded-2xl px-4 py-3 flex items-center gap-3"
             style={{
@@ -167,7 +167,7 @@ export function Hero() {
             </span>
             <div>
               <p className="text-xs font-bold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>Nova inscrição</p>
-              <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Maria R. — Retiro de Jovens</p>
+              <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Maria R., Retiro de Jovens</p>
             </div>
           </div>
         </div>

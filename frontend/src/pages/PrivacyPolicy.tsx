@@ -65,7 +65,7 @@ export function PrivacyPolicy() {
           <p className="mt-4" style={textStyle}>
             Esta política explica quais dados pessoais o Ecclesio coleta, para que são usados, com quem são
             compartilhados e como você pode exercer os seus direitos, conforme a Lei Geral de Proteção de Dados
-            Pessoais (Lei nº 13.709/2018 — LGPD).
+            Pessoais (LGPD, Lei nº 13.709/2018).
           </p>
 
           <Section title="1. Quem somos">
@@ -191,7 +191,7 @@ export function PrivacyPolicy() {
           </Section>
 
           <p className="mt-12" style={textStyle}>
-            <Link to="/" style={{ color: '#00186D', textDecoration: 'underline' }}>← Voltar para o início</Link>
+            <Link to="/" style={{ color: '#00186D', textDecoration: 'underline' }}>Voltar para o início</Link>
           </p>
         </article>
       </main>

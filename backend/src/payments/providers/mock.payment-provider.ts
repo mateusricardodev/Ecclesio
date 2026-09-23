@@ -6,7 +6,7 @@ import {
   ProviderPaymentStatus,
 } from './payment-provider.interface.js';
 
-// Minimal valid 1×1 white PNG — serves as placeholder QR image in mock mode
+// Minimal valid 1×1 white PNG, serves as placeholder QR image in mock mode
 const PLACEHOLDER_QR_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 

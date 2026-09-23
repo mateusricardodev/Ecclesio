@@ -78,7 +78,7 @@ export function AdminPayouts() {
     }
   }, [load, user?.role])
 
-  // O backend também bloqueia — aqui é só para não mostrar uma tela vazia.
+  // O backend também bloqueia; aqui é só para não mostrar uma tela vazia.
   if (user && user.role !== 'admin') return <Navigate to="/dashboard" replace />
 
   async function update(id: string, status: Payout['status'], notes?: string) {

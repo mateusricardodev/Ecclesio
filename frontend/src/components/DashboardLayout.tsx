@@ -14,7 +14,7 @@ const NAV_ITEMS = [
   { label: 'Configurações', icon: Settings, to: '/dashboard', key: 'config' },
 ]
 
-/** Item exclusivo do admin da plataforma — a fila de resgates a pagar. */
+/** Item exclusivo do admin da plataforma: a fila de resgates a pagar. */
 const ADMIN_NAV_ITEM = {
   label: 'Saques', icon: Banknote, to: '/admin/saques', key: 'saques',
 }
@@ -50,7 +50,7 @@ export function DashboardLayout({
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#F5F2E8' }}>
 
-      {/* ── TOPBAR ─────────────────────────────────────────────────────────── */}
+      {/* TOPBAR */}
       <header
         className="sticky top-0 z-30 flex items-center h-[60px] px-5 gap-4"
         style={{
@@ -133,7 +133,7 @@ export function DashboardLayout({
       </header>
 
       <div className="flex flex-1">
-        {/* ── SIDEBAR desktop ────────────────────────────────────────────── */}
+        {/* SIDEBAR desktop */}
         <aside
           className="hidden lg:flex flex-col w-[220px] shrink-0 min-h-[calc(100vh-60px)] sticky top-[60px] self-start"
           style={{
@@ -144,7 +144,7 @@ export function DashboardLayout({
           <SidebarContent active={active} isAdmin={isAdmin} />
         </aside>
 
-        {/* ── SIDEBAR mobile drawer ──────────────────────────────────────── */}
+        {/* SIDEBAR mobile drawer */}
         {sidebarOpen && (
           <div className="lg:hidden fixed inset-0 z-40 flex">
             <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
@@ -167,7 +167,7 @@ export function DashboardLayout({
           </div>
         )}
 
-        {/* ── CONTEÚDO ───────────────────────────────────────────────────── */}
+        {/* CONTEÚDO */}
         <main className="flex-1 min-w-0 px-5 sm:px-8 py-8">
           {children}
         </main>

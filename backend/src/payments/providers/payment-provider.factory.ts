@@ -20,7 +20,7 @@ export function paymentProviderFactory(
     return new MercadoPagoPaymentProvider(token);
   }
 
-  // O provedor mock aprova pagamentos sem cobrança real — nunca pode subir em
+  // O provedor mock aprova pagamentos sem cobrança real e nunca pode subir em
   // produção por esquecimento de variável de ambiente.
   if (isProduction) {
     throw new Error(

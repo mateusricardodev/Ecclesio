@@ -59,7 +59,7 @@ describe('FeedbackService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── config ────────────────────────────────────────────────────────────────
+  // config
 
   describe('getConfig', () => {
     it('cai na lista padrão quando o evento nunca configurou os itens', async () => {
@@ -109,7 +109,7 @@ describe('FeedbackService', () => {
     });
   });
 
-  // ─── resultados ────────────────────────────────────────────────────────────
+  // resultados
 
   describe('getResults', () => {
     it('calcula média e distribuição ignorando itens sem nota', async () => {
@@ -186,7 +186,7 @@ describe('FeedbackService', () => {
     });
   });
 
-  // ─── convites ──────────────────────────────────────────────────────────────
+  // convites
 
   describe('sendInvites', () => {
     it('exige a pesquisa aberta', async () => {
@@ -216,7 +216,7 @@ describe('FeedbackService', () => {
     });
   });
 
-  // ─── formulário público ────────────────────────────────────────────────────
+  // formulário público
 
   describe('getPublicForm', () => {
     it('não expõe o formulário com a pesquisa fechada', async () => {
@@ -252,7 +252,7 @@ describe('FeedbackService', () => {
     });
   });
 
-  // ─── envio de resposta ─────────────────────────────────────────────────────
+  // envio de resposta
 
   describe('submit', () => {
     const ratings = [{ item: 'Cozinha', score: 9 }];
@@ -324,7 +324,7 @@ describe('FeedbackService', () => {
 
       expect(mockDb.eventFeedback.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          // Identificado pela inscrição — o nome digitado não sobrescreve o cadastro
+          // Identificado pela inscrição: o nome digitado não sobrescreve o cadastro
           data: expect.objectContaining({ registrationId: 'reg-1', respondentName: null }),
         }),
       );

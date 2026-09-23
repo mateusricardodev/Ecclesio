@@ -1,19 +1,19 @@
 const testimonials = [
   {
     name: 'Pe. André Lima',
-    role: 'Coordenador de Pastoral Jovem — Diocese de SP',
-    text: 'Usamos o Ecclesio para o nosso retiro anual. O processo foi absurdamente simples — em 15 minutos o evento estava online e as inscrições começaram a chegar.',
+    role: 'Coordenador de Pastoral Jovem, Diocese de SP',
+    text: 'Usamos o Ecclesio para o nosso retiro anual. O processo foi absurdamente simples. Em 15 minutos o evento estava online e as inscrições começaram a chegar.',
     avatar: 'AL',
   },
   {
     name: 'Simone Ferreira',
-    role: 'Secretária — Paróquia Nossa Senhora da Graça, RJ',
+    role: 'Secretária, Paróquia Nossa Senhora da Graça, RJ',
     text: 'O melhor é que os participantes não precisam criar conta. Isso eliminou metade das dúvidas que recebia antes. Recomendo demais para qualquer paróquia.',
     avatar: 'SF',
   },
   {
     name: 'Josué Carvalho',
-    role: 'Coordenador de Eventos — Comunidade Shalom, BH',
+    role: 'Coordenador de Eventos, Comunidade Shalom, BH',
     text: 'O painel de gestão é muito prático. Consigo ver quem se inscreveu, quantas vagas restam e editar informações tudo em um lugar só.',
     avatar: 'JC',
   },

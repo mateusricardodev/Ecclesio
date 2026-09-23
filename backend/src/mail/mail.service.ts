@@ -34,7 +34,7 @@ export class MailService {
   constructor(private readonly config: ConfigService) {
     if (!this.isDev) {
       if (!this.config.get<string>('MAIL_HOST')) {
-        this.logger.error('MAIL_HOST não configurado — os e-mails de confirmação não serão enviados.');
+        this.logger.error('MAIL_HOST não configurado. Os e-mails de confirmação não serão enviados.');
       }
       this.transporter = nodemailer.createTransport({
         host: this.config.get<string>('MAIL_HOST'),
@@ -62,7 +62,7 @@ export class MailService {
     if (!this.transporterPromise) {
       this.transporterPromise = nodemailer.createTestAccount().then((account) => {
         this.logger.log(
-          `[DEV] Ethereal Email configurado — usuário: ${account.user}`,
+          `[DEV] Ethereal Email configurado. Usuário: ${account.user}`,
         );
         this.transporter = nodemailer.createTransport({
           host: 'smtp.ethereal.email',
@@ -79,7 +79,7 @@ export class MailService {
 
   /**
    * Envia o e-mail de confirmação. Retorna `true` se o SMTP aceitou a mensagem
-   * e `false` se o envio falhou — os disparos automáticos são fire-and-forget e
+   * e `false` se o envio falhou. Os disparos automáticos são fire-and-forget e
    * ignoram o retorno, mas o reenvio manual pelo organizador precisa saber se
    * saiu para poder avisar na tela.
    */
@@ -108,7 +108,7 @@ export class MailService {
           color: { dark: '#1B2B5E', light: '#F2EDE4' },
         });
       } catch {
-        this.logger.warn('Falha ao gerar QR code para o email — enviando sem QR');
+        this.logger.warn('Falha ao gerar QR code para o email; enviando sem QR');
       }
     }
 
@@ -117,7 +117,7 @@ export class MailService {
       const info = await transport.sendMail({
         from,
         to: data.participantEmail,
-        subject: `Inscrição confirmada — ${data.eventTitle}`,
+        subject: `Inscrição confirmada: ${data.eventTitle}`,
         html: this.buildEmailHtml({ ...data, formattedDate, formattedTime, hasQr: !!qrBuffer }),
         attachments: qrBuffer
           ? [{ filename: 'qrcode.png', content: qrBuffer, cid: 'qrcode@ecclesio' }]
@@ -153,7 +153,7 @@ export class MailService {
       const info = await transport.sendMail({
         from,
         to: data.participantEmail,
-        subject: `Como foi para você? — ${data.eventTitle}`,
+        subject: `Como foi o ${data.eventTitle}?`,
         html: this.buildFeedbackInviteHtml(data),
       });
 
@@ -329,10 +329,10 @@ export class MailService {
                 Ecclesio
               </p>
               <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:26px;font-weight:700;">
-                Inscrição Confirmada!
+                Inscrição confirmada
               </h1>
               <p style="margin:0;color:#a0b0d0;font-size:14px;">
-                Olá, <strong style="color:#ffffff;">${data.participantName}</strong> — sua vaga está garantida.
+                Olá, <strong style="color:#ffffff;">${data.participantName}</strong>, sua vaga está garantida.
               </p>
             </td>
           </tr>
@@ -355,10 +355,10 @@ export class MailService {
                       ${data.eventTitle}
                     </p>
                     <p style="margin:0 0 4px 0;color:#5a6070;font-size:13px;">
-                      📅 ${data.formattedDate} às ${data.formattedTime}
+                      ${data.formattedDate} às ${data.formattedTime}
                     </p>
                     ${data.eventLocation
-                      ? `<p style="margin:0;color:#5a6070;font-size:13px;">📍 ${data.eventLocation}</p>`
+                      ? `<p style="margin:0;color:#5a6070;font-size:13px;">${data.eventLocation}</p>`
                       : ''}
                   </td>
                 </tr>

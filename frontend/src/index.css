@@ -6,7 +6,7 @@
   --color-brand-teal: #2dd4bf;
   --color-brand-teal-dark: #0f766e;
 
-  /* Identidade Ecclesio — azul-marinho, dourado e creme. O painel usa estes
+  /* Identidade Ecclesio: azul-marinho, dourado e creme. O painel usa estes
      mesmos valores em `style={{}}`; aqui eles viram tokens do Tailwind
      (bg-ecc-navy, text-ecc-gold, ...) para o app de credenciamento. Mudar a
      paleta do app inteiro é mudar este bloco. */
@@ -24,7 +24,7 @@
   --color-ecc-red: #991B1B;
   --color-ecc-red-soft: #FEF2F2;
 
-  /* Tipografia — duas famílias e nada mais: uma serifada editorial de alto
+  /* Tipografia: duas famílias e nada mais: uma serifada editorial de alto
      contraste nos títulos e uma grotesca geométrica em toda a UI, incluindo
      os rótulos pequenos em caixa alta. Trocar a tipografia do sistema
      inteiro é trocar estas duas linhas. */

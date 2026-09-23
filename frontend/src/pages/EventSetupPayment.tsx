@@ -46,7 +46,7 @@ export function EventSetupPayment() {
   }, [id])
 
   // Preview enquanto digita. Dinheiro é recebido direto pelo organizador, sem
-  // passar pela plataforma — por isso não tem taxa.
+  // passar pela plataforma, por isso não tem taxa.
   const previewBase = Number(form.value)
   const previewCharge =
     feeConfig && form.type !== 'cash' && previewBase > 0
@@ -238,11 +238,11 @@ export function EventSetupPayment() {
         {/* Navegação */}
         <div className="flex items-center justify-between pb-8">
           <button onClick={() => navigate(`/events/${id}/edit`)} style={wizardNavBtn()}>
-            ← Passo anterior
+            Passo anterior
           </button>
           {canProceed && (
             <button onClick={() => navigate(`/events/${id}/setup/form`)} style={wizardPrimaryBtn()}>
-              Próximo passo →
+              Próximo passo
             </button>
           )}
         </div>

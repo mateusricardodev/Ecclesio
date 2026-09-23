@@ -92,7 +92,7 @@ export function SearchRegistrations() {
   return (
     <DashboardLayout active="inscricoes">
 
-      {/* ── Cabeçalho ── */}
+      {/* Cabeçalho */}
       <div className="mb-8">
         <p
           className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
@@ -111,7 +111,7 @@ export function SearchRegistrations() {
         </p>
       </div>
 
-      {/* ── Campo de busca ── */}
+      {/* Campo de busca */}
       <div className="relative mb-6 max-w-xl">
         <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#6B7280' }} />
         <input
@@ -132,7 +132,7 @@ export function SearchRegistrations() {
         />
       </div>
 
-      {/* ── Resultados ── */}
+      {/* Resultados */}
       {loading ? (
         <div
           className="rounded-2xl overflow-hidden"
@@ -208,7 +208,7 @@ export function SearchRegistrations() {
                   </div>
 
                   <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                    {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '—'}
+                    {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '-'}
                   </span>
 
                   <span

@@ -1,6 +1,6 @@
 /**
  * Itens avaliados por padrão na pesquisa pós-evento. O organizador pode
- * renomear, remover ou acrescentar itens — quando isso acontece a lista fica
+ * renomear, remover ou acrescentar itens. Quando isso acontece, a lista fica
  * gravada em `Event.feedbackItems`; enquanto o campo for null, vale esta.
  */
 export const DEFAULT_FEEDBACK_ITEMS = [
