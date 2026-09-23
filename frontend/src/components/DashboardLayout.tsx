@@ -7,7 +7,7 @@ import {
 import { useAuthStore } from '../store/auth.store'
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard', key: 'dashboard' },
+  { label: 'Painel', icon: LayoutDashboard, to: '/dashboard', key: 'dashboard' },
   { label: 'Eventos', icon: Calendar, to: '/eventos', key: 'eventos' },
   { label: 'Inscrições', icon: Users, to: '/buscar-inscricoes', key: 'inscricoes' },
   { label: 'Financeiro', icon: Wallet, to: '/financeiro', key: 'financeiro' },

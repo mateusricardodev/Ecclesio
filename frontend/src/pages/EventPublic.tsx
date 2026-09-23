@@ -43,7 +43,7 @@ export function EventPublic() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F2E8' }}>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando evento...</p>
+        <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>Carregando evento...</p>
       </div>
     )
   }
@@ -54,7 +54,7 @@ export function EventPublic() {
         <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
           Evento não encontrado
         </p>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           O endereço pode estar incorreto ou o evento não está publicado.
         </p>
       </div>
@@ -89,7 +89,7 @@ export function EventPublic() {
           >
             <h1
               className="text-center"
-              style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#FFFFFF', lineHeight: 1.2 }}
             >
               {event.title}
             </h1>
@@ -105,7 +105,7 @@ export function EventPublic() {
         <div className="flex flex-col items-center gap-2 text-center">
           {event.bannerUrl && (
             <h1
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.875rem', fontWeight: 400, color: '#0A0A09', lineHeight: 1.2 }}
             >
               {event.title}
             </h1>
@@ -115,8 +115,8 @@ export function EventPublic() {
 
         {/* Info card */}
         <div
-          className="rounded-2xl p-4 flex flex-col gap-3"
-          style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
+          className="rounded-[20px] p-4 flex flex-col gap-3"
+          style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
         >
           <div className="flex items-center gap-3">
             <div
@@ -146,7 +146,7 @@ export function EventPublic() {
         {hasPaymentMethods ? (
           <button
             onClick={handleRegister}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-bold text-sm transition-all"
             style={{
               background: '#00186D',
               color:      '#FFFFFF',
@@ -159,8 +159,8 @@ export function EventPublic() {
           </button>
         ) : (
           <div
-            className="rounded-2xl p-4 text-center"
-            style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}
+            className="rounded-[20px] p-4 text-center"
+            style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
           >
             <p className="text-sm" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>Inscrições em breve</p>
           </div>
@@ -169,13 +169,14 @@ export function EventPublic() {
         {/* Sobre */}
         {event.about && (
           <div
-            className="rounded-2xl p-5"
-            style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
+            className="rounded-[20px] p-5"
+            style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-2" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow mb-2"
+ style={{ color: '#00186D' }}>
               Sobre o evento
             </p>
-            <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
               {event.about}
             </p>
           </div>

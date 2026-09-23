@@ -92,7 +92,8 @@ export function EventSetupPayment() {
         {/* Formas cadastradas */}
         {methods.length > 0 && (
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Modalidades cadastradas
             </p>
             <div className="flex flex-col gap-2">
@@ -100,7 +101,7 @@ export function EventSetupPayment() {
                 <div
                   key={m.id}
                   className="flex items-start justify-between rounded-xl px-4 py-3"
-                  style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.08)' }}
+                  style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid #E9E9E9' }}
                 >
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
@@ -108,7 +109,7 @@ export function EventSetupPayment() {
                         R$ {Number(m.value).toFixed(2).replace('.', ',')}
                       </span>
                       {m.type === 'credit_card' && (
-                        <span className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                        <span className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                           {m.installments}x
                         </span>
                       )}
@@ -120,12 +121,12 @@ export function EventSetupPayment() {
                       </span>
                     </div>
                     {m.feeAmount > 0 && (
-                      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                         Participante paga {formatBRL(m.totalAmount)} &middot; taxa de serviço {formatBRL(m.feeAmount)}
                       </p>
                     )}
                     {m.description && (
-                      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{m.description}</p>
+                      <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>{m.description}</p>
                     )}
                     {m.startDate && m.endDate && (
                       <p className="text-xs mt-0.5" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
@@ -135,7 +136,7 @@ export function EventSetupPayment() {
                   </div>
                   <button
                     onClick={() => handleRemove(m.id)}
-                    className="p-1 rounded-lg transition-all ml-3 shrink-0"
+                    className="p-1 rounded-full transition-all ml-3 shrink-0"
                     style={{ color: '#EF4444' }}
                   >
                     <X size={15} />
@@ -148,7 +149,8 @@ export function EventSetupPayment() {
 
         {/* Formulário nova modalidade */}
         <WizardCard>
-          <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
             Adicionar modalidade
           </p>
 
@@ -173,7 +175,7 @@ export function EventSetupPayment() {
             )}
             <WizardField label="Valor" required>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>R$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>R$</span>
                 <WizardInput name="value" type="number" min={0} step="0.01" value={form.value} onChange={handleChange} placeholder="0,00" style={{ paddingLeft: '2.25rem' }} />
               </div>
             </WizardField>
@@ -185,16 +187,16 @@ export function EventSetupPayment() {
               style={{ background: 'rgba(212,177,106,0.12)', border: '1px solid rgba(212,177,106,0.35)' }}
             >
               <div className="flex items-center justify-between text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
-                <span style={{ color: '#33425C' }}>Você recebe</span>
+                <span style={{ color: '#0A0A09' }}>Você recebe</span>
                 <span className="font-semibold" style={{ color: '#0A0A09' }}>{formatBRL(previewCharge.base)}</span>
               </div>
               <div className="flex items-center justify-between text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
-                <span style={{ color: '#6B7280' }}>Taxa de serviço</span>
-                <span style={{ color: '#6B7280' }}>+ {formatBRL(previewCharge.fee)}</span>
+                <span style={{ color: '#6F6F6F' }}>Taxa de serviço</span>
+                <span style={{ color: '#6F6F6F' }}>+ {formatBRL(previewCharge.fee)}</span>
               </div>
               <div
                 className="flex items-center justify-between text-sm pt-1 mt-1"
-                style={{ fontFamily: 'var(--font-sans)', borderTop: '1px solid rgba(0,24,109,0.1)' }}
+                style={{ fontFamily: 'var(--font-sans)', borderTop: '1px solid #E9E9E9' }}
               >
                 <span className="font-semibold" style={{ color: '#00186D' }}>Participante paga</span>
                 <span className="font-bold" style={{ color: '#00186D' }}>{formatBRL(previewCharge.total)}</span>
@@ -203,7 +205,7 @@ export function EventSetupPayment() {
           )}
 
           {form.type === 'cash' && Number(form.value) > 0 && (
-            <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Pagamento em dinheiro é recebido direto por você, sem taxa de serviço e sem entrar no
               saldo da plataforma.
             </p>

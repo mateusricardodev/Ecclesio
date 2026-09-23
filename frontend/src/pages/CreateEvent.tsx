@@ -69,13 +69,13 @@ export function CreateEvent() {
             <WizardField label="Endereço da página do evento">
               <div
                 className="flex items-center overflow-hidden"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', borderRadius: '10px' }}
+                style={{ border: '1px solid #E9E9E9', borderRadius: '10px' }}
               >
                 <span
                   className="px-3 py-2.5 text-xs shrink-0"
                   style={{
                     background: 'rgba(0,24,109,0.04)',
-                    borderRight: '1px solid rgba(0,24,109,0.12)',
+                    borderRight: '1px solid #E9E9E9',
                     color: '#00186D',
                     fontFamily: 'var(--font-sans)',
                   }}

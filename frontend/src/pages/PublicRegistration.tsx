@@ -95,12 +95,11 @@ const labelStyle: React.CSSProperties = {
 }
 
 const sectionLabelStyle: React.CSSProperties = {
-  fontSize:      '0.625rem',
-  fontWeight:    700,
-  color:         '#D4B16A',
-  fontFamily:    'var(--font-sans)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.1em',
+  fontSize:      '12px',
+  lineHeight:    1.4,
+  color:         '#00186D',
+  fontFamily:    'var(--font-mono)',
+  letterSpacing: '-0.01em',
 }
 
 export function PublicRegistration() {
@@ -280,14 +279,14 @@ export function PublicRegistration() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F2E8' }}>
-      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
+      <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
     </div>
   )
 
   if (notFound || !event) return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-3" style={{ background: '#F5F2E8' }}>
       <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>Evento não encontrado</p>
-      <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>O endereço pode estar incorreto ou o evento não está publicado.</p>
+      <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>O endereço pode estar incorreto ou o evento não está publicado.</p>
     </div>
   )
 
@@ -341,7 +340,7 @@ export function PublicRegistration() {
       {/* Cabeçalho do evento */}
       <div className="py-8 px-4" style={{ background: '#00186D' }}>
         <div className="max-w-2xl mx-auto">
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#FFFFFF', lineHeight: 1.2 }}>
             {event.title}
           </h1>
           <p className="text-sm mt-1 capitalize" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-sans)' }}>
@@ -352,20 +351,20 @@ export function PublicRegistration() {
 
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div
-          className="rounded-2xl overflow-hidden"
-          style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
+          className="rounded-[20px] overflow-hidden"
+          style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
         >
           {/* Título do formulário */}
-          <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+          <div className="px-6 py-5" style={{ borderBottom: '1px solid #E9E9E9' }}>
             <p style={sectionLabelStyle}>Formulário de inscrição</p>
-            <p className="text-xl font-semibold mt-0.5" style={{ color: '#00186D', fontFamily: 'var(--font-display)' }}>
+            <p className="text-xl font-semibold mt-0.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
               Preencha seus dados
             </p>
           </div>
 
           <form onSubmit={handleSubmit}>
             {/* Dados básicos */}
-            <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+            <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
               <p style={sectionLabelStyle}>Dados básicos</p>
               <div>
                 <label style={labelStyle}>Nome completo *</label>
@@ -391,7 +390,7 @@ export function PublicRegistration() {
 
             {/* Dados pessoais */}
             {hasPersonal && (
-              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
                 <p style={sectionLabelStyle}>Dados pessoais</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {PERSONAL_FIELDS.map(renderField)}
@@ -401,7 +400,7 @@ export function PublicRegistration() {
 
             {/* Contato do responsável */}
             {hasResponsible && (
-              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
                 <p style={sectionLabelStyle}>Contato do responsável</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {RESPONSIBLE_FIELDS.map(renderField)}
@@ -411,7 +410,7 @@ export function PublicRegistration() {
 
             {/* Saúde */}
             {enabled.has('Usa Medicamento') && (
-              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
                 <p style={sectionLabelStyle}>Saúde</p>
                 <div>
                   <label style={labelStyle}>Faz uso de medicamento? *</label>
@@ -421,11 +420,11 @@ export function PublicRegistration() {
                         key={opcao}
                         type="button"
                         onClick={() => { setUsaMedicamento(opcao); if (opcao === 'nao') setQualMedicamento('') }}
-                        className="px-5 py-2 rounded-full text-sm font-semibold transition-all"
+                        className="px-5 py-2 rounded-full text-sm font-bold transition-all"
                         style={
                           usaMedicamento === opcao
                             ? { background: '#00186D', color: '#FFFFFF', border: '1.5px solid #00186D' }
-                            : { background: 'transparent', color: '#6B7280', border: '1.5px solid rgba(0,24,109,0.2)' }
+                            : { background: 'transparent', color: '#6F6F6F', border: '1.5px solid rgba(0,24,109,0.2)' }
                         }
                       >
                         {opcao === 'sim' ? 'Sim' : 'Não'}
@@ -444,7 +443,7 @@ export function PublicRegistration() {
 
             {/* Endereço */}
             {hasAddress && (
-              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+              <div className="px-6 py-5 flex flex-col gap-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
                 <p style={sectionLabelStyle}>Endereço</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {enabled.has('CEP') && (
@@ -477,11 +476,11 @@ export function PublicRegistration() {
 
             {/* Autorização de Responsável */}
             {enabled.has('Autorização de Responsável') && (
-              <div className="px-6 py-5 flex flex-col gap-3" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+              <div className="px-6 py-5 flex flex-col gap-3" style={{ borderBottom: '1px solid #E9E9E9' }}>
                 <p style={sectionLabelStyle}>Documentos</p>
                 <div
                   className="flex items-start gap-4 rounded-xl p-4"
-                  style={{ background: 'rgba(0,24,109,0.03)', border: '1px solid rgba(0,24,109,0.08)' }}
+                  style={{ background: 'rgba(0,24,109,0.03)', border: '1px solid #E9E9E9' }}
                 >
                   <div
                     className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
@@ -495,7 +494,7 @@ export function PublicRegistration() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>Autorização de Responsável</p>
-                    <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                    <p className="text-xs mt-0.5" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                       {event.authorizationFormUrl
                         ? 'Baixe o modelo, preencha, assine e entregue no dia do evento.'
                         : 'Traga a autorização assinada pelo responsável no dia do evento.'}
@@ -506,7 +505,7 @@ export function PublicRegistration() {
                         target="_blank"
                         rel="noopener noreferrer"
                         download
-                        className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-sm font-semibold transition-all"
+                        className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-sm font-bold transition-all"
                         style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -521,7 +520,7 @@ export function PublicRegistration() {
             )}
 
             {/* Forma de pagamento */}
-            <div className="px-6 py-5 flex flex-col gap-3" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
+            <div className="px-6 py-5 flex flex-col gap-3" style={{ borderBottom: '1px solid #E9E9E9' }}>
               <p style={sectionLabelStyle}>Forma de pagamento</p>
               {event.paymentMethods.length === 0 ? (
                 <p
@@ -582,7 +581,7 @@ export function PublicRegistration() {
                   className="mt-0.5 w-4 h-4 shrink-0"
                   style={{ accentColor: '#00186D' }}
                 />
-                <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                <span className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                   Concordo com os termos de participação e autorizo o uso dos meus dados, inclusive os de saúde quando informados, para fins de organização do evento, conforme a{' '}
                   <Link to="/privacidade" target="_blank" style={{ color: '#00186D', textDecoration: 'underline' }}>Política de privacidade</Link>.
                 </span>
@@ -600,7 +599,7 @@ export function PublicRegistration() {
               <button
                 type="submit"
                 disabled={submitting || !form.termsAccepted}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-semibold text-sm transition-all"
                 style={{
                   background:  (submitting || !form.termsAccepted) ? 'rgba(0,24,109,0.4)' : '#00186D',
                   color:       '#FFFFFF',

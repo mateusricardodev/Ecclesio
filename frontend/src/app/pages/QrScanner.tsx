@@ -111,7 +111,7 @@ export function QrScanner() {
           <button
             onClick={() => navigate(`/app/evento/${id}`)}
             aria-label="Voltar"
-            className="-ml-1 rounded-lg p-1 text-white active:bg-white/15"
+            className="-ml-1 rounded-full p-1 text-white active:bg-white/15"
           >
             <ArrowLeft className="h-6 w-6" />
           </button>
@@ -122,7 +122,7 @@ export function QrScanner() {
       {/* conteúdo central */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-8">
         {cameraError ? (
-          <p className="max-w-xs rounded-2xl bg-white/95 px-5 py-4 text-center text-sm text-ecc-ink">
+          <p className="max-w-xs rounded-[20px] bg-white/95 px-5 py-4 text-center text-sm text-ecc-ink">
             {cameraError}
           </p>
         ) : (
@@ -161,7 +161,7 @@ export function QrScanner() {
       {/* feedback */}
       {feedback && (
         <div className="absolute inset-x-0 bottom-0 z-20 p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
-          <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
+          <div className="flex items-center gap-3 rounded-[20px] bg-white px-4 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
             <span
               className={
                 'flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white ' +

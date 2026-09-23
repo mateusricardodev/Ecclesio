@@ -102,8 +102,8 @@ export function EventSetupForm() {
   const colHdr = (label: string, cls: string) => (
     <span
       key={label}
-      className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${cls}`}
-      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+      className={`ecc-eyebrow ${cls}`}
+      style={{ color: '#6F6F6F' }}
     >
       {label}
     </span>
@@ -118,7 +118,7 @@ export function EventSetupForm() {
           {/* Cabeçalho da tabela */}
           <div
             className="grid grid-cols-3 pb-2"
-            style={{ borderBottom: '1px solid rgba(0,24,109,0.08)' }}
+            style={{ borderBottom: '1px solid #E9E9E9' }}
           >
             {colHdr('Campo',              'col-span-1')}
             {colHdr('Obrigatório',        'col-span-1 text-center')}
@@ -130,7 +130,7 @@ export function EventSetupForm() {
             <div
               key={field}
               className="grid grid-cols-3 items-center py-3"
-              style={{ borderBottom: '1px solid rgba(0,24,109,0.06)' }}
+              style={{ borderBottom: '1px solid #E9E9E9' }}
             >
               <span className="text-sm font-medium" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                 {field}
@@ -156,11 +156,11 @@ export function EventSetupForm() {
             <div key={group.label}>
               <div
                 className="py-2 mt-2"
-                style={{ borderTop: '1px solid rgba(0,24,109,0.06)' }}
+                style={{ borderTop: '1px solid #E9E9E9' }}
               >
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.1em]"
-                  style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+                  className="ecc-eyebrow text-[10px]"
+                  style={{ color: '#00186D' }}
                 >
                   {group.label}
                 </span>
@@ -170,9 +170,9 @@ export function EventSetupForm() {
                 <div
                   key={field}
                   className="grid grid-cols-3 items-center py-3"
-                  style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}
+                  style={{ borderBottom: '1px solid #E9E9E9' }}
                 >
-                  <span className="text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                  <span className="text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                     {field}
                   </span>
                   <span />
@@ -184,7 +184,7 @@ export function EventSetupForm() {
                   </div>
                   {field === AUTHORIZATION_FIELD && enabled.has(field) && (
                     <div className="col-span-3 mt-3 flex flex-col gap-2">
-                      <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <p className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                         Envie o modelo (PDF) que o participante vai baixar, preencher e entregar no dia do evento.
                       </p>
                       <div className="flex flex-wrap items-center gap-3">

@@ -180,7 +180,7 @@ export function PixPayment() {
   if (stage === 'cash') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center max-w-md w-full">
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-8 text-center max-w-md w-full">
           <div className="w-20 h-20 bg-[#C9A84C]/15 rounded-full flex items-center justify-center mx-auto mb-5">
             <svg className="w-10 h-10 text-[#C9A84C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -194,7 +194,7 @@ export function PixPayment() {
           </p>
 
           <div className="bg-[#F2EDE4] border border-[#C9A84C]/40 rounded-xl p-4 mb-6 text-left">
-            <p className="font-cinzel text-xs text-[#C9A84C] uppercase tracking-widest mb-1">Pagamento em dinheiro</p>
+            <p className="ecc-eyebrow font-cinzel text-[#C9A84C] mb-1">Pagamento em dinheiro</p>
             <p className="font-inter text-sm text-gray-600">
               {state.amountDue && state.amountDue > 0 ? (
                 <>Leve <span className="font-semibold text-[#1B2B5E]">R$ {Number(state.amountDue).toFixed(2).replace('.', ',')}</span> em
@@ -217,7 +217,7 @@ export function PixPayment() {
 
           {state.code && (
             <div className="bg-[#F2EDE4] border border-[#1B2B5E]/10 rounded-xl p-4 mb-6 flex flex-col items-center gap-3">
-              <p className="font-cinzel text-xs text-[#C9A84C] uppercase tracking-widest">Código de credenciamento</p>
+              <p className="ecc-eyebrow font-cinzel text-[#C9A84C]">Código de credenciamento</p>
               {qrDataUrl ? (
                 <img src={qrDataUrl} alt="QR Code da inscrição" className="w-44 h-44 rounded-lg" />
               ) : (
@@ -262,7 +262,7 @@ export function PixPayment() {
   if (stage === 'confirmed') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center max-w-md w-full">
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-8 text-center max-w-md w-full">
           <div className="w-20 h-20 bg-[#1B2B5E]/10 rounded-full flex items-center justify-center mx-auto mb-5">
             <svg className="w-10 h-10 text-[#1B2B5E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -283,7 +283,7 @@ export function PixPayment() {
 
           {state.code && (
             <div className="bg-[#F2EDE4] border border-[#1B2B5E]/10 rounded-xl p-4 mb-6 flex flex-col items-center gap-3">
-              <p className="font-cinzel text-xs text-[#C9A84C] uppercase tracking-widest">Código de credenciamento</p>
+              <p className="ecc-eyebrow font-cinzel text-[#C9A84C]">Código de credenciamento</p>
               {qrDataUrl ? (
                 <img src={qrDataUrl} alt="QR Code da inscrição" className="w-44 h-44 rounded-lg" />
               ) : (
@@ -328,7 +328,7 @@ export function PixPayment() {
   if (stage === 'failed' || stage === 'overbooked') {
     return (
       <div className="min-h-screen bg-[#F2EDE4] flex items-center justify-center px-4 py-12">
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center max-w-md w-full">
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-8 text-center max-w-md w-full">
           <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
             <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -378,15 +378,15 @@ export function PixPayment() {
       <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-6">
 
         {/* Valor */}
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 text-center">
-          <p className="font-cinzel text-xs font-bold text-[#C9A84C] uppercase tracking-widest mb-1">Valor a pagar</p>
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-6 text-center">
+          <p className="ecc-eyebrow font-cinzel text-[#C9A84C] mb-1">Valor a pagar</p>
           <p className="font-cormorant text-5xl font-bold text-[#1B2B5E]">
             R$ {Number(amount).toFixed(2).replace('.', ',')}
           </p>
         </div>
 
         {/* QR Code + Copia e Cola */}
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 flex flex-col items-center gap-5">
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-6 flex flex-col items-center gap-5">
           <div className="w-52 h-52 flex items-center justify-center">
             {state.qrCodeBase64 ? (
               <img
@@ -430,7 +430,7 @@ export function PixPayment() {
         </div>
 
         {/* Expiração + polling */}
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex flex-col gap-3 text-center">
+        <div className="bg-white border border-gray-200 rounded-[20px] shadow-sm p-5 flex flex-col gap-3 text-center">
           <p className="font-inter text-sm text-gray-500">
             Este PIX expira em{' '}
             <span className="font-bold text-[#1B2B5E] tabular-nums">{mm}:{ss}</span>
@@ -444,7 +444,7 @@ export function PixPayment() {
         {/* Dev/mock helper */}
         {state.providerPaymentId && !state.qrCodeBase64 && (
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <p className="font-cinzel text-xs font-bold text-amber-700 uppercase tracking-wide mb-2">Modo teste (mock)</p>
+            <p className="ecc-eyebrow font-cinzel text-amber-700 mb-2">Modo teste (mock)</p>
             <p className="font-inter text-xs text-amber-600 mb-2">
               Para simular o pagamento, execute no terminal:
             </p>

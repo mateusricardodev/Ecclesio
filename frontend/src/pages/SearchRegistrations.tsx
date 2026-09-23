@@ -82,8 +82,8 @@ export function SearchRegistrations() {
   const colHeader = (label: string, cls: string) => (
     <span
       key={label}
-      className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${cls}`}
-      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+      className={`ecc-eyebrow ${cls}`}
+      style={{ color: '#6F6F6F' }}
     >
       {label}
     </span>
@@ -95,25 +95,25 @@ export function SearchRegistrations() {
       {/* Cabeçalho */}
       <div className="mb-8">
         <p
-          className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-          style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+          className="ecc-eyebrow mb-1"
+          style={{ color: '#00186D' }}
         >
           Gestão
         </p>
         <h1
           className="leading-tight"
-          style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+          style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
         >
           Inscrições
         </h1>
-        <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-sm mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           Todas as inscrições dos seus eventos. Use a busca para filtrar.
         </p>
       </div>
 
       {/* Campo de busca */}
       <div className="relative mb-6 max-w-xl">
-        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#6B7280' }} />
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#6F6F6F' }} />
         <input
           type="text"
           value={query}
@@ -122,12 +122,11 @@ export function SearchRegistrations() {
           className="w-full text-sm focus:outline-none transition-all"
           style={{
             background: '#FFFFFF',
-            border: '1px solid rgba(0,24,109,0.15)',
+            border: '1px solid #E9E9E9',
             borderRadius: '12px',
             color: '#0A0A09',
             fontFamily: 'var(--font-sans)',
             padding: '0.65rem 0.875rem 0.65rem 2.5rem',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
           }}
         />
       </div>
@@ -135,8 +134,8 @@ export function SearchRegistrations() {
       {/* Resultados */}
       {loading ? (
         <div
-          className="rounded-2xl overflow-hidden"
-          style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}
+          className="rounded-[20px] overflow-hidden"
+          style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
         >
           {Array.from({ length: 5 }).map((_, i) => <RowSkeleton key={i} />)}
         </div>
@@ -152,17 +151,16 @@ export function SearchRegistrations() {
         />
       ) : (
         <div
-          className="rounded-2xl overflow-hidden"
+          className="rounded-[20px] overflow-hidden"
           style={{
             background: '#FFFFFF',
-            border: '1px solid rgba(0,24,109,0.08)',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+            border: '1px solid #E9E9E9',
           }}
         >
           {/* Contagem */}
           <div
             className="px-5 py-3 text-xs"
-            style={{ borderBottom: '1px solid rgba(0,24,109,0.07)', color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+            style={{ borderBottom: '1px solid #E9E9E9', color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
           >
             {query.trim() ? `${filtered.length} de ${regs.length} inscrição(ões)` : `${regs.length} inscrição(ões)`}
           </div>
@@ -170,7 +168,7 @@ export function SearchRegistrations() {
           {/* Cabeçalho colunas */}
           <div
             className="hidden sm:flex items-center gap-4 px-5 py-2.5"
-            style={{ background: 'rgba(0,24,109,0.02)', borderBottom: '1px solid rgba(0,24,109,0.06)' }}
+            style={{ background: 'rgba(0,24,109,0.02)', borderBottom: '1px solid #E9E9E9' }}
           >
             <span className="w-9 shrink-0" />
             {colHeader('Participante', 'flex-1')}
@@ -189,7 +187,7 @@ export function SearchRegistrations() {
                 <li
                   key={reg.id}
                   className="flex items-center gap-4 px-5 py-3.5 transition-colors"
-                  style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}
+                  style={{ borderBottom: '1px solid #E9E9E9' }}
                 >
                   <span
                     className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
@@ -202,12 +200,12 @@ export function SearchRegistrations() {
                     <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                       {reg.user.name}
                     </p>
-                    <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                    <p className="text-xs truncate" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                       {reg.user.email}
                     </p>
                   </div>
 
-                  <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                  <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                     {reg.cpf ? reg.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '-'}
                   </span>
 
@@ -232,8 +230,8 @@ export function SearchRegistrations() {
 
                   <Link
                     to={`/events/${reg.event.id}/registrations/${reg.id}/edit`}
-                    className="p-1.5 rounded-lg transition-all shrink-0"
-                    style={{ color: '#6B7280' }}
+                    className="p-1.5 rounded-full transition-all shrink-0"
+                    style={{ color: '#6F6F6F' }}
                     title="Editar inscrição"
                   >
                     <Pencil size={14} />
@@ -251,8 +249,8 @@ export function SearchRegistrations() {
 function EmptyHint({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div
-      className="rounded-2xl p-12 text-center"
-      style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
+      className="rounded-[20px] p-12 text-center"
+      style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
     >
       <span
         className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
@@ -261,7 +259,7 @@ function EmptyHint({ title, subtitle }: { title: string; subtitle: string }) {
         <Users size={20} style={{ color: '#00186D' }} />
       </span>
       <p className="font-semibold text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>{title}</p>
-      <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>{subtitle}</p>
+      <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>{subtitle}</p>
     </div>
   )
 }
@@ -270,7 +268,7 @@ function RowSkeleton() {
   return (
     <div
       className="flex items-center gap-4 px-5 py-3.5 animate-pulse"
-      style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}
+      style={{ borderBottom: '1px solid #E9E9E9' }}
     >
       <div className="w-9 h-9 rounded-full shrink-0" style={{ background: 'rgba(0,24,109,0.06)' }} />
       <div className="flex-1">

@@ -44,7 +44,7 @@ export function SearchCheckin() {
       <AppHeader title="Pesquisar" onBack={() => navigate(`/app/evento/${id}`)} />
 
       <div className="px-4 pb-1 pt-4">
-        <div className="flex items-center gap-3 rounded-2xl border border-ecc-navy/10 bg-white px-4 py-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.04)] focus-within:border-ecc-navy/30">
+        <div className="flex items-center gap-3 rounded-[20px] border border-ecc-navy/10 bg-white px-4 py-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.04)] focus-within:border-ecc-navy/30">
           <Search className="h-5 w-5 shrink-0 text-ecc-faint" />
           <input
             autoFocus
@@ -79,10 +79,10 @@ export function SearchCheckin() {
         ) : (
           groups.map((g) => (
             <section key={g.letter} className="mt-4">
-              <h2 className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-ecc-gold-dark">
+              <h2 className="ecc-eyebrow mb-2 px-1 text-[11px] text-ecc-gold-dark">
                 {g.letter}
               </h2>
-              <ul className="divide-y divide-ecc-navy/[0.07] overflow-hidden rounded-2xl border border-ecc-navy/10 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+              <ul className="divide-y divide-ecc-navy/[0.07] overflow-hidden rounded-[20px] border border-ecc-navy/10 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
                 {g.items.map((p) => (
                   <li key={p.id}>
                     <ParticipantCard
@@ -104,7 +104,7 @@ export function SearchCheckin() {
 
 function InitialState() {
   return (
-    <div className="mt-6 rounded-2xl border border-ecc-navy/10 bg-white p-8 text-center shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+    <div className="mt-6 rounded-[20px] border border-ecc-navy/10 bg-white p-8 text-center shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-ecc-navy/[0.06]">
         <Search className="h-5 w-5 text-ecc-navy" />
       </span>

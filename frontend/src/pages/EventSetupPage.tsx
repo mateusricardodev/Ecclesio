@@ -106,11 +106,11 @@ export function EventSetupPage() {
           </div>
           <div className="text-center">
             <h2
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
             >
               Evento publicado com sucesso!
             </h2>
-            <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Redirecionando para o painel...
             </p>
           </div>
@@ -129,13 +129,13 @@ export function EventSetupPage() {
         <aside className="w-full md:w-52 md:shrink-0">
           <WizardCard>
             <p
-              className="text-[10px] font-semibold uppercase tracking-[0.1em]"
-              style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+              className="ecc-eyebrow text-[10px]"
+              style={{ color: '#00186D' }}
             >
               Seções da página
             </p>
             <div className="flex items-center justify-between">
-              <span className="text-sm" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+              <span className="text-sm" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                 Descrição
               </span>
               <Toggle enabled={aboutEnabled} onToggle={() => setAboutEnabled((v) => !v)} />
@@ -179,11 +179,11 @@ export function EventSetupPage() {
                   style={{ border: '2px dashed rgba(0,24,109,0.2)', background: 'rgba(0,24,109,0.02)' }}
                 >
                   {uploading ? (
-                    <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Enviando...</span>
+                    <span className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>Enviando...</span>
                   ) : (
                     <>
                       <ImageIcon size={28} style={{ color: '#9CA3AF', marginBottom: '0.5rem' }} />
-                      <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <span className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                         Clique para anexar uma imagem
                       </span>
                       <span className="text-xs mt-1" style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}>
@@ -223,15 +223,15 @@ export function EventSetupPage() {
             {slug && (
               <div
                 className="flex items-center gap-2 rounded-xl px-3 py-2.5"
-                style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.1)' }}
+                style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid #E9E9E9' }}
               >
-                <span className="flex-1 min-w-0 text-xs truncate" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <span className="flex-1 min-w-0 text-xs truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   {publicUrl}
                 </span>
                 <button onClick={copyLink} className="p-1 rounded transition-all" style={{ color: copied ? '#00186D' : '#6B7280' }} title="Copiar link">
                   <Copy size={14} />
                 </button>
-                <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="p-1 rounded" style={{ color: '#6B7280' }} title="Pré-visualizar">
+                <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="p-1 rounded" style={{ color: '#6F6F6F' }} title="Pré-visualizar">
                   <ExternalLink size={14} />
                 </a>
               </div>
@@ -242,8 +242,8 @@ export function EventSetupPage() {
               </p>
             )}
 
-            <div className="flex items-center flex-wrap gap-x-3 gap-y-2 pt-1" style={{ borderTop: '1px solid rgba(0,24,109,0.07)' }}>
-              <span className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+            <div className="flex items-center flex-wrap gap-x-3 gap-y-2 pt-1" style={{ borderTop: '1px solid #E9E9E9' }}>
+              <span className="text-sm font-medium" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                 Publicar evento
               </span>
               <Toggle enabled={isPublished} onToggle={() => setIsPublished((v) => !v)} />

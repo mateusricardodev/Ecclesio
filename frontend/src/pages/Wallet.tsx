@@ -66,14 +66,13 @@ const PIX_KEY_TYPES = [
 
 const cardStyle = {
   background: '#FFFFFF',
-  border: '1px solid rgba(0,24,109,0.08)',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+  border: '1px solid #E9E9E9',
 } as const
 
 const inputStyle = {
   width: '100%',
   borderRadius: '0.75rem',
-  border: '1px solid rgba(0,24,109,0.12)',
+  border: '1px solid #E9E9E9',
   padding: '0.6rem 0.85rem',
   fontSize: '0.875rem',
   fontFamily: 'var(--font-sans)',
@@ -180,18 +179,18 @@ export function Wallet() {
       <div className="max-w-5xl mx-auto flex flex-col gap-6">
         <div>
           <p
-            className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-            style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+            className="ecc-eyebrow mb-1"
+            style={{ color: '#00186D' }}
           >
             Carteira
           </p>
           <h1
             className="leading-tight"
-            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
           >
             Financeiro
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-sm mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             As inscrições pagas online entram aqui como saldo. O valor fica retido até alguns dias
             depois do evento e então pode ser resgatado para a sua chave PIX.
           </p>
@@ -219,11 +218,11 @@ export function Wallet() {
         </div>
 
         {/* Resgate */}
-        <div className="rounded-2xl p-5" style={cardStyle}>
+        <div className="rounded-[20px] p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Resgatar saldo
           </h2>
-          <p className="text-xs mb-4" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             {summary ? `Valor mínimo de ${formatBRL(summary.minPayout)}.` : ''} O PIX é enviado
             manualmente pela equipe após conferir os dados da conta.
           </p>
@@ -248,13 +247,13 @@ export function Wallet() {
 
           <form onSubmit={handleRequestPayout} className="flex flex-col sm:flex-row gap-3 sm:items-end">
             <div className="flex-1">
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                 Valor do resgate
               </label>
               <div className="relative">
                 <span
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                  style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+                  style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
                 >
                   R$
                 </span>
@@ -273,7 +272,7 @@ export function Wallet() {
             <button
               type="button"
               onClick={() => setPayoutAmount(String(summary?.available ?? 0))}
-              className="text-xs font-medium px-3 py-2.5 rounded-xl transition-all shrink-0"
+              className="text-xs font-medium px-3 py-2.5 rounded-full transition-all shrink-0"
               style={{ color: '#00186D', background: 'rgba(0,24,109,0.06)', fontFamily: 'var(--font-sans)' }}
             >
               Usar tudo
@@ -281,12 +280,11 @@ export function Wallet() {
             <button
               type="submit"
               disabled={requesting || !hasAccount || hasOpenPayout}
-              className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shrink-0"
+              className="inline-flex items-center justify-center gap-2 text-sm font-bold px-5 py-2.5 rounded-full transition-all shrink-0"
               style={{
                 background: '#00186D',
                 color: '#FFFFFF',
                 fontFamily: 'var(--font-sans)',
-                boxShadow: '0 2px 12px rgba(0,24,109,0.20)',
                 opacity: requesting || !hasAccount || hasOpenPayout ? 0.5 : 1,
               }}
             >
@@ -299,18 +297,18 @@ export function Wallet() {
         </div>
 
         {/* Chave PIX */}
-        <div className="rounded-2xl p-5" style={cardStyle}>
+        <div className="rounded-[20px] p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Conta de recebimento
           </h2>
-          <p className="text-xs mb-4" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             O repasse só é enviado para uma conta no nome do titular cadastrado.
           </p>
 
           <form onSubmit={handleSaveAccount} className="flex flex-col gap-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium mb-1.5" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   Tipo de chave
                 </label>
                 <select
@@ -324,7 +322,7 @@ export function Wallet() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   Chave PIX
                 </label>
                 <input
@@ -336,7 +334,7 @@ export function Wallet() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   Nome do titular
                 </label>
                 <input
@@ -348,7 +346,7 @@ export function Wallet() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                <label className="block text-xs font-medium mb-1.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   CPF ou CNPJ do titular
                 </label>
                 <input
@@ -368,7 +366,7 @@ export function Wallet() {
               <button
                 type="submit"
                 disabled={savingAccount}
-                className="text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+                className="text-sm font-semibold px-5 py-2.5 rounded-full transition-all"
                 style={{
                   background: 'rgba(0,24,109,0.06)',
                   color: '#00186D',
@@ -385,19 +383,19 @@ export function Wallet() {
         </div>
 
         {/* Extrato */}
-        <div className="rounded-2xl p-5" style={cardStyle}>
+        <div className="rounded-[20px] p-5" style={cardStyle}>
           <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
             Extrato
           </h2>
 
           {loading ? (
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
           ) : entries.length === 0 ? (
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Nenhuma movimentação ainda. Inscrições pagas online aparecem aqui.
             </p>
           ) : (
-            <div className="flex flex-col divide-y" style={{ borderColor: 'rgba(0,24,109,0.07)' }}>
+            <div className="flex flex-col divide-y" style={{ borderColor: '#E9E9E9' }}>
               {entries.map((entry) => {
                 const amount = Number(entry.amount)
                 const isRetained = new Date(entry.availableAt) > new Date()
@@ -430,11 +428,11 @@ export function Wallet() {
 
         {/* Histórico de resgates */}
         {payouts.length > 0 && (
-          <div className="rounded-2xl p-5" style={cardStyle}>
+          <div className="rounded-[20px] p-5" style={cardStyle}>
             <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
               Resgates
             </h2>
-            <div className="flex flex-col divide-y" style={{ borderColor: 'rgba(0,24,109,0.07)' }}>
+            <div className="flex flex-col divide-y" style={{ borderColor: '#E9E9E9' }}>
               {payouts.map((payout) => {
                 const badge = PAYOUT_BADGE[payout.status]
                 return (
@@ -447,7 +445,7 @@ export function Wallet() {
                         {formatDate(payout.createdAt)} · {payout.pixKey}
                       </p>
                       {payout.notes && (
-                        <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                        <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                           {payout.notes}
                         </p>
                       )}
@@ -484,7 +482,7 @@ function StatCard({
 }) {
   return (
     <div
-      className="rounded-2xl p-5"
+      className="rounded-[20px] p-5"
       style={{
         ...cardStyle,
         ...(highlight ? { border: '1px solid rgba(212,177,106,0.5)' } : {}),
@@ -496,10 +494,10 @@ function StatCard({
       </div>
       <p
         style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          color: '#00186D',
+          fontFamily: 'var(--font-display)', letterSpacing: '-0.02em',
+          fontSize: '1.875rem',
+          fontWeight: 400,
+          color: '#0A0A09',
         }}
       >
         {value ?? '-'}

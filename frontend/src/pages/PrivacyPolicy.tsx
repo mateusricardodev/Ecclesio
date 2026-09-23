@@ -9,15 +9,16 @@ const LAST_UPDATED  = '23 de setembro de 2026'
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'var(--font-display)',
-  fontSize: '1.5rem',
-  fontWeight: 600,
-  color: '#00186D',
+  fontSize: '1.75rem',
+  fontWeight: 400,
+  color: '#0A0A09',
+  letterSpacing: '-0.02em',
   marginTop: '2.5rem',
   marginBottom: '0.75rem',
 }
 
 const textStyle: React.CSSProperties = {
-  color: '#33425C',
+  color: '#6F6F6F',
   fontFamily: 'var(--font-sans)',
   fontSize: '0.95rem',
   lineHeight: 1.75,
@@ -50,15 +51,12 @@ export function PrivacyPolicy() {
       <LandingNavbar />
       <main className="flex-1 pt-28 pb-20 px-4 sm:px-6">
         <article className="max-w-3xl mx-auto">
-          <p
-            className="text-xs font-semibold uppercase tracking-[0.15em]"
-            style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
-          >
+          <p className="ecc-eyebrow">
             Última atualização: {LAST_UPDATED}
           </p>
           <h1
             className="mt-2"
-            style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 600, color: '#00186D', lineHeight: 1.15 }}
+            style={{ fontFamily: 'var(--font-display)', fontSize: '3.25rem', fontWeight: 400, color: '#0A0A09', lineHeight: 0.95, letterSpacing: '-0.03em' }}
           >
             Política de Privacidade
           </h1>

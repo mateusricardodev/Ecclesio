@@ -41,8 +41,7 @@ const KEY_TYPE_LABELS: Record<string, string> = {
 
 const cardStyle = {
   background: '#FFFFFF',
-  border: '1px solid rgba(0,24,109,0.08)',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+  border: '1px solid #E9E9E9',
 } as const
 
 export function AdminPayouts() {
@@ -103,18 +102,18 @@ export function AdminPayouts() {
       <div className="max-w-5xl mx-auto flex flex-col gap-6">
         <div>
           <p
-            className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-            style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+            className="ecc-eyebrow mb-1"
+            style={{ color: '#00186D' }}
           >
             Plataforma
           </p>
           <h1
             className="leading-tight"
-            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
           >
             Saques
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-sm mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Envie o PIX pela sua conta e marque como pago aqui. Confira sempre se o titular da chave
             bate com o nome cadastrado.
           </p>
@@ -189,7 +188,7 @@ function PayoutRow({
   return (
     <div
       className="rounded-xl px-4 py-4 flex flex-col gap-3"
-      style={{ background: 'rgba(0,24,109,0.03)', border: '1px solid rgba(0,24,109,0.08)' }}
+      style={{ background: 'rgba(0,24,109,0.03)', border: '1px solid #E9E9E9' }}
     >
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0">
@@ -199,7 +198,7 @@ function PayoutRow({
           <p className="text-sm mt-0.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
             {payout.user.name} <span style={{ color: '#9CA3AF' }}>· {payout.user.email}</span>
           </p>
-          <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Solicitado em {new Date(payout.createdAt).toLocaleDateString('pt-BR')}
           </p>
         </div>
@@ -213,22 +212,22 @@ function PayoutRow({
 
       <div
         className="rounded-lg px-3 py-2.5 flex items-start justify-between gap-3"
-        style={{ background: '#FFFFFF', border: '1px solid rgba(0,24,109,0.08)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
       >
         <div className="min-w-0">
-          <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Chave {KEY_TYPE_LABELS[payout.pixKeyType] ?? payout.pixKeyType}
           </p>
           <p className="text-sm font-medium break-all" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
             {payout.pixKey}
           </p>
-          <p className="text-xs mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Titular: {payout.pixHolderName} · {payout.pixHolderDocument}
           </p>
         </div>
         <button
           onClick={copyKey}
-          className="p-2 rounded-lg shrink-0 transition-all"
+          className="p-2 rounded-full shrink-0 transition-all"
           style={{ color: copied ? '#166534' : '#00186D', background: 'rgba(0,24,109,0.05)' }}
           title="Copiar chave"
         >
@@ -237,7 +236,7 @@ function PayoutRow({
       </div>
 
       {payout.notes && (
-        <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           Observação: {payout.notes}
         </p>
       )}
@@ -292,7 +291,7 @@ function ActionButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className="text-sm font-semibold px-4 py-2 rounded-xl transition-all"
+      className="text-sm font-semibold px-4 py-2 rounded-full transition-all"
       style={{ ...palette, fontFamily: 'var(--font-sans)', opacity: disabled ? 0.5 : 1 }}
     >
       {children}
@@ -302,7 +301,7 @@ function ActionButton({
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-5" style={cardStyle}>
+    <div className="rounded-[20px] p-5" style={cardStyle}>
       <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
         {title}
       </h2>
@@ -313,7 +312,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+    <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
       {children}
     </p>
   )
@@ -332,7 +331,7 @@ function Stat({
 }) {
   return (
     <div
-      className="rounded-2xl p-4"
+      className="rounded-[20px] p-4"
       style={{ ...cardStyle, ...(highlight ? { border: '1px solid rgba(212,177,106,0.5)' } : {}) }}
     >
       <p
@@ -341,7 +340,7 @@ function Stat({
       >
         {label}
       </p>
-      <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 600, color: '#00186D' }}>
+      <p style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.25rem', fontWeight: 400, color: '#0A0A09' }}>
         {value}
       </p>
       {hint && (

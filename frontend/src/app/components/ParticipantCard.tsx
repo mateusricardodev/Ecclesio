@@ -52,7 +52,7 @@ export function ParticipantCard({
           <button
             onClick={onUndo}
             disabled={busy}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-ecc-navy/20 px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-ecc-navy transition-colors active:bg-ecc-navy/5 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full border border-ecc-navy/20 px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-ecc-navy transition-colors active:bg-ecc-navy/5 disabled:opacity-50"
           >
             <RotateCcw className="h-3.5 w-3.5 shrink-0" />
             Desfazer Check-in
@@ -61,7 +61,7 @@ export function ParticipantCard({
           <button
             onClick={onCheckIn}
             disabled={busy}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-ecc-navy px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-white shadow-[0_2px_12px_rgba(0,24,109,0.20)] transition-colors active:bg-ecc-navy-deep disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full bg-ecc-navy px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-white shadow-[0_2px_12px_rgba(0,24,109,0.20)] transition-colors active:bg-ecc-navy-deep disabled:opacity-50"
           >
             <Check className="h-3.5 w-3.5 shrink-0" strokeWidth={3} />
             Fazer Check-in
