@@ -1,48 +1,110 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-purple: #7e22ce;
-  --color-brand-purple-light: #a855f7;
-  --color-brand-teal: #2dd4bf;
-  --color-brand-teal-dark: #0f766e;
-
   /* Identidade Ecclesio: azul-marinho, dourado e creme. O painel usa estes
      mesmos valores em `style={{}}`; aqui eles viram tokens do Tailwind
-     (bg-ecc-navy, text-ecc-gold, ...) para o app de credenciamento. Mudar a
-     paleta do app inteiro é mudar este bloco. */
+     (bg-ecc-navy, text-ecc-gold, ...). Mudar a paleta é mudar este bloco. */
   --color-ecc-navy: #00186D;
   --color-ecc-navy-deep: #001152;
+  --color-ecc-navy-soft: #E6E9F3;
   --color-ecc-gold: #D4B16A;
   --color-ecc-gold-dark: #C9A84C;
+  --color-ecc-gold-soft: #F4EDDC;
   --color-ecc-cream: #F5F2E8;
   --color-ecc-cream-dark: #F2EDE4;
   --color-ecc-ink: #0A0A09;
+  --color-ecc-text: #6F6F6F;
   --color-ecc-muted: #6B7280;
-  --color-ecc-faint: #9CA3AF;
+  --color-ecc-faint: #929292;
+  --color-ecc-line: #E9E9E9;
+  --color-ecc-surface: #E4E4E4;
   --color-ecc-green: #166534;
   --color-ecc-amber: #92400E;
   --color-ecc-red: #991B1B;
   --color-ecc-red-soft: #FEF2F2;
 
-  /* Tipografia: duas famílias e nada mais: uma serifada editorial de alto
-     contraste nos títulos e uma grotesca geométrica em toda a UI, incluindo
-     os rótulos pequenos em caixa alta. Trocar a tipografia do sistema
-     inteiro é trocar estas duas linhas. */
-  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* Tipografia do design system (Figma "Ecclesio Design"):
+     Crimson Text nos títulos, DM Sans no texto e na interface e Roboto Mono
+     nos rótulos pequenos (sobretítulos, legendas, metadados). */
+  --font-display: 'Crimson Text', Georgia, serif;
+  --font-sans: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
 
-  /* Apelidos dos tokens antigos, para as classes font-* que ainda existem
-     em PixPayment. Todos apontam para uma das duas famílias acima. */
+  /* Apelidos dos tokens antigos usados em PixPayment. */
   --font-cormorant: var(--font-display);
-  --font-cinzel: var(--font-sans);
+  --font-cinzel: var(--font-mono);
   --font-bebas: var(--font-sans);
   --font-inter: var(--font-sans);
+
+  --radius-pill: 1000px;
+  --radius-block: 30px;
+  --radius-card: 20px;
 }
 
 body {
   font-family: var(--font-sans);
-  /* A Instrument Serif só tem o peso 400. Sem isto o navegador falsifica um
-     bold nos títulos que pedem 600/700, engrossando os traços e matando o
-     contraste que define a fonte. A propriedade é herdada por toda a árvore. */
+  color: var(--color-ecc-ink);
+  background: #FFFFFF;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
   font-synthesis-weight: none;
+}
+
+/* Títulos em serifa com o espaçamento negativo do design. */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--color-ecc-gold-soft);
+  color: var(--color-ecc-navy);
+}
+
+@layer components {
+  /* Sobretítulo em mono, como "Benefits" / "Specs" no design. */
+  .ecc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--color-ecc-navy);
+  }
+
+  .ecc-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--color-ecc-ink);
+  }
+
+  .ecc-paragraph {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--color-ecc-text);
+  }
+
+  .ecc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: var(--radius-pill);
+    padding: 14px 22px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+    transition: background-color 0.15s, color 0.15s, opacity 0.15s;
+  }
+  .ecc-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .ecc-btn-primary { background: var(--color-ecc-navy); color: #FFFFFF; }
+  .ecc-btn-primary:hover:not(:disabled) { background: var(--color-ecc-navy-deep); }
+  .ecc-btn-soft { background: var(--color-ecc-navy-soft); color: var(--color-ecc-navy); }
+  .ecc-btn-soft:hover:not(:disabled) { background: #D8DDEC; }
+  .ecc-btn-gold { background: var(--color-ecc-gold); color: var(--color-ecc-navy); }
+  .ecc-btn-gold:hover:not(:disabled) { background: var(--color-ecc-gold-dark); }
 }

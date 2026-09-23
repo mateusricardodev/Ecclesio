@@ -335,7 +335,7 @@ export function PublicRegistration() {
     <div className="min-h-screen" style={{ background: '#F5F2E8' }}>
       {/* Topbar mínima */}
       <div className="w-full py-3 px-6 flex items-center" style={{ background: '#00186D' }}>
-        <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-6 brightness-0 invert" />
+        <img src="/logo-horizontal.png" alt="Ecclesio" className="h-6 brightness-0 invert" />
       </div>
 
       {/* Cabeçalho do evento */}

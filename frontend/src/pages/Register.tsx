@@ -44,7 +44,7 @@ export function Register() {
           style={{ background: 'linear-gradient(135deg, rgba(0,24,109,0.82) 0%, rgba(0,24,109,0.45) 100%)' }}
         />
         <div className="relative z-10 flex flex-col justify-between h-full px-14 py-12">
-          <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-10 object-contain" />
+          <img src="/logo-horizontal.png" alt="Ecclesio" className="h-10 object-contain" />
 
           <div>
             <div className="flex items-center gap-3 mb-6">
@@ -81,7 +81,7 @@ export function Register() {
 
           {/* Logo mobile */}
           <div className="lg:hidden flex justify-center mb-8">
-            <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-9 object-contain" />
+            <img src="/logo-horizontal.png" alt="Ecclesio" className="h-9 object-contain" />
           </div>
 
           <div

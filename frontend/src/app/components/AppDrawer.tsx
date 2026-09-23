@@ -56,7 +56,7 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
       >
         <div className="border-b border-white/10 px-5 pb-5 pt-6">
           <img
-            src="/logo-ecclesio.png"
+            src="/logo-horizontal.png"
             alt="Ecclesio"
             className="h-7 object-contain"
           />

@@ -98,7 +98,7 @@ export function Login() {
         <div className="relative z-10 flex flex-col justify-between h-full px-14 py-12">
           {/* Logo */}
           <div>
-            <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-10 object-contain" />
+            <img src="/logo-horizontal.png" alt="Ecclesio" className="h-10 object-contain" />
           </div>
 
           {/* Headline */}
@@ -152,7 +152,7 @@ export function Login() {
 
           {/* Logo mobile */}
           <div className="lg:hidden flex justify-center mb-8">
-            <img src="/logo-ecclesio.png" alt="Ecclesio" className="h-9 object-contain" />
+            <img src="/logo-horizontal.png" alt="Ecclesio" className="h-9 object-contain" />
           </div>
 
           {/* Card */}
