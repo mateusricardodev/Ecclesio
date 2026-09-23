@@ -168,7 +168,7 @@ export function EventVolunteers() {
 
         {/* Adicionar */}
         <div className="rounded-[20px] p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-1" style={{ color: '#0A0A09' }}>
             Adicionar à equipe
           </h2>
           <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
@@ -218,7 +218,7 @@ export function EventVolunteers() {
 
         {/* Lista */}
         <div className="rounded-[20px] p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-4" style={{ color: '#0A0A09' }}>
             Na equipe {volunteers.length > 0 && `(${volunteers.length})`}
           </h2>
 

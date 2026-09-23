@@ -397,7 +397,7 @@ export function EventFeedback() {
               {/* Notas por item */}
               <div className="rounded-[20px] overflow-hidden" style={CARD}>
                 <div className="px-5 py-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
-                  <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+                  <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
                     Notas por item
                   </h2>
                 </div>
@@ -466,7 +466,7 @@ export function EventFeedback() {
               {openAnswers.length > 0 && (
                 <div className="rounded-[20px] overflow-hidden" style={CARD}>
                   <div className="px-5 py-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
-                    <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+                    <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
                       Melhorias e pontos negativos
                     </h2>
                   </div>

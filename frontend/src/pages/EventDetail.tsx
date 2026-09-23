@@ -284,7 +284,7 @@ export function EventDetail() {
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4"
           style={{ borderBottom: '1px solid #E9E9E9' }}
         >
-          <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
             Inscrições
           </h2>
           <div className="flex items-center gap-2">

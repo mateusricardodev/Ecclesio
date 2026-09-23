@@ -302,7 +302,7 @@ function ActionButton({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-[20px] p-5" style={cardStyle}>
-      <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+      <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-4" style={{ color: '#0A0A09' }}>
         {title}
       </h2>
       <div className="flex flex-col gap-3">{children}</div>

@@ -219,7 +219,7 @@ export function Wallet() {
 
         {/* Resgate */}
         <div className="rounded-[20px] p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-1" style={{ color: '#0A0A09' }}>
             Resgatar saldo
           </h2>
           <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
@@ -298,7 +298,7 @@ export function Wallet() {
 
         {/* Chave PIX */}
         <div className="rounded-[20px] p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-1" style={{ color: '#0A0A09' }}>
             Conta de recebimento
           </h2>
           <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
@@ -384,7 +384,7 @@ export function Wallet() {
 
         {/* Extrato */}
         <div className="rounded-[20px] p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-4" style={{ color: '#0A0A09' }}>
             Extrato
           </h2>
 
@@ -429,7 +429,7 @@ export function Wallet() {
         {/* Histórico de resgates */}
         {payouts.length > 0 && (
           <div className="rounded-[20px] p-5" style={cardStyle}>
-            <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+            <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-4" style={{ color: '#0A0A09' }}>
               Resgates
             </h2>
             <div className="flex flex-col divide-y" style={{ borderColor: '#E9E9E9' }}>
