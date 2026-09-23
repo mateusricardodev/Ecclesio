@@ -43,14 +43,13 @@ interface Results {
 
 const CARD: React.CSSProperties = {
   background: '#FFFFFF',
-  border: '1px solid rgba(0,24,109,0.08)',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+  border: '1px solid #E9E9E9',
 }
 
 const FIELD: React.CSSProperties = {
   width: '100%',
   background: '#FAFAFA',
-  border: '1px solid rgba(0,24,109,0.15)',
+  border: '1px solid #E9E9E9',
   borderRadius: '10px',
   color: '#0A0A09',
   fontFamily: 'var(--font-sans)',
@@ -68,7 +67,7 @@ function scoreColor(score: number | null): string {
 }
 
 function formatAverage(value: number | null): string {
-  return value === null ? '—' : value.toFixed(1).replace('.', ',')
+  return value === null ? '-' : value.toFixed(1).replace('.', ',')
 }
 
 export function EventFeedback() {
@@ -166,7 +165,7 @@ export function EventFeedback() {
       setInviteModal(false)
       setToast(
         data.total === 0
-          ? 'Todos os inscritos confirmados já responderam — nenhum e-mail enviado.'
+          ? 'Todos os inscritos confirmados já responderam. Nenhum e-mail foi enviado.'
           : `Convite enviado para ${data.sent} de ${data.total} participante(s).` +
               (data.failed > 0 ? ` ${data.failed} falhou(aram).` : ''),
       )
@@ -193,40 +192,40 @@ export function EventFeedback() {
   return (
     <DashboardLayout active="eventos">
 
-      {/* ── Cabeçalho ── */}
+      {/* Cabeçalho */}
       <div className="mb-7">
         <Link
           to={`/events/${id}`}
           className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-colors"
-          style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+          style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
         >
           <ArrowLeft size={14} />
           Voltar ao evento
         </Link>
         <p
-          className="text-xs font-semibold uppercase tracking-[0.12em] mb-1"
-          style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+          className="ecc-eyebrow mb-1"
+          style={{ color: '#00186D' }}
         >
           Pesquisa pós-evento
         </p>
         <h1
           className="leading-tight"
-          style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+          style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
         >
-          Avaliação — {eventTitle || '...'}
+          Avaliação: {eventTitle || '...'}
         </h1>
       </div>
 
-      {/* ── Status e envio ── */}
-      <div className="rounded-2xl p-5 mb-6 flex flex-col gap-4" style={CARD}>
+      {/* Status e envio */}
+      <div className="rounded-[20px] p-5 mb-6 flex flex-col gap-4" style={CARD}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
               Receber respostas
             </p>
-            <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               {open
-                ? 'A pesquisa está aberta — quem tiver o link consegue responder.'
+                ? 'A pesquisa está aberta. Quem tiver o link consegue responder.'
                 : 'A pesquisa está fechada. Ative para liberar o formulário.'}
             </p>
           </div>
@@ -244,7 +243,7 @@ export function EventFeedback() {
             <div className="flex gap-2 shrink-0">
               <button
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-full transition-all"
                 style={{ border: '1.5px solid rgba(0,24,109,0.25)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
               >
                 {copied ? <Check size={13} /> : <Copy size={13} />}
@@ -253,14 +252,13 @@ export function EventFeedback() {
               <button
                 onClick={() => { setInviteError(''); setInviteModal(true) }}
                 disabled={!open}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all"
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full transition-all"
                 style={{
                   background: '#00186D',
                   color: '#FFFFFF',
                   fontFamily: 'var(--font-sans)',
                   opacity: open ? 1 : 0.5,
                   cursor: open ? 'pointer' : 'not-allowed',
-                  boxShadow: '0 2px 8px rgba(0,24,109,0.18)',
                 }}
                 title={open ? 'Enviar por e-mail aos inscritos confirmados' : 'Abra a pesquisa para enviar'}
               >
@@ -283,14 +281,14 @@ export function EventFeedback() {
         )}
       </div>
 
-      {/* ── Abas ── */}
+      {/* Abas */}
       <div className="flex gap-1 mb-5">
         {([['resultados', 'Resultados'], ['configuracao', 'Itens avaliados']] as const).map(
           ([key, label]) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              className="text-xs font-semibold px-4 py-2 rounded-xl transition-all"
+              className="text-xs font-bold px-4 py-2 rounded-full transition-all"
               style={{
                 background: tab === key ? '#00186D' : 'transparent',
                 color: tab === key ? '#FFFFFF' : '#6B7280',
@@ -305,13 +303,13 @@ export function EventFeedback() {
       </div>
 
       {loading ? (
-        <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-center py-14 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           Carregando...
         </p>
       ) : tab === 'configuracao' ? (
-        /* ── Configuração dos itens ── */
-        <div className="rounded-2xl p-5 flex flex-col gap-3 max-w-2xl" style={CARD}>
-          <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        /* Configuração dos itens */
+        <div className="rounded-[20px] p-5 flex flex-col gap-3 max-w-2xl" style={CARD}>
+          <p className="text-xs" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Cada item vira uma nota de 0 a 10 no formulário, com espaço para comentário. As duas
             perguntas finais (o que melhorar e ponto negativo) são fixas.
           </p>
@@ -328,7 +326,7 @@ export function EventFeedback() {
               />
               <button
                 onClick={() => setItems((prev) => prev.filter((_, i) => i !== index))}
-                className="p-2 rounded-lg shrink-0 transition-all"
+                className="p-2 rounded-full shrink-0 transition-all"
                 style={{ color: '#DC2626' }}
                 title="Remover item"
               >
@@ -340,7 +338,7 @@ export function EventFeedback() {
           <div className="flex flex-wrap items-center gap-2 mt-1">
             <button
               onClick={() => setItems((prev) => [...prev, ''])}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-full transition-all"
               style={{ border: '1.5px solid rgba(0,24,109,0.25)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
             >
               <Plus size={13} />
@@ -349,13 +347,12 @@ export function EventFeedback() {
             <button
               onClick={handleSaveItems}
               disabled={savingItems}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-xl transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full transition-all"
               style={{
                 background: '#00186D',
                 color: '#FFFFFF',
                 fontFamily: 'var(--font-sans)',
                 opacity: savingItems ? 0.7 : 1,
-                boxShadow: '0 2px 8px rgba(0,24,109,0.18)',
               }}
             >
               {savingItems ? 'Salvando...' : 'Salvar itens'}
@@ -363,7 +360,7 @@ export function EventFeedback() {
           </div>
         </div>
       ) : (
-        /* ── Resultados ── */
+        /* Resultados */
         <div className="flex flex-col gap-6">
           {/* Métricas */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -372,7 +369,7 @@ export function EventFeedback() {
               { label: 'Média geral', value: formatAverage(results?.overall ?? null), icon: Star, accent: scoreColor(results?.overall ?? null) },
               { label: 'Comentários', value: String((results?.summary ?? []).reduce((sum, s) => sum + s.comments.length, 0) + openAnswers.length), icon: MessageSquare, accent: '#D4B16A' },
             ].map((c) => (
-              <div key={c.label} className="rounded-2xl p-5" style={CARD}>
+              <div key={c.label} className="rounded-[20px] p-5" style={CARD}>
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center mb-3"
                   style={{ background: `${c.accent}12` }}
@@ -382,7 +379,7 @@ export function EventFeedback() {
                 <p className="text-2xl font-bold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                   {c.value}
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                <p className="text-xs mt-0.5" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                   {c.label}
                 </p>
               </div>
@@ -390,23 +387,23 @@ export function EventFeedback() {
           </div>
 
           {results && results.total === 0 ? (
-            <div className="rounded-2xl p-10 text-center" style={CARD}>
-              <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <div className="rounded-[20px] p-10 text-center" style={CARD}>
+              <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                 Nenhuma resposta ainda. Abra a pesquisa e envie o link aos participantes.
               </p>
             </div>
           ) : (
             <>
               {/* Notas por item */}
-              <div className="rounded-2xl overflow-hidden" style={CARD}>
-                <div className="px-5 py-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
-                  <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+              <div className="rounded-[20px] overflow-hidden" style={CARD}>
+                <div className="px-5 py-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
+                  <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
                     Notas por item
                   </h2>
                 </div>
                 <ul>
                   {(results?.summary ?? []).map((s) => (
-                    <li key={s.item} className="px-5 py-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}>
+                    <li key={s.item} className="px-5 py-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
                       <div className="flex items-center justify-between gap-3 mb-2">
                         <p className="text-sm font-semibold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                           {s.item}
@@ -423,7 +420,7 @@ export function EventFeedback() {
                           >
                             {formatAverage(s.average)}
                           </span>
-                          <span className="text-[11px]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                          <span className="text-[11px]" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                             {s.answers} nota(s)
                           </span>
                         </div>
@@ -449,11 +446,11 @@ export function EventFeedback() {
                               className="rounded-xl px-3.5 py-2.5"
                               style={{ background: 'rgba(0,24,109,0.03)' }}
                             >
-                              <p className="text-[11px] mb-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                              <p className="text-[11px] mb-0.5" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                                 {c.name ?? 'Anônimo'}
                                 {c.score !== null && ` · nota ${c.score}`}
                               </p>
-                              <p className="text-sm whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                              <p className="text-sm whitespace-pre-line" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                                 {c.comment}
                               </p>
                             </li>
@@ -467,16 +464,16 @@ export function EventFeedback() {
 
               {/* Respostas abertas */}
               {openAnswers.length > 0 && (
-                <div className="rounded-2xl overflow-hidden" style={CARD}>
-                  <div className="px-5 py-4" style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}>
-                    <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+                <div className="rounded-[20px] overflow-hidden" style={CARD}>
+                  <div className="px-5 py-4" style={{ borderBottom: '1px solid #E9E9E9' }}>
+                    <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
                       Melhorias e pontos negativos
                     </h2>
                   </div>
                   <ul>
                     {openAnswers.map((r) => (
-                      <li key={r.id} className="px-5 py-4 flex flex-col gap-3" style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}>
-                        <p className="text-[11px]" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <li key={r.id} className="px-5 py-4 flex flex-col gap-3" style={{ borderBottom: '1px solid #E9E9E9' }}>
+                        <p className="text-[11px]" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                           {r.name ?? 'Anônimo'} ·{' '}
                           {new Date(r.createdAt).toLocaleDateString('pt-BR', {
                             day: '2-digit', month: 'short', year: 'numeric',
@@ -484,20 +481,21 @@ export function EventFeedback() {
                         </p>
                         {r.improvements && (
                           <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+                            <p className="ecc-eyebrow text-[10px] mb-1"
+ style={{ color: '#00186D' }}>
                               O que melhorar
                             </p>
-                            <p className="text-sm whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                            <p className="text-sm whitespace-pre-line" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                               {r.improvements}
                             </p>
                           </div>
                         )}
                         {r.negatives && (
                           <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#991B1B', fontFamily: 'var(--font-sans)' }}>
+                            <p className="ecc-eyebrow text-[10px] mb-1" style={{ color: '#991B1B' }}>
                               Ponto negativo
                             </p>
-                            <p className="text-sm whitespace-pre-line" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                            <p className="text-sm whitespace-pre-line" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                               {r.negatives}
                             </p>
                           </div>
@@ -512,19 +510,19 @@ export function EventFeedback() {
         </div>
       )}
 
-      {/* ── Modal de envio ── */}
+      {/* Modal de envio */}
       {inviteModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
           style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}
         >
-          <div className="w-full max-w-sm rounded-2xl p-7" style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
-            <h3 className="font-semibold mb-2" style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}>
+          <div className="w-full max-w-sm rounded-[20px] p-7" style={{ background: '#FFFFFF' }}>
+            <h3 className="font-semibold mb-2" style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.25rem', color: '#0A0A09' }}>
               Enviar avaliação
             </h3>
-            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm mb-2" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Cada inscrito confirmado que ainda não respondeu recebe um e-mail com o link
-              individual da pesquisa. Quem já respondeu não recebe de novo — dá para reenviar
+              individual da pesquisa. Quem já respondeu não recebe de novo. Dá para reenviar
               quantas vezes precisar.
             </p>
             {inviteError && (
@@ -535,15 +533,15 @@ export function EventFeedback() {
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setInviteModal(false)}
-                className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
+                className="px-4 py-2 text-sm rounded-full"
+                style={{ border: '1px solid #E9E9E9', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
               <button
                 onClick={handleInvite}
                 disabled={inviting}
-                className="px-4 py-2 text-sm font-semibold rounded-xl"
+                className="px-4 py-2 text-sm font-bold rounded-full"
                 style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: inviting ? 0.7 : 1 }}
               >
                 {inviting ? 'Enviando...' : 'Enviar agora'}
@@ -556,7 +554,7 @@ export function EventFeedback() {
       {toast && (
         <div
           className="fixed bottom-6 right-6 z-50 max-w-xs rounded-xl px-4 py-3 text-sm"
-          style={{ background: '#00186D', color: '#FFFFFF', boxShadow: '0 12px 32px rgba(0,0,0,0.18)', fontFamily: 'var(--font-sans)' }}
+          style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
         >
           {toast}
         </div>

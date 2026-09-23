@@ -20,14 +20,13 @@ interface EventInfo {
 
 const cardStyle = {
   background: '#FFFFFF',
-  border: '1px solid rgba(0,24,109,0.08)',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+  border: '1px solid #E9E9E9',
 } as const
 
 const inputStyle = {
   width: '100%',
   borderRadius: '0.75rem',
-  border: '1px solid rgba(0,24,109,0.12)',
+  border: '1px solid #E9E9E9',
   padding: '0.6rem 0.85rem',
   fontSize: '0.875rem',
   fontFamily: 'var(--font-sans)',
@@ -132,12 +131,12 @@ export function EventVolunteers() {
     <DashboardLayout active="eventos">
       <div className="max-w-3xl mx-auto flex flex-col gap-6">
 
-        {/* ── Cabeçalho ─────────────────────────────────────────────────── */}
+        {/* Cabeçalho */}
         <div>
           <Link
             to={`/events/${id}`}
             className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-colors"
-            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+            style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
           >
             <ArrowLeft size={14} />
             Voltar ao evento
@@ -145,34 +144,34 @@ export function EventVolunteers() {
 
           <h1
             className="leading-tight"
-            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
+            style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09' }}
           >
             Equipe de credenciamento
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-sm mt-1" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             {event?.title ?? '...'}
           </p>
         </div>
 
-        {/* ── O que o voluntário pode fazer ─────────────────────────────── */}
+        {/* O que o voluntário pode fazer */}
         <div
           className="rounded-xl px-4 py-3 flex gap-3"
-          style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid rgba(0,24,109,0.1)' }}
+          style={{ background: 'rgba(0,24,109,0.04)', border: '1px solid #E9E9E9' }}
         >
           <ScanLine size={16} className="shrink-0 mt-0.5" style={{ color: '#00186D' }} />
-          <p className="text-xs leading-relaxed" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs leading-relaxed" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
             Quem está na equipe usa o app de credenciamento <strong>apenas neste evento</strong>:
             conferir a lista, buscar inscrito e ler QR Code. Não vê o financeiro, não edita o evento
             e não alcança seus outros eventos. Assim ninguém precisa do seu login.
           </p>
         </div>
 
-        {/* ── Adicionar ─────────────────────────────────────────────────── */}
-        <div className="rounded-2xl p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-1" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+        {/* Adicionar */}
+        <div className="rounded-[20px] p-5" style={cardStyle}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-1" style={{ color: '#0A0A09' }}>
             Adicionar à equipe
           </h2>
-          <p className="text-xs mb-4" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-xs mb-4" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             A pessoa precisa ter uma conta no site. Se ainda não tiver, peça para criar em
             &ldquo;Criar conta&rdquo; antes.
           </p>
@@ -189,12 +188,11 @@ export function EventVolunteers() {
             <button
               type="submit"
               disabled={adding}
-              className="inline-flex items-center justify-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shrink-0"
+              className="inline-flex items-center justify-center gap-2 text-sm font-bold px-5 py-2.5 rounded-full transition-all shrink-0"
               style={{
                 background: '#00186D',
                 color: '#FFFFFF',
                 fontFamily: 'var(--font-sans)',
-                boxShadow: '0 2px 12px rgba(0,24,109,0.20)',
                 opacity: adding ? 0.5 : 1,
               }}
             >
@@ -218,22 +216,22 @@ export function EventVolunteers() {
           )}
         </div>
 
-        {/* ── Lista ─────────────────────────────────────────────────────── */}
-        <div className="rounded-2xl p-5" style={cardStyle}>
-          <h2 className="font-semibold text-sm mb-4" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+        {/* Lista */}
+        <div className="rounded-[20px] p-5" style={cardStyle}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none mb-4" style={{ color: '#0A0A09' }}>
             Na equipe {volunteers.length > 0 && `(${volunteers.length})`}
           </h2>
 
           {loading ? (
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Carregando...
             </p>
           ) : volunteers.length === 0 ? (
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Ninguém na equipe ainda. Só você pode credenciar neste evento.
             </p>
           ) : (
-            <div className="flex flex-col divide-y" style={{ borderColor: 'rgba(0,24,109,0.07)' }}>
+            <div className="flex flex-col divide-y" style={{ borderColor: '#E9E9E9' }}>
               {volunteers.map((volunteer) => (
                 <div key={volunteer.id} className="flex items-center gap-3 py-3">
                   <span
@@ -267,7 +265,7 @@ export function EventVolunteers() {
                   <button
                     onClick={() => handleRemove(volunteer)}
                     disabled={removingId === volunteer.userId}
-                    className="p-2 rounded-lg transition-all shrink-0"
+                    className="p-2 rounded-full transition-all shrink-0"
                     style={{ color: '#EF4444', opacity: removingId === volunteer.userId ? 0.4 : 1 }}
                     title="Remover da equipe"
                   >

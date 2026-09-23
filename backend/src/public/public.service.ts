@@ -153,7 +153,7 @@ export class PublicService {
 
     // Taxa de serviço por cima do valor da inscrição: o participante paga
     // base + taxa, o organizador recebe a base cheia. Só incide sobre
-    // pagamento online — em dinheiro o valor nunca passa pela plataforma.
+    // pagamento online; em dinheiro o valor nunca passa pela plataforma.
     const charge = requiresOnlinePayment
       ? computeCharge(baseAmount, resolveFeeConfig(event))
       : { base: baseAmount, fee: 0, total: baseAmount };

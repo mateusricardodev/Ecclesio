@@ -20,7 +20,7 @@ export class FeedbackRatingDto {
   @MaxLength(MAX_FEEDBACK_ITEM_LENGTH)
   item: string;
 
-  /** Ausente quando o participante escolhe "não sei avaliar" — não entra na média. */
+  /** Ausente quando o participante escolhe "não sei avaliar"; não entra na média. */
   @IsInt()
   @Min(0)
   @Max(10)

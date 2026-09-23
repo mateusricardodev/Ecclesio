@@ -6,7 +6,7 @@ import {
 } from './platform-fee.js';
 
 describe('platform-fee', () => {
-  // ─── computeCharge ─────────────────────────────────────────────────────────
+  // computeCharge
 
   describe('computeCharge', () => {
     const fivePercent = { percent: 5, fixed: 0, min: 0 };
@@ -56,7 +56,7 @@ describe('platform-fee', () => {
     });
   });
 
-  // ─── resolveFeeConfig ──────────────────────────────────────────────────────
+  // resolveFeeConfig
 
   describe('resolveFeeConfig', () => {
     it('usa o padrão global quando o evento não tem override', () => {
@@ -96,7 +96,7 @@ describe('platform-fee', () => {
     });
   });
 
-  // ─── retenção ──────────────────────────────────────────────────────────────
+  // retenção
 
   describe('saleAvailableAt', () => {
     it('conta a retenção a partir da data de término do evento', () => {

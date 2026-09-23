@@ -34,7 +34,7 @@ export class MailService {
   constructor(private readonly config: ConfigService) {
     if (!this.isDev) {
       if (!this.config.get<string>('MAIL_HOST')) {
-        this.logger.error('MAIL_HOST não configurado — os e-mails de confirmação não serão enviados.');
+        this.logger.error('MAIL_HOST não configurado. Os e-mails de confirmação não serão enviados.');
       }
       this.transporter = nodemailer.createTransport({
         host: this.config.get<string>('MAIL_HOST'),
@@ -62,7 +62,7 @@ export class MailService {
     if (!this.transporterPromise) {
       this.transporterPromise = nodemailer.createTestAccount().then((account) => {
         this.logger.log(
-          `[DEV] Ethereal Email configurado — usuário: ${account.user}`,
+          `[DEV] Ethereal Email configurado. Usuário: ${account.user}`,
         );
         this.transporter = nodemailer.createTransport({
           host: 'smtp.ethereal.email',
@@ -79,7 +79,7 @@ export class MailService {
 
   /**
    * Envia o e-mail de confirmação. Retorna `true` se o SMTP aceitou a mensagem
-   * e `false` se o envio falhou — os disparos automáticos são fire-and-forget e
+   * e `false` se o envio falhou. Os disparos automáticos são fire-and-forget e
    * ignoram o retorno, mas o reenvio manual pelo organizador precisa saber se
    * saiu para poder avisar na tela.
    */
@@ -105,10 +105,10 @@ export class MailService {
         qrBuffer = await QRCode.toBuffer(data.registrationCode, {
           width: 200,
           margin: 2,
-          color: { dark: '#1B2B5E', light: '#F2EDE4' },
+          color: { dark: '#00186D', light: '#F5F2E8' },
         });
       } catch {
-        this.logger.warn('Falha ao gerar QR code para o email — enviando sem QR');
+        this.logger.warn('Falha ao gerar QR code para o email; enviando sem QR');
       }
     }
 
@@ -117,7 +117,7 @@ export class MailService {
       const info = await transport.sendMail({
         from,
         to: data.participantEmail,
-        subject: `Inscrição confirmada — ${data.eventTitle}`,
+        subject: `Inscrição confirmada: ${data.eventTitle}`,
         html: this.buildEmailHtml({ ...data, formattedDate, formattedTime, hasQr: !!qrBuffer }),
         attachments: qrBuffer
           ? [{ filename: 'qrcode.png', content: qrBuffer, cid: 'qrcode@ecclesio' }]
@@ -153,7 +153,7 @@ export class MailService {
       const info = await transport.sendMail({
         from,
         to: data.participantEmail,
-        subject: `Como foi para você? — ${data.eventTitle}`,
+        subject: `Como foi o ${data.eventTitle}?`,
         html: this.buildFeedbackInviteHtml(data),
       });
 
@@ -183,20 +183,20 @@ export class MailService {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Avalie o evento</title>
 </head>
-<body style="margin:0;padding:0;background:#F2EDE4;font-family:'Segoe UI',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F2EDE4;padding:32px 0;">
+<body style="margin:0;padding:0;background:#F5F2E8;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F2E8;padding:32px 0;">
     <tr>
       <td align="center">
         <table width="580" cellpadding="0" cellspacing="0"
-               style="max-width:580px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(27,43,94,0.12);">
+               style="max-width:580px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,24,109,0.12);">
 
           <!-- Header -->
           <tr>
-            <td style="background:#1B2B5E;padding:36px 40px;text-align:center;">
-              <p style="margin:0 0 10px 0;color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
+            <td style="background:#00186D;padding:36px 40px;text-align:center;">
+              <p style="margin:0 0 10px 0;color:#D4B16A;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
                 Ecclesio
               </p>
-              <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:26px;font-weight:700;">
+              <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:32px;font-weight:400;font-family:Georgia,'Times New Roman',serif;letter-spacing:-0.5px;">
                 Como foi para você?
               </h1>
               <p style="margin:0;color:#a0b0d0;font-size:14px;">
@@ -209,7 +209,7 @@ export class MailService {
           <tr>
             <td style="padding:36px 40px;">
               <p style="margin:0 0 20px 0;color:#33425C;font-size:15px;line-height:1.7;">
-                O <strong style="color:#1B2B5E;">${data.eventTitle}</strong> chegou ao fim e a sua
+                O <strong style="color:#00186D;">${data.eventTitle}</strong> chegou ao fim e a sua
                 opinião é o que nos ajuda a fazer o próximo ainda melhor. São poucos minutos:
                 você dá uma nota de 0 a 10 para cada parte do evento e comenta o que quiser.
               </p>
@@ -218,7 +218,7 @@ export class MailService {
                 <tr>
                   <td align="center">
                     <a href="${data.surveyUrl}"
-                       style="display:inline-block;background:#1B2B5E;color:#ffffff;text-decoration:none;
+                       style="display:inline-block;background:#00186D;color:#ffffff;text-decoration:none;
                               padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;">
                       Avaliar o evento
                     </a>
@@ -229,7 +229,7 @@ export class MailService {
               <p style="margin:0 0 8px 0;color:#8a8070;font-size:12px;line-height:1.7;text-align:center;">
                 Se o botão não funcionar, copie e cole este endereço no navegador:
               </p>
-              <p style="margin:0;color:#1B2B5E;font-size:12px;line-height:1.6;text-align:center;word-break:break-all;">
+              <p style="margin:0;color:#00186D;font-size:12px;line-height:1.6;text-align:center;word-break:break-all;">
                 ${data.surveyUrl}
               </p>
             </td>
@@ -237,10 +237,10 @@ export class MailService {
 
           <!-- Footer -->
           <tr>
-            <td style="background:#1B2B5E;padding:20px 40px;text-align:center;">
+            <td style="background:#00186D;padding:20px 40px;text-align:center;">
               <p style="margin:0;color:#a0b0d0;font-size:11px;">
                 Este e-mail foi enviado automaticamente por
-                <strong style="color:#C9A84C;">Ecclesio</strong>.
+                <strong style="color:#D4B16A;">Ecclesio</strong>.
               </p>
             </td>
           </tr>
@@ -266,7 +266,7 @@ export class MailService {
             <td style="padding:10px 0;border-bottom:1px solid #e5e0d6;">
               <table width="100%" cellpadding="0" cellspacing="0"><tr>
                 <td style="color:#8a8070;font-size:13px;">Valor pago</td>
-                <td style="text-align:right;color:#1B2B5E;font-size:15px;font-weight:700;">
+                <td style="text-align:right;color:#00186D;font-size:15px;font-weight:700;">
                   R$ ${Number(data.amountPaid).toFixed(2).replace('.', ',')}
                 </td>
               </tr></table>
@@ -288,15 +288,15 @@ export class MailService {
     const qrSection = data.hasQr
       ? `<!-- QR Code -->
         <table width="100%" cellpadding="0" cellspacing="0"
-               style="background:#F2EDE4;border-radius:12px;margin-bottom:24px;">
+               style="background:#F5F2E8;border-radius:12px;margin-bottom:24px;">
           <tr>
             <td style="padding:24px;text-align:center;">
-              <p style="margin:0 0 4px 0;color:#C9A84C;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
+              <p style="margin:0 0 4px 0;color:#D4B16A;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
                 Código de Credenciamento
               </p>
               <img src="cid:qrcode@ecclesio" alt="QR Code" width="140" height="140"
                    style="display:block;margin:16px auto;border-radius:8px;" />
-              <p style="margin:0;color:#1B2B5E;font-size:20px;font-weight:700;font-family:monospace;letter-spacing:4px;">
+              <p style="margin:0;color:#00186D;font-size:20px;font-weight:700;font-family:monospace;letter-spacing:4px;">
                 ${data.registrationCode}
               </p>
               <p style="margin:8px 0 0 0;color:#8a8070;font-size:11px;">
@@ -315,24 +315,24 @@ export class MailService {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Confirmação de Inscrição</title>
 </head>
-<body style="margin:0;padding:0;background:#F2EDE4;font-family:'Segoe UI',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F2EDE4;padding:32px 0;">
+<body style="margin:0;padding:0;background:#F5F2E8;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F5F2E8;padding:32px 0;">
     <tr>
       <td align="center">
         <table width="580" cellpadding="0" cellspacing="0"
-               style="max-width:580px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(27,43,94,0.12);">
+               style="max-width:580px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,24,109,0.12);">
 
           <!-- Header -->
           <tr>
-            <td style="background:#1B2B5E;padding:36px 40px;text-align:center;">
-              <p style="margin:0 0 10px 0;color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
+            <td style="background:#00186D;padding:36px 40px;text-align:center;">
+              <p style="margin:0 0 10px 0;color:#D4B16A;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
                 Ecclesio
               </p>
-              <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:26px;font-weight:700;">
-                Inscrição Confirmada!
+              <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:32px;font-weight:400;font-family:Georgia,'Times New Roman',serif;letter-spacing:-0.5px;">
+                Inscrição confirmada
               </h1>
               <p style="margin:0;color:#a0b0d0;font-size:14px;">
-                Olá, <strong style="color:#ffffff;">${data.participantName}</strong> — sua vaga está garantida.
+                Olá, <strong style="color:#ffffff;">${data.participantName}</strong>, sua vaga está garantida.
               </p>
             </td>
           </tr>
@@ -345,20 +345,20 @@ export class MailService {
 
               <!-- Detalhes do evento -->
               <table width="100%" cellpadding="0" cellspacing="0"
-                     style="background:#F2EDE4;border-radius:12px;margin-bottom:24px;">
+                     style="background:#F5F2E8;border-radius:12px;margin-bottom:24px;">
                 <tr>
                   <td style="padding:20px 24px;">
-                    <p style="margin:0 0 12px 0;color:#C9A84C;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
+                    <p style="margin:0 0 12px 0;color:#D4B16A;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
                       Detalhes do Evento
                     </p>
-                    <p style="margin:0 0 8px 0;color:#1B2B5E;font-size:18px;font-weight:700;">
+                    <p style="margin:0 0 8px 0;color:#00186D;font-size:18px;font-weight:700;">
                       ${data.eventTitle}
                     </p>
                     <p style="margin:0 0 4px 0;color:#5a6070;font-size:13px;">
-                      📅 ${data.formattedDate} às ${data.formattedTime}
+                      ${data.formattedDate} às ${data.formattedTime}
                     </p>
                     ${data.eventLocation
-                      ? `<p style="margin:0;color:#5a6070;font-size:13px;">📍 ${data.eventLocation}</p>`
+                      ? `<p style="margin:0;color:#5a6070;font-size:13px;">${data.eventLocation}</p>`
                       : ''}
                   </td>
                 </tr>
@@ -380,10 +380,10 @@ export class MailService {
 
           <!-- Footer -->
           <tr>
-            <td style="background:#1B2B5E;padding:20px 40px;text-align:center;">
+            <td style="background:#00186D;padding:20px 40px;text-align:center;">
               <p style="margin:0;color:#a0b0d0;font-size:11px;">
                 Este e-mail foi enviado automaticamente por
-                <strong style="color:#C9A84C;">Ecclesio</strong>.
+                <strong style="color:#D4B16A;">Ecclesio</strong>.
               </p>
             </td>
           </tr>

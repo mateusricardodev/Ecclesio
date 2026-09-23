@@ -107,7 +107,7 @@ describe('PublicService', () => {
     );
   });
 
-  // ─── findEventBySlug ─────────────────────────────────────────────────────────
+  // findEventBySlug
 
   describe('findEventBySlug', () => {
     it('retorna evento publicado com formas de pagamento', async () => {
@@ -171,7 +171,7 @@ describe('PublicService', () => {
     });
   });
 
-  // ─── register ────────────────────────────────────────────────────────────────
+  // register
 
   describe('register', () => {
     const setup = () => {

@@ -22,14 +22,13 @@ const SCORES = Array.from({ length: 11 }, (_, i) => i)
 
 const CARD: React.CSSProperties = {
   background: '#FFFFFF',
-  border: '1px solid rgba(0,24,109,0.08)',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+  border: '1px solid #E9E9E9',
 }
 
 const FIELD: React.CSSProperties = {
   width: '100%',
   background: '#FAFAFA',
-  border: '1px solid rgba(0,24,109,0.15)',
+  border: '1px solid #E9E9E9',
   borderRadius: '10px',
   color: '#0A0A09',
   fontFamily: 'var(--font-sans)',
@@ -126,7 +125,7 @@ export function PublicFeedback() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F2E8' }}>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           Carregando avaliação...
         </p>
       </div>
@@ -139,7 +138,7 @@ export function PublicFeedback() {
         <p className="text-lg font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
           Avaliação indisponível
         </p>
-        <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           {error || 'O endereço pode estar incorreto ou a pesquisa foi encerrada.'}
         </p>
       </div>
@@ -155,10 +154,10 @@ export function PublicFeedback() {
         >
           <CheckCircle2 size={30} style={{ color: '#00186D' }} />
         </div>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.875rem', fontWeight: 400, color: '#0A0A09' }}>
           {sent ? 'Obrigado pela sua avaliação!' : 'Você já respondeu'}
         </h1>
-        <p className="text-sm max-w-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-sm max-w-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           {sent
             ? 'Sua resposta foi registrada e vai ajudar a organização a preparar o próximo encontro.'
             : 'A sua resposta para este evento já está registrada. Obrigado!'}
@@ -184,14 +183,14 @@ export function PublicFeedback() {
             style={{ background: '#00186D', minHeight: '150px' }}
           >
             <p
-              className="text-xs font-semibold uppercase tracking-[0.14em]"
-              style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+              className="ecc-eyebrow"
+              style={{ color: '#00186D' }}
             >
               Avaliação do evento
             </p>
             <h1
               className="text-center"
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#FFFFFF', lineHeight: 1.2 }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#FFFFFF', lineHeight: 1.2 }}
             >
               {form.eventTitle}
             </h1>
@@ -202,24 +201,24 @@ export function PublicFeedback() {
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto px-5 py-5 flex flex-col gap-3 pb-16">
 
         {/* Intro */}
-        <div className="rounded-2xl p-5" style={CARD}>
+        <div className="rounded-[20px] p-5" style={CARD}>
           {form.bannerUrl && (
             <>
               <p
-                className="text-xs font-semibold uppercase tracking-[0.14em] mb-1"
-                style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+                className="ecc-eyebrow mb-1"
+                style={{ color: '#00186D' }}
               >
                 Avaliação do evento
               </p>
               <h1
                 className="mb-2"
-                style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}
+                style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.35rem', fontWeight: 400, color: '#0A0A09', lineHeight: 1.2 }}
               >
                 {form.eventTitle}
               </h1>
             </>
           )}
-          <p className="text-sm leading-relaxed" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
             {form.participantName ? `Olá, ${form.participantName}! ` : ''}
             Dê uma nota de <strong>0 a 10</strong> para cada parte do evento e comente o que quiser.
             Leva poucos minutos e ajuda muito na preparação do próximo.
@@ -230,7 +229,7 @@ export function PublicFeedback() {
         {form.items.map((item) => {
           const answer = answers[item] ?? { score: '', comment: '' }
           return (
-            <div key={item} className="rounded-2xl p-5 flex flex-col gap-3" style={CARD}>
+            <div key={item} className="rounded-[20px] p-5 flex flex-col gap-3" style={CARD}>
               <div className="flex items-center justify-between gap-3">
                 <label
                   htmlFor={`score-${item}`}
@@ -275,7 +274,7 @@ export function PublicFeedback() {
         })}
 
         {/* Perguntas abertas */}
-        <div className="rounded-2xl p-5 flex flex-col gap-4" style={CARD}>
+        <div className="rounded-[20px] p-5 flex flex-col gap-4" style={CARD}>
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="improvements"
@@ -314,7 +313,7 @@ export function PublicFeedback() {
             />
           </div>
 
-          {/* Só no link genérico — pelo link do e-mail já sabemos quem respondeu */}
+          {/* Só no link genérico; pelo link do e-mail já sabemos quem respondeu */}
           {!form.participantName && (
             <div className="flex flex-col gap-1.5">
               <label
@@ -346,14 +345,13 @@ export function PublicFeedback() {
         <button
           type="submit"
           disabled={sending}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all"
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-bold text-sm transition-all"
           style={{
             background: '#00186D',
             color: '#FFFFFF',
             fontFamily: 'var(--font-sans)',
             cursor: sending ? 'not-allowed' : 'pointer',
             opacity: sending ? 0.7 : 1,
-            boxShadow: '0 4px 14px rgba(0,24,109,0.25)',
           }}
         >
           {sending ? 'Enviando...' : 'Enviar avaliação'}

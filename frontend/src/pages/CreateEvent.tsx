@@ -69,13 +69,13 @@ export function CreateEvent() {
             <WizardField label="Endereço da página do evento">
               <div
                 className="flex items-center overflow-hidden"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', borderRadius: '10px' }}
+                style={{ border: '1px solid #E9E9E9', borderRadius: '10px' }}
               >
                 <span
                   className="px-3 py-2.5 text-xs shrink-0"
                   style={{
                     background: 'rgba(0,24,109,0.04)',
-                    borderRight: '1px solid rgba(0,24,109,0.12)',
+                    borderRight: '1px solid #E9E9E9',
                     color: '#00186D',
                     fontFamily: 'var(--font-sans)',
                   }}
@@ -117,7 +117,7 @@ export function CreateEvent() {
             </div>
 
             <WizardField label="Local do evento">
-              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções — São Paulo, SP" />
+              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções, São Paulo, SP" />
             </WizardField>
 
             <WizardField label="Descrição">
@@ -135,7 +135,7 @@ export function CreateEvent() {
 
           <div className="flex justify-end pb-8">
             <button type="submit" disabled={loading} style={wizardPrimaryBtn(loading)}>
-              {loading ? 'Criando...' : 'Próximo passo →'}
+              {loading ? 'Criando...' : 'Próximo passo'}
             </button>
           </div>
         </form>

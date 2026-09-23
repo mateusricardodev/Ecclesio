@@ -28,12 +28,12 @@ export function EventWizardHeader({ active, eventId }: Props) {
   return (
     <div
       className="mb-8"
-      style={{ borderBottom: '1px solid rgba(0,24,109,0.08)', paddingBottom: '1.5rem' }}
+      style={{ borderBottom: '1px solid #E9E9E9', paddingBottom: '1.5rem' }}
     >
       {/* Label superior */}
       <p
-        className="text-xs font-semibold uppercase tracking-[0.12em] mb-4"
-        style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}
+        className="ecc-eyebrow mb-4"
+        style={{ color: '#00186D' }}
       >
         Configuração do evento
       </p>

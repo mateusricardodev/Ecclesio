@@ -6,7 +6,7 @@
  * R$ 100,00 cheios e a plataforma fica com R$ 5,00.
  *
  * Atenção ao fechar a margem: o gateway (Mercado Pago) cobra a taxa dele sobre
- * o TOTAL cobrado, e ela sai da parte da plataforma — o organizador sempre
+ * o TOTAL cobrado, e ela sai da parte da plataforma. O organizador sempre
  * recebe a base integral. Ou seja, a taxa configurada aqui é bruta, não
  * líquida.
  */
@@ -21,9 +21,9 @@ export interface FeeConfig {
 }
 
 export interface Charge {
-  /** Valor da inscrição — vira crédito do organizador. */
+  /** Valor da inscrição: vira crédito do organizador. */
   base: number;
-  /** Taxa de serviço — fica com a plataforma. */
+  /** Taxa de serviço: fica com a plataforma. */
   fee: number;
   /** Total cobrado do participante (base + fee). */
   total: number;

@@ -32,7 +32,7 @@ describe('AuthService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── register ──────────────────────────────────────────────────────────────
+  // register
 
   describe('register', () => {
     it('cria usuário e retorna dados sem senha', async () => {
@@ -109,7 +109,7 @@ describe('AuthService', () => {
     });
   });
 
-  // ─── login ─────────────────────────────────────────────────────────────────
+  // login
 
   describe('login', () => {
     it('retorna access_token para credenciais válidas', async () => {
@@ -142,7 +142,7 @@ describe('AuthService', () => {
     });
   });
 
-  // ─── me ────────────────────────────────────────────────────────────────────
+  // me
 
   describe('me', () => {
     it('retorna dados do usuário por id', async () => {

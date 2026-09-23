@@ -42,7 +42,7 @@ export class FeedbackController {
     return this.feedback.sendInvites(eventId, user.id);
   }
 
-  // ─── Rotas públicas (sem JwtGuard) ─────────────────────────────────────────
+  // Rotas públicas (sem JwtGuard)
 
   @Get('public/events/:slug/feedback')
   getPublicForm(@Param('slug') slug: string, @Query('r') registrationId?: string) {

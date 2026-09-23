@@ -1,5 +1,5 @@
 /**
- * E2E — inscrições.app
+ * E2E: Ecclesio
  *
  * Pré-requisitos:
  *   docker-compose -f docker-compose.test.yml up -d
@@ -60,12 +60,10 @@ describe('inscrições.app (e2e)', () => {
     await cleanDatabase(prisma);
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
   // AUTH
-  // ──────────────────────────────────────────────────────────────────────────
 
   describe('Auth', () => {
-    it('POST /auth/register — cria conta e retorna dados do usuário', async () => {
+    it('POST /auth/register: cria conta e retorna dados do usuário', async () => {
       const res = await request(app.getHttpServer())
         .post('/auth/register')
         .send({ name: 'Teste E2E', email: 'e2e@test.com', password: 'senha123' })
@@ -75,7 +73,7 @@ describe('inscrições.app (e2e)', () => {
       expect(res.body).not.toHaveProperty('password');
     });
 
-    it('POST /auth/register — 409 para email duplicado', async () => {
+    it('POST /auth/register: 409 para email duplicado', async () => {
       await request(app.getHttpServer())
         .post('/auth/register')
         .send({ name: 'A', email: 'dup@test.com', password: 'senha123' });
@@ -86,7 +84,7 @@ describe('inscrições.app (e2e)', () => {
         .expect(409);
     });
 
-    it('POST /auth/login — retorna access_token', async () => {
+    it('POST /auth/login: retorna access_token', async () => {
       await request(app.getHttpServer())
         .post('/auth/register')
         .send({ name: 'Login', email: 'login@test.com', password: 'senha123' });
@@ -99,7 +97,7 @@ describe('inscrições.app (e2e)', () => {
       expect(res.body).toHaveProperty('access_token');
     });
 
-    it('POST /auth/login — 401 para senha errada', async () => {
+    it('POST /auth/login: 401 para senha errada', async () => {
       await request(app.getHttpServer())
         .post('/auth/register')
         .send({ name: 'X', email: 'x@test.com', password: 'certa' });
@@ -110,11 +108,11 @@ describe('inscrições.app (e2e)', () => {
         .expect(401);
     });
 
-    it('GET /auth/me — 401 sem token', async () => {
+    it('GET /auth/me: 401 sem token', async () => {
       await request(app.getHttpServer()).get('/auth/me').expect(401);
     });
 
-    it('GET /auth/me — retorna dados do usuário autenticado', async () => {
+    it('GET /auth/me: retorna dados do usuário autenticado', async () => {
       await request(app.getHttpServer())
         .post('/auth/register')
         .send({ name: 'Me User', email: 'me@test.com', password: 'senha123' });
@@ -134,9 +132,7 @@ describe('inscrições.app (e2e)', () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
   // Helpers para o fluxo principal
-  // ──────────────────────────────────────────────────────────────────────────
 
   async function registerAndLogin(email = 'org@test.com', password = 'senha123') {
     await request(app.getHttpServer())
@@ -169,7 +165,7 @@ describe('inscrições.app (e2e)', () => {
     return res.body;
   }
 
-  /** Modalidade gratuita (value 0) — inscrição pública confirma na hora, sem PIX. */
+  /** Modalidade gratuita (value 0): inscrição pública confirma na hora, sem PIX. */
   async function createFreePaymentMethod(token: string, eventId: string) {
     const res = await request(app.getHttpServer())
       .post(`/events/${eventId}/payment-methods`)
@@ -202,19 +198,17 @@ describe('inscrições.app (e2e)', () => {
     };
   }
 
-  // ──────────────────────────────────────────────────────────────────────────
   // EVENTS
-  // ──────────────────────────────────────────────────────────────────────────
 
   describe('Events', () => {
-    it('POST /events — 401 sem autenticação', async () => {
+    it('POST /events: 401 sem autenticação', async () => {
       await request(app.getHttpServer())
         .post('/events')
         .send({ title: 'X', date: '2026-09-01' })
         .expect(401);
     });
 
-    it('POST /events — cria evento autenticado', async () => {
+    it('POST /events: cria evento autenticado', async () => {
       const token = await registerAndLogin();
       const event = await createEvent(token);
 
@@ -222,7 +216,7 @@ describe('inscrições.app (e2e)', () => {
       expect(event.title).toBe('Conferência E2E');
     });
 
-    it('PUT /events/:id — 403 quando outro usuário tenta editar', async () => {
+    it('PUT /events/:id: 403 quando outro usuário tenta editar', async () => {
       const ownerToken = await registerAndLogin('owner@test.com');
       const otherToken = await registerAndLogin('other@test.com');
 
@@ -235,7 +229,7 @@ describe('inscrições.app (e2e)', () => {
         .expect(403);
     });
 
-    it('DELETE /events/:id — 403 quando outro usuário tenta remover', async () => {
+    it('DELETE /events/:id: 403 quando outro usuário tenta remover', async () => {
       const ownerToken = await registerAndLogin('del-owner@test.com');
       const otherToken = await registerAndLogin('del-other@test.com');
       const event = await createEvent(ownerToken);
@@ -246,7 +240,7 @@ describe('inscrições.app (e2e)', () => {
         .expect(403);
     });
 
-    it('GET /events — retorna apenas eventos do usuário autenticado', async () => {
+    it('GET /events: retorna apenas eventos do usuário autenticado', async () => {
       const t1 = await registerAndLogin('u1@test.com');
       const t2 = await registerAndLogin('u2@test.com');
 
@@ -262,12 +256,10 @@ describe('inscrições.app (e2e)', () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
   // INSCRIÇÕES PÚBLICAS
-  // ──────────────────────────────────────────────────────────────────────────
 
   describe('Inscrições públicas', () => {
-    it('POST /public/events/:slug/register — inscreve sem autenticação', async () => {
+    it('POST /public/events/:slug/register: inscreve sem autenticação', async () => {
       const token = await registerAndLogin();
       const event = await createEvent(token);
       const method = await createFreePaymentMethod(token, event.id);
@@ -287,7 +279,7 @@ describe('inscrições.app (e2e)', () => {
       expect(res.body.status).toBe('confirmed');
     });
 
-    it('POST /public/events/:slug/register — 404 para evento não publicado', async () => {
+    it('POST /public/events/:slug/register: 404 para evento não publicado', async () => {
       const token = await registerAndLogin('pub@test.com');
       const event = await createEvent(token); // isPublished = false por padrão
       const method = await createFreePaymentMethod(token, event.id);
@@ -298,7 +290,7 @@ describe('inscrições.app (e2e)', () => {
         .expect(404);
     });
 
-    it('POST /public/events/:slug/register — 409 quando evento lotado', async () => {
+    it('POST /public/events/:slug/register: 409 quando evento lotado', async () => {
       const token = await registerAndLogin('full@test.com');
       const event = await createEvent(token, { maxParticipants: 1 });
       const method = await createFreePaymentMethod(token, event.id);
@@ -308,27 +300,27 @@ describe('inscrições.app (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({ isPublished: true });
 
-      // Primeira inscrição — deve funcionar
+      // Primeira inscrição: deve funcionar
       await request(app.getHttpServer())
         .post(`/public/events/${event.slug}/register`)
         .send(publicRegistration(3, method.id))
         .expect(201);
 
-      // Segunda inscrição — deve retornar 409 (Conflict)
+      // Segunda inscrição: deve retornar 409 (Conflict)
       await request(app.getHttpServer())
         .post(`/public/events/${event.slug}/register`)
         .send(publicRegistration(4, method.id))
         .expect(409);
     });
 
-    it('POST /public/events/:slug/register — 404 para slug inexistente', async () => {
+    it('POST /public/events/:slug/register: 404 para slug inexistente', async () => {
       await request(app.getHttpServer())
         .post('/public/events/nao-existe/register')
         .send(publicRegistration(5, '00000000-0000-0000-0000-000000000000'))
         .expect(404);
     });
 
-    it('POST /public/events/:slug/register — 400 para CPF inválido', async () => {
+    it('POST /public/events/:slug/register: 400 para CPF inválido', async () => {
       const token = await registerAndLogin('cpf@test.com');
       const event = await createEvent(token);
       const method = await createFreePaymentMethod(token, event.id);
@@ -345,9 +337,7 @@ describe('inscrições.app (e2e)', () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
   // FLUXO PRINCIPAL: registrar → logar → criar evento → inscrever → listar
-  // ──────────────────────────────────────────────────────────────────────────
 
   describe('Fluxo principal completo', () => {
     it('organiza evento, inscreve participante e lista inscrições', async () => {
@@ -389,12 +379,10 @@ describe('inscrições.app (e2e)', () => {
     });
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
   // RACE CONDITION (prova do bug C-01)
   // Este teste FALHA hoje e PASSA após a correção com transação Serializable
-  // ──────────────────────────────────────────────────────────────────────────
 
-  describe('Race condition — BUG C-01', () => {
+  describe('Race condition: BUG C-01', () => {
     it('FALHA ESPERADA: evento com 1 vaga aceita N inscrições simultâneas', async () => {
       const token = await registerAndLogin('race@test.com');
       const event = await createEvent(token, { maxParticipants: 1 });

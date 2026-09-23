@@ -19,7 +19,7 @@ export function ParticipantCard({
 }: ParticipantCardProps) {
   return (
     <div className="flex items-start gap-3 px-4 py-4">
-      {/* Selo de credenciado — verde do painel, só quando já fez check-in. */}
+      {/* Selo de credenciado (verde do painel), só quando já fez check-in. */}
       {p.checkedIn && (
         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ecc-green">
           <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
@@ -39,7 +39,7 @@ export function ParticipantCard({
 
         <button
           onClick={onViewData}
-          className="mt-2 text-[13px] font-semibold text-ecc-gold-dark active:opacity-70"
+          className="mt-2 text-[13px] font-bold text-ecc-navy active:opacity-70"
         >
           Ver dados
         </button>
@@ -52,7 +52,7 @@ export function ParticipantCard({
           <button
             onClick={onUndo}
             disabled={busy}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-ecc-navy/20 px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-ecc-navy transition-colors active:bg-ecc-navy/5 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full border border-ecc-navy/20 px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-ecc-navy transition-colors active:bg-ecc-navy/5 disabled:opacity-50"
           >
             <RotateCcw className="h-3.5 w-3.5 shrink-0" />
             Desfazer Check-in
@@ -61,7 +61,7 @@ export function ParticipantCard({
           <button
             onClick={onCheckIn}
             disabled={busy}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-ecc-navy px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-white shadow-[0_2px_12px_rgba(0,24,109,0.20)] transition-colors active:bg-ecc-navy-deep disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full bg-ecc-navy px-2 py-2.5 text-center text-[12px] font-semibold leading-tight text-white  transition-colors active:bg-ecc-navy-deep disabled:opacity-50"
           >
             <Check className="h-3.5 w-3.5 shrink-0" strokeWidth={3} />
             Fazer Check-in
@@ -76,7 +76,7 @@ function MetaLine({ label, value }: { label: string; value: string | null }) {
   return (
     <p className="truncate text-[13px] text-ecc-muted">
       <span className="text-ecc-faint">{label}: </span>
-      {value ?? '—'}
+      {value ?? '-'}
     </p>
   )
 }

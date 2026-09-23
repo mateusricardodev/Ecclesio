@@ -31,7 +31,7 @@ function formatBRL(cents: number): string {
 /**
  * Carteira do organizador.
  *
- * O saldo nunca é armazenado — é sempre a soma do `LedgerEntry`. Uma linha
+ * O saldo nunca é armazenado: é sempre a soma do `LedgerEntry`. Uma linha
  * conta no saldo disponível quando `availableAt <= agora`; vendas ficam
  * retidas até alguns dias depois do evento, débitos de resgate valem na hora.
  */
@@ -115,7 +115,7 @@ export class WalletService {
     const pixKey = dto.pixKey.trim();
     const document = dto.pixHolderDocument.replace(/\D/g, '');
 
-    // Uma chave do tipo CPF/CNPJ tem que ser o documento do próprio titular —
+    // Uma chave do tipo CPF/CNPJ tem que ser o documento do próprio titular;
     // é a checagem mais barata contra repassar para a conta de outra pessoa.
     if (dto.pixKeyType === 'cpf' || dto.pixKeyType === 'cnpj') {
       if (pixKey.replace(/\D/g, '') !== document)
@@ -139,7 +139,7 @@ export class WalletService {
 
   /**
    * Solicita um resgate. O débito no razão nasce na mesma transação que confere
-   * o saldo, sob isolamento serializável — sem isso, dois cliques simultâneos
+   * o saldo, sob isolamento serializável. Sem isso, dois cliques simultâneos
    * sacariam o mesmo saldo duas vezes.
    */
   async requestPayout(userId: string, amount: number) {
@@ -168,7 +168,7 @@ export class WalletService {
         });
         if (open)
           throw new ConflictException(
-            'Você já tem um resgate em andamento — aguarde a conclusão antes de pedir outro',
+            'Você já tem um resgate em andamento. Aguarde a conclusão antes de pedir outro.',
           );
 
         const balance = await tx.ledgerEntry.aggregate({
@@ -245,7 +245,7 @@ export class WalletService {
 
   /**
    * Atualiza um resgate. Recusar devolve o valor ao saldo com uma linha de
-   * estorno, em vez de apagar o débito — o histórico de um resgate recusado
+   * estorno, em vez de apagar o débito: o histórico de um resgate recusado
    * precisa continuar visível.
    */
   async updatePayout(payoutId: string, adminId: string, dto: UpdatePayoutDto) {
@@ -265,7 +265,7 @@ export class WalletService {
               payoutId: payout.id,
               type: 'payout_reversal',
               amount: payout.amount,
-              description: 'Resgate recusado — valor devolvido ao saldo',
+              description: 'Resgate recusado, valor devolvido ao saldo',
               availableAt: new Date(),
             },
           });
@@ -289,7 +289,7 @@ export class WalletService {
 
   /**
    * Visão financeira da plataforma: quanto entrou, quanto é dos organizadores
-   * e quanto sobra de taxa. `outstandingBalance` é a soma de todo o razão —
+   * e quanto sobra de taxa. `outstandingBalance` é a soma de todo o razão,
    * ou seja, o que a plataforma ainda deve, retido e disponível somados.
    */
   async getPlatformRevenue() {

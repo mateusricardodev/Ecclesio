@@ -83,7 +83,7 @@ describe('RegistrationsService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── create (com ticket) ────────────────────────────────────────────────────
+  // create (com ticket)
 
   describe('create', () => {
     it('cria inscrição com ticket válido', async () => {
@@ -129,7 +129,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── findByEvent ────────────────────────────────────────────────────────────
+  // findByEvent
 
   describe('findByEvent', () => {
     it('retorna inscrições paginadas quando é o dono do evento', async () => {
@@ -155,7 +155,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── exportToXlsx ───────────────────────────────────────────────────────────
+  // exportToXlsx
 
   describe('exportToXlsx', () => {
     beforeEach(() => {
@@ -204,7 +204,7 @@ describe('RegistrationsService', () => {
     });
 
     it('coloca o check-in logo depois de Status e preenche Sim/Não', async () => {
-      // Na 13ª coluna ninguém enxergava sem rolar — a posição é parte do
+      // Na 13ª coluna ninguém enxergava sem rolar; a posição é parte do
       // contrato da planilha, por isso o teste trava a ordem.
       mockDb.registration.findMany.mockResolvedValue([
         {
@@ -259,7 +259,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── createByOrganizer ──────────────────────────────────────────────────────
+  // createByOrganizer
 
   describe('createByOrganizer', () => {
     const dto = { name: 'José', email: 'jose@test.com', cpf: '00000000000' };
@@ -307,7 +307,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── update ─────────────────────────────────────────────────────────────────
+  // update
 
   describe('update', () => {
     const reg = { id: 'r1', userId: USER_ID, user: baseUser, event: { createdBy: OWNER_ID } };
@@ -468,7 +468,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── cancel ─────────────────────────────────────────────────────────────────
+  // cancel
 
   describe('cancel', () => {
     it('cancela inscrição quando é o dono do evento', async () => {
@@ -492,7 +492,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── resendConfirmation ─────────────────────────────────────────────────────
+  // resendConfirmation
 
   describe('resendConfirmation', () => {
     const confirmedReg = {
@@ -577,7 +577,7 @@ describe('RegistrationsService', () => {
     });
   });
 
-  // ─── search ─────────────────────────────────────────────────────────────────
+  // search
 
   describe('search', () => {
     it('retorna apenas inscrições dos eventos do usuário autenticado', async () => {

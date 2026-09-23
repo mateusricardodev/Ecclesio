@@ -2,7 +2,7 @@ import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 
 /**
- * Ingresso em PDF da inscrição — o mesmo documento que o participante baixa ao
+ * Ingresso em PDF da inscrição: o mesmo documento que o participante baixa ao
  * concluir a inscrição pública e que o organizador pode gerar de novo pelo
  * painel, para quem perdeu o e-mail de confirmação.
  */
@@ -20,8 +20,8 @@ export interface TicketPdfData {
   amount?: number | null
 }
 
-const NAVY: [number, number, number] = [27, 43, 94]
-const GOLD: [number, number, number] = [201, 168, 76]
+const NAVY: [number, number, number] = [0, 24, 109]
+const GOLD: [number, number, number] = [212, 177, 106]
 const CREAM: [number, number, number] = [242, 237, 228]
 const LABEL: [number, number, number] = [130, 130, 130]
 const VALUE: [number, number, number] = [30, 30, 30]
@@ -44,7 +44,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
     ? await QRCode.toDataURL(data.code, {
         width: 300,
         margin: 2,
-        color: { dark: '#1B2B5E', light: '#F2EDE4' },
+        color: { dark: '#00186D', light: '#FFFFFF' },
       })
     : null
 
@@ -53,7 +53,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
   const H = pdf.internal.pageSize.getHeight()
 
   // Linhas de detalhe: só entram as que têm valor, e a altura do card
-  // acompanha — inscrição lançada pelo organizador costuma ter menos dados.
+  // acompanha, porque inscrição lançada pelo organizador costuma ter menos dados.
   const rows: Array<[string, string]> = []
   if (data.participantName) rows.push(['Participante', data.participantName])
   if (data.participantCpf) rows.push(['Documento', data.participantCpf])
@@ -73,7 +73,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
   pdf.setFillColor(...NAVY)
   pdf.rect(0, 0, W, 48, 'F')
 
-  // label "INGRESSO" dourado — sem charSpace para centralizar corretamente
+  // label "INGRESSO" dourado, sem charSpace para centralizar corretamente
   pdf.setTextColor(...GOLD)
   pdf.setFontSize(9)
   pdf.setFont('helvetica', 'bold')

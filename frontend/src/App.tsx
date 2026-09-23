@@ -21,6 +21,7 @@ import { Wallet } from './pages/Wallet'
 import { AdminPayouts } from './pages/AdminPayouts'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LandingPage } from './pages/LandingPage'
+import { PrivacyPolicy } from './pages/PrivacyPolicy'
 import { EventsList } from './app/pages/EventsList'
 import { EventCheckin } from './app/pages/EventCheckin'
 import { SearchCheckin } from './app/pages/SearchCheckin'
@@ -32,6 +33,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/privacidade" element={<PrivacyPolicy />} />
         <Route path="/register" element={<Navigate to="/login" replace />} />
         <Route path="/evento/:slug" element={<EventPublic />} />
         <Route path="/evento/:slug/inscricao" element={<PublicRegistration />} />

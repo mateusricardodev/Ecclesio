@@ -270,7 +270,7 @@ export class RegistrationsService {
     if (event.createdBy !== userId)
       throw new ForbiddenException('Sem permissão para adicionar inscrições a este evento');
 
-    // Normaliza para só dígitos — o dedup por evento depende de formato único
+    // Normaliza para só dígitos: o dedup por evento depende de formato único
     const normalizedCpf = dto.cpf.replace(/\D/g, '');
 
     const registration = await this.prisma.db.$transaction(async (tx) => {
@@ -334,7 +334,7 @@ export class RegistrationsService {
       throw new ForbiddenException('Sem permissão para editar esta inscrição');
 
     // Só propaga o nome para o User vinculado se for uma conta-placeholder
-    // (isShadow) criada para essa inscrição — nunca para uma conta real, que
+    // (isShadow) criada para essa inscrição, nunca para uma conta real, que
     // pode pertencer a alguém sem qualquer relação com este organizador.
     if (dto.name && registration.user.isShadow) {
       await this.prisma.db.user.update({
@@ -373,7 +373,7 @@ export class RegistrationsService {
 
   /**
    * Grava valor e/ou modalidade de pagamento da inscrição. Nenhum dos dois tem
-   * coluna própria na Registration — ambos vivem no Payment vinculado, então
+   * coluna própria na Registration: ambos vivem no Payment vinculado, então
    * aqui é um upsert desse Payment.
    *
    * `provider` de um Payment já existente não é tocado: ele registra por onde
@@ -427,12 +427,12 @@ export class RegistrationsService {
   }
 
   /**
-   * Reenvia o e-mail de confirmação de uma inscrição — participante que não
+   * Reenvia o e-mail de confirmação de uma inscrição, para o participante que não
    * recebeu, perdeu ou apagou o original.
    *
    * Diferente dos disparos automáticos (fire-and-forget), aqui o envio é
    * aguardado: o organizador clicou no botão e precisa saber se a mensagem saiu
-   * ou falhou. Só vale para inscrição confirmada — o e-mail anuncia "inscrição
+   * ou falhou. Só vale para inscrição confirmada: o e-mail anuncia "inscrição
    * confirmada", então mandá-lo para quem ainda não pagou seria mentira.
    */
   async resendConfirmation(id: string, userId: string) {

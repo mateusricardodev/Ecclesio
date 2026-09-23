@@ -72,7 +72,7 @@ export class PaymentsService {
       payerName: registration.user.name,
       payerEmail: registration.user.email,
       payerCpf: registration.cpf ?? '',
-      description: `${registration.event.title} — Inscrição`,
+      description: `Inscrição: ${registration.event.title}`,
     });
 
     const payment = await this.prisma.db.payment.create({
@@ -127,7 +127,7 @@ export class PaymentsService {
           },
         },
       });
-      if (!payment) return null; // already confirmed — idempotent no-op
+      if (!payment) return null; // already confirmed, idempotent no-op
 
       const reg = payment.registration;
       let newStatus: 'confirmed' | 'overbooked' = 'confirmed';
@@ -140,7 +140,7 @@ export class PaymentsService {
         if (affected === 0) {
           newStatus = 'overbooked';
           this.logger.warn(
-            `[payment:${providerPaymentId}] Estoque esgotado — Registration ${reg.id} → overbooked`,
+            `[payment:${providerPaymentId}] Estoque esgotado: Registration ${reg.id} → overbooked`,
           );
         }
       }
@@ -148,7 +148,7 @@ export class PaymentsService {
       await tx.payment.update({ where: { id: payment.id }, data: { status: 'paid' } });
       await tx.registration.update({ where: { id: reg.id }, data: { status: newStatus } });
 
-      // Crédito na carteira do organizador — o dinheiro caiu na conta da
+      // Crédito na carteira do organizador: o dinheiro caiu na conta da
       // plataforma, e o razão é o que registra quanto dela pertence a ele.
       // Só para inscrição confirmada: `overbooked` significa que o pagamento
       // entrou mas a vaga tinha acabado, e esse valor fica retido na
@@ -166,7 +166,7 @@ export class PaymentsService {
             paymentId: payment.id,
             type: 'sale',
             amount: baseAmount,
-            description: `Inscrição — ${reg.event.title}`,
+            description: `Inscrição: ${reg.event.title}`,
             availableAt: saleAvailableAt(reg.event),
           },
         });
@@ -188,7 +188,7 @@ export class PaymentsService {
     });
 
     if (!emailData) {
-      this.logger.log(`[webhook] Pagamento ${providerPaymentId} já confirmado ou overbooked — sem email`);
+      this.logger.log(`[webhook] Pagamento ${providerPaymentId} já confirmado ou overbooked, sem email`);
       return;
     }
 
@@ -198,7 +198,7 @@ export class PaymentsService {
       data: { confirmationEmailSentAt: new Date() },
     });
     if (marked.count === 0) {
-      this.logger.log(`[webhook] Email já enviado para inscrição ${emailData.registrationId} — ignorado`);
+      this.logger.log(`[webhook] Email já enviado para inscrição ${emailData.registrationId}, ignorado`);
       return;
     }
 
@@ -218,7 +218,7 @@ export class PaymentsService {
 
   /**
    * Confirmação manual pelo organizador (ex.: pagamento recebido fora do fluxo
-   * automático — transferência direta, dinheiro, etc.). Marca o Payment como
+   * automático, como transferência direta ou dinheiro). Marca o Payment como
    * pago com provider 'manual' e confirma a inscrição, disparando o mesmo
    * e-mail de confirmação do fluxo automático.
    *

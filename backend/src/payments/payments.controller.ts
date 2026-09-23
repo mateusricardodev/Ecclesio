@@ -68,7 +68,7 @@ export class PaymentsController {
   /**
    * Webhook do Mercado Pago. Recebe notificações de mudança de status de pagamento.
    * Valida a assinatura quando MERCADOPAGO_WEBHOOK_SECRET estiver configurado.
-   * Sempre retorna 200 — erros de negócio não devem causar retentativa do MP.
+   * Sempre retorna 200: erros de negócio não devem causar retentativa do MP.
    */
   @SkipThrottle()
   @Post('webhook/mercadopago')
@@ -86,14 +86,14 @@ export class PaymentsController {
     if (secret) {
       const mp = this.provider as MercadoPagoPaymentProvider;
       if (typeof mp.validateWebhookSignature === 'function') {
-        // Com o secret configurado, a assinatura é obrigatória — sem o
+        // Com o secret configurado, a assinatura é obrigatória. Sem o
         // header não há como validar, então a notificação é ignorada (antes
         // a ausência do header pulava a checagem inteira e processava assim
         // mesmo).
         const valid =
           !!xSignature &&
           mp.validateWebhookSignature(secret, xSignature, xRequestId ?? '', dataId);
-        if (!valid) return { ok: true }; // assinatura ausente/inválida — ignora silenciosamente
+        if (!valid) return { ok: true }; // assinatura ausente/inválida, ignora silenciosamente
       }
     }
 

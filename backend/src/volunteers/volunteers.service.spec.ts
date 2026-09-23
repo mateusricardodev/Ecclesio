@@ -50,7 +50,7 @@ describe('VolunteersService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── autorização ───────────────────────────────────────────────────────────
+  // autorização
 
   describe('autorização', () => {
     it('só o dono do evento administra a equipe', async () => {
@@ -78,7 +78,7 @@ describe('VolunteersService', () => {
     });
   });
 
-  // ─── list ──────────────────────────────────────────────────────────────────
+  // list
 
   describe('list', () => {
     it('marca conta-sombra como pendente de ativação', async () => {
@@ -114,7 +114,7 @@ describe('VolunteersService', () => {
     });
   });
 
-  // ─── add ───────────────────────────────────────────────────────────────────
+  // add
 
   describe('add', () => {
     it('vincula a pessoa ao evento', async () => {
@@ -204,7 +204,7 @@ describe('VolunteersService', () => {
     });
   });
 
-  // ─── remove ────────────────────────────────────────────────────────────────
+  // remove
 
   describe('remove', () => {
     it('desvincula a pessoa do evento', async () => {

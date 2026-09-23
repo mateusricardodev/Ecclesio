@@ -63,10 +63,10 @@ export function NewRegistration() {
             >
               <CheckCircle size={28} style={{ color: '#00186D' }} />
             </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.875rem', fontWeight: 400, color: '#0A0A09' }}>
               Inscrição realizada!
             </h2>
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Redirecionando para o evento...
             </p>
           </div>
@@ -82,14 +82,15 @@ export function NewRegistration() {
           <Link
             to={`/events/${eventId}`}
             className="inline-flex items-center gap-1.5 text-sm mb-4"
-            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+            style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
           >
             <ArrowLeft size={14} /> Voltar ao evento
           </Link>
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+          <p className="ecc-eyebrow mb-1"
+ style={{ color: '#00186D' }}>
             Inscrições
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09', lineHeight: 1.2 }}>
             Nova inscrição
           </h1>
         </div>
@@ -105,7 +106,8 @@ export function NewRegistration() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Dados básicos
             </p>
             <WizardField label="Nome completo" required>
@@ -136,7 +138,8 @@ export function NewRegistration() {
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Dados complementares
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

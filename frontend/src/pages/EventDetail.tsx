@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Search, Plus, Pencil, ArrowLeft, Calendar, MapPin, Users, CheckCircle, Circle, Clock, XCircle, Download, FileDown, Mail, Star } from 'lucide-react'
+import { Search, Plus, Pencil, ArrowLeft, Users, CheckCircle, Circle, Download, FileDown, Mail, Star } from 'lucide-react'
 import { DashboardLayout } from '../components/DashboardLayout'
+import { PageHeader, Stat } from '../components/ui'
 import { useAuthStore } from '../store/auth.store'
 import api from '../api/axios'
 import { downloadTicketPdf } from '../lib/ticketPdf'
@@ -31,7 +32,7 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
 
 function paymentMethodLabel(reg: Registration): string {
   const method = reg.payment?.method
-  if (!method) return '—'
+  if (!method) return '-'
   return PAYMENT_METHOD_LABELS[method] ?? method
 }
 
@@ -125,7 +126,7 @@ export function EventDetail() {
     }
   }
 
-  // O aviso de sucesso some sozinho — nada aqui exige confirmação do usuário.
+  // O aviso de sucesso some sozinho; nada aqui exige confirmação do usuário.
   useEffect(() => {
     if (!toast) return
     const timer = setTimeout(() => setToast(''), 5000)
@@ -146,7 +147,7 @@ export function EventDetail() {
         participantName: reg.user.name,
         participantCpf: reg.cpf ? formatCpf(reg.cpf) : null,
         email: reg.user.email,
-        // "Valor pago" no ingresso só faz sentido com o pagamento quitado —
+        // "Valor pago" no ingresso só faz sentido com o pagamento quitado,
         // inscrição pendente sai sem a linha de valor.
         amount: reg.payment?.status === 'paid' ? Number(reg.payment.amount) : null,
       })
@@ -211,7 +212,7 @@ export function EventDetail() {
     const matchFrom   = !dateFrom || created >= new Date(dateFrom)
     const matchTo     = !dateTo   || created <= new Date(dateTo + 'T23:59:59')
     const matchStatus = statusFilter ? r.status === statusFilter : r.status !== 'canceled'
-    // 'none' cobre inscrição sem Payment e Payment sem modalidade gravada —
+    // 'none' cobre inscrição sem Payment e Payment sem modalidade gravada,
     // mesmo critério que o backend aplica na exportação.
     const matchMethod = !methodFilter
       || (methodFilter === 'none' ? !r.payment?.method : r.payment?.method === methodFilter)
@@ -225,15 +226,15 @@ export function EventDetail() {
   }
 
   const statCards = [
-    { label: 'Total',       value: counts.confirmed + counts.pending, icon: Users,       accent: '#00186D' },
-    { label: 'Confirmados', value: counts.confirmed,     icon: CheckCircle, accent: '#166534' },
-    { label: 'Pendentes',   value: counts.pending,       icon: Clock,       accent: '#92400E' },
-    { label: 'Cancelados',  value: counts.canceled,      icon: XCircle,     accent: '#991B1B' },
+    { label: 'Inscritos',   value: counts.confirmed + counts.pending },
+    { label: 'Confirmados', value: counts.confirmed },
+    { label: 'Pendentes',   value: counts.pending },
+    { label: 'Cancelados',  value: counts.canceled },
   ]
 
   const inputStyle: React.CSSProperties = {
     background: '#FFFFFF',
-    border: '1px solid rgba(0,24,109,0.15)',
+    border: '1px solid #E9E9E9',
     borderRadius: '10px',
     color: '#0A0A09',
     fontFamily: 'var(--font-sans)',
@@ -246,133 +247,51 @@ export function EventDetail() {
   return (
     <DashboardLayout active="eventos">
 
-      {/* ── Cabeçalho ── */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
-        <div className="min-w-0">
-          <Link
-            to="/eventos"
-            className="inline-flex items-center gap-1.5 text-xs font-medium mb-3 transition-colors"
-            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
-          >
-            <ArrowLeft size={14} />
-            Voltar aos eventos
-          </Link>
+      {/* Cabeçalho */}
+      <Link to="/eventos" className="inline-flex items-center gap-1.5 text-sm font-bold text-ecc-text hover:text-ecc-ink mb-6" style={{ letterSpacing: '-0.025em' }}>
+        <ArrowLeft size={14} /> Eventos
+      </Link>
+      <PageHeader
+        eyebrow={event ? [
+          new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }),
+          event.location,
+        ].filter(Boolean).join(' · ') : undefined}
+        title={event?.title ?? '...'}
+        actions={event && user?.id === event.createdBy ? (
+          <>
+            <Link to={`/events/${id}/equipe`} className="ecc-btn ecc-btn-soft"><Users size={15} /> Equipe</Link>
+            <Link to={`/events/${id}/avaliacao`} className="ecc-btn ecc-btn-soft"><Star size={15} /> Avaliação</Link>
+            <Link to={`/events/${id}/edit`} className="ecc-btn ecc-btn-primary"><Pencil size={15} /> Editar evento</Link>
+          </>
+        ) : undefined}
+      />
 
-          <h1
-            className="leading-tight truncate"
-            style={{ fontFamily: 'var(--font-display)', fontSize: '1.85rem', fontWeight: 600, color: '#00186D' }}
-          >
-            {event?.title ?? '...'}
-          </h1>
-
-          {event && (
-            <div className="flex flex-wrap items-center gap-4 mt-1.5">
-              <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                <Calendar size={13} style={{ color: '#00186D', opacity: 0.5 }} />
-                {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
-              </span>
-              {event.location && (
-                <span className="inline-flex items-center gap-1.5 text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                  <MapPin size={13} style={{ color: '#00186D', opacity: 0.5 }} />
-                  {event.location}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
-        {event && user?.id === event.createdBy && (
-          <div className="shrink-0 flex items-center gap-2">
-            <Link
-              to={`/events/${id}/equipe`}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
-              style={{
-                border: '1.5px solid rgba(0,24,109,0.25)',
-                color: '#00186D',
-                fontFamily: 'var(--font-sans)',
-              }}
-            >
-              <Users size={15} />
-              Equipe
-            </Link>
-            <Link
-              to={`/events/${id}/avaliacao`}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
-              style={{
-                border: '1.5px solid rgba(212,177,106,0.55)',
-                color: '#8A6D2F',
-                fontFamily: 'var(--font-sans)',
-              }}
-            >
-              <Star size={15} />
-              Avaliação
-            </Link>
-            <Link
-              to={`/events/${id}/edit`}
-              className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
-              style={{
-                border: '1.5px solid rgba(0,24,109,0.25)',
-                color: '#00186D',
-                fontFamily: 'var(--font-sans)',
-              }}
-            >
-              <Pencil size={15} />
-              Editar evento
-            </Link>
-          </div>
-        )}
+      {/* Métricas */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-8 mb-12">
+        {statCards.map((c) => <Stat key={c.label} label={c.label} value={c.value} />)}
       </div>
 
-      {/* ── Métricas ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {statCards.map((c) => (
-          <div
-            key={c.label}
-            className="rounded-2xl p-5"
-            style={{
-              background: '#FFFFFF',
-              border: '1px solid rgba(0,24,109,0.08)',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-            }}
-          >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center mb-3"
-              style={{ background: `${c.accent}12` }}
-            >
-              <c.icon size={15} style={{ color: c.accent }} />
-            </div>
-            <p className="text-2xl font-bold" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
-              {c.value}
-            </p>
-            <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-              {c.label}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Tabela de inscrições ── */}
+      {/* Tabela de inscrições */}
       <div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-[20px] overflow-hidden"
         style={{
           background: '#FFFFFF',
-          border: '1px solid rgba(0,24,109,0.08)',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          border: '1px solid #E9E9E9',
         }}
       >
         {/* Toolbar */}
         <div
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 py-4"
-          style={{ borderBottom: '1px solid rgba(0,24,109,0.07)' }}
+          style={{ borderBottom: '1px solid #E9E9E9' }}
         >
-          <h2 className="font-semibold text-sm" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>
+          <h2 className="font-[family-name:var(--font-display)] text-[24px] leading-none" style={{ color: '#0A0A09' }}>
             Inscrições
           </h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all"
+              className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full sm:rounded-full transition-all"
               style={{
                 border: '1.5px solid rgba(0,24,109,0.25)',
                 color: '#00186D',
@@ -385,8 +304,8 @@ export function EventDetail() {
             </button>
             <Link
               to={`/events/${id}/registrations/new`}
-              className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-semibold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all"
-              style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', boxShadow: '0 2px 8px rgba(0,24,109,0.18)' }}
+              className="inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full sm:rounded-full transition-all"
+              style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
             >
               <Plus size={13} />
               Nova inscrição
@@ -397,10 +316,10 @@ export function EventDetail() {
         {/* Filtros */}
         <div
           className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"
-          style={{ borderBottom: '1px solid rgba(0,24,109,0.07)', background: 'rgba(0,24,109,0.02)' }}
+          style={{ borderBottom: '1px solid #E9E9E9', background: 'rgba(0,24,109,0.02)' }}
         >
           <div className="relative sm:col-span-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#6B7280' }} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: '#6F6F6F' }} />
             <input
               type="text"
               placeholder="Nome, CPF, e-mail ou código"
@@ -438,7 +357,7 @@ export function EventDetail() {
         {!loading && filtered.length > 0 && (
           <div
             className="hidden sm:flex items-center gap-4 px-5 py-2.5"
-            style={{ background: 'rgba(0,24,109,0.02)', borderBottom: '1px solid rgba(0,24,109,0.06)' }}
+            style={{ background: 'rgba(0,24,109,0.02)', borderBottom: '1px solid #E9E9E9' }}
           >
             <span className="w-9 shrink-0" />
             {[
@@ -452,8 +371,8 @@ export function EventDetail() {
             ].map((col) => (
               <span
                 key={col.label}
-                className={`text-[10px] font-semibold uppercase tracking-[0.1em] ${col.cls}`}
-                style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+                className={`ecc-eyebrow ${col.cls}`}
+                style={{ color: '#6F6F6F' }}
               >
                 {col.label}
               </span>
@@ -463,11 +382,11 @@ export function EventDetail() {
 
         {/* Linhas */}
         {loading ? (
-          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-center py-14 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Carregando...
           </p>
         ) : filtered.length === 0 ? (
-          <p className="text-center py-14 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+          <p className="text-center py-14 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
             Nenhuma inscrição encontrada.
           </p>
         ) : (
@@ -478,7 +397,7 @@ export function EventDetail() {
                 <li
                   key={reg.id}
                   className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4 px-4 sm:px-5 py-3 sm:py-3.5 transition-colors"
-                  style={{ borderBottom: '1px solid rgba(0,24,109,0.05)' }}
+                  style={{ borderBottom: '1px solid #E9E9E9' }}
                 >
                   {/* Linha 1 no mobile: avatar + nome + status. Em sm+, vira parte da linha única. */}
                   <div className="flex items-center gap-3 sm:contents">
@@ -493,18 +412,18 @@ export function EventDetail() {
                       <p className="font-semibold text-sm truncate" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                         {reg.user.name}
                       </p>
-                      <p className="text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <p className="text-xs truncate" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                         {reg.user.email}
                       </p>
                     </div>
 
-                    <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                      {reg.cpf ? formatCpf(reg.cpf) : '—'}
+                    <span className="hidden lg:block text-xs w-32 shrink-0 truncate" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
+                      {reg.cpf ? formatCpf(reg.cpf) : '-'}
                     </span>
 
                     <span
                       className="hidden md:block text-xs w-28 shrink-0 truncate"
-                      style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+                      style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
                       title={paymentMethodLabel(reg)}
                     >
                       {paymentMethodLabel(reg)}
@@ -518,7 +437,7 @@ export function EventDetail() {
                     </span>
 
                     {/* Check-in: no mobile só o ícone (verde = feito), em sm+ vira
-                        coluna com Sim/Não — mesmo rótulo da planilha exportada. */}
+                        coluna com Sim/Não, mesmo rótulo da planilha exportada. */}
                     <span
                       className="inline-flex items-center justify-center gap-1 text-xs font-medium shrink-0 sm:w-20"
                       style={{ color: reg.checkedIn ? '#166534' : '#9CA3AF', fontFamily: 'var(--font-sans)' }}
@@ -541,7 +460,7 @@ export function EventDetail() {
                     <div className="flex items-baseline gap-2 min-w-0 sm:contents">
                       {/* A coluna "Tipo" da linha única só aparece em md+, então
                           abaixo de sm a forma de pagamento precisa deste espelho. */}
-                      <span className="sm:hidden text-xs truncate" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                      <span className="sm:hidden text-xs truncate" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
                         {paymentMethodLabel(reg)}
                       </span>
                       <span className="text-sm shrink-0 sm:w-24 sm:text-right" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
@@ -552,8 +471,8 @@ export function EventDetail() {
                     <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 sm:w-[190px] sm:justify-end">
                       <Link
                         to={`/events/${id}/registrations/${reg.id}/edit`}
-                        className="p-1.5 rounded-lg transition-all"
-                        style={{ color: '#6B7280' }}
+                        className="p-1.5 rounded-full transition-all"
+                        style={{ color: '#6F6F6F' }}
                         title="Editar inscrição"
                       >
                         <Pencil size={14} />
@@ -561,7 +480,7 @@ export function EventDetail() {
                       <button
                         onClick={() => handleDownloadTicket(reg)}
                         disabled={!reg.code || downloadingId === reg.id}
-                        className="p-1.5 rounded-lg transition-all"
+                        className="p-1.5 rounded-full transition-all"
                         style={{
                           color: '#00186D',
                           opacity: reg.code ? (downloadingId === reg.id ? 0.5 : 1) : 0.35,
@@ -578,7 +497,7 @@ export function EventDetail() {
                       {reg.status === 'confirmed' && (
                         <button
                           onClick={() => { setResendError(''); setResendModal(reg.id) }}
-                          className="p-1.5 rounded-lg transition-all"
+                          className="p-1.5 rounded-full transition-all"
                           style={{ color: '#D4B16A' }}
                           title="Reenviar e-mail de confirmação"
                         >
@@ -588,7 +507,7 @@ export function EventDetail() {
                       {reg.status === 'pending' && (
                         <button
                           onClick={() => { setConfirmError(''); setConfirmPaymentModal(reg.id) }}
-                          className="p-1.5 rounded-lg transition-all"
+                          className="p-1.5 rounded-full transition-all"
                           style={{ color: '#166534' }}
                           title="Confirmar pagamento manualmente"
                         >
@@ -598,7 +517,7 @@ export function EventDetail() {
                       {reg.status !== 'canceled' ? (
                         <button
                           onClick={() => setCancelConfirm(reg.id)}
-                          className="text-xs px-2.5 py-1.5 rounded-lg transition-all shrink-0"
+                          className="text-xs px-2.5 py-1.5 rounded-full transition-all shrink-0"
                           style={{ border: '1px solid rgba(220,38,38,0.3)', color: '#DC2626', fontFamily: 'var(--font-sans)' }}
                         >
                           Cancelar
@@ -617,43 +536,43 @@ export function EventDetail() {
         {/* Rodapé da tabela */}
         <div
           className="px-5 py-3 text-xs"
-          style={{ borderTop: '1px solid rgba(0,24,109,0.06)', color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+          style={{ borderTop: '1px solid #E9E9E9', color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
         >
           {filtered.length} inscrição(ões) exibida(s)
         </div>
       </div>
 
-      {/* ── Modal de cancelamento ── */}
+      {/* Modal de cancelamento */}
       {cancelConfirm && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
           style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}
         >
           <div
-            className="w-full max-w-sm rounded-2xl p-7"
-            style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
+            className="w-full max-w-sm rounded-[20px] p-7"
+            style={{ background: '#FFFFFF' }}
           >
             <h3
               className="font-semibold mb-2"
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.25rem', color: '#0A0A09' }}
             >
               Cancelar inscrição
             </h3>
-            <p className="text-sm mb-6" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm mb-6" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Tem certeza que deseja cancelar esta inscrição? Esta ação não pode ser desfeita.
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setCancelConfirm(null)}
-                className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
+                className="px-4 py-2 text-sm rounded-full"
+                style={{ border: '1px solid #E9E9E9', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
               <button
                 onClick={() => handleCancel(cancelConfirm)}
                 disabled={canceling}
-                className="px-4 py-2 text-sm font-semibold rounded-xl"
+                className="px-4 py-2 text-sm font-semibold rounded-full"
                 style={{ background: '#DC2626', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: canceling ? 0.7 : 1 }}
               >
                 {canceling ? 'Cancelando...' : 'Confirmar cancelamento'}
@@ -663,23 +582,23 @@ export function EventDetail() {
         </div>
       )}
 
-      {/* ── Modal de confirmação manual de pagamento ── */}
+      {/* Modal de confirmação manual de pagamento */}
       {confirmPaymentModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
           style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}
         >
           <div
-            className="w-full max-w-sm rounded-2xl p-7"
-            style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
+            className="w-full max-w-sm rounded-[20px] p-7"
+            style={{ background: '#FFFFFF' }}
           >
             <h3
               className="font-semibold mb-2"
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.25rem', color: '#0A0A09' }}
             >
               Confirmar pagamento
             </h3>
-            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm mb-2" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Use isto apenas se você já recebeu o pagamento fora do sistema (transferência, dinheiro, etc.). A inscrição passará para "Confirmado" e o participante receberá o e-mail de confirmação.
             </p>
             {confirmError && (
@@ -690,15 +609,15 @@ export function EventDetail() {
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setConfirmPaymentModal(null)}
-                className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
+                className="px-4 py-2 text-sm rounded-full"
+                style={{ border: '1px solid #E9E9E9', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
               <button
                 onClick={() => handleConfirmPayment(confirmPaymentModal)}
                 disabled={confirmingPayment}
-                className="px-4 py-2 text-sm font-semibold rounded-xl"
+                className="px-4 py-2 text-sm font-semibold rounded-full"
                 style={{ background: '#166534', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: confirmingPayment ? 0.7 : 1 }}
               >
                 {confirmingPayment ? 'Confirmando...' : 'Confirmar pagamento'}
@@ -707,25 +626,25 @@ export function EventDetail() {
           </div>
         </div>
       )}
-      {/* ── Modal de reenvio do e-mail de confirmação ── */}
+      {/* Modal de reenvio do e-mail de confirmação */}
       {resendModal && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 px-4"
           style={{ background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)' }}
         >
           <div
-            className="w-full max-w-sm rounded-2xl p-7"
-            style={{ background: '#FFFFFF', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
+            className="w-full max-w-sm rounded-[20px] p-7"
+            style={{ background: '#FFFFFF' }}
           >
             <h3
               className="font-semibold mb-2"
-              style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: '#00186D' }}
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.25rem', color: '#0A0A09' }}
             >
               Reenviar e-mail
             </h3>
-            <p className="text-sm mb-2" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm mb-2" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               O e-mail de confirmação, com o QR code de credenciamento, será enviado novamente para{' '}
-              <span style={{ color: '#33425C', fontWeight: 600 }}>
+              <span style={{ color: '#0A0A09', fontWeight: 600 }}>
                 {registrations.find((r) => r.id === resendModal)?.user.email}
               </span>
               .
@@ -738,15 +657,15 @@ export function EventDetail() {
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setResendModal(null)}
-                className="px-4 py-2 text-sm rounded-xl"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', color: '#33425C', fontFamily: 'var(--font-sans)' }}
+                className="px-4 py-2 text-sm rounded-full"
+                style={{ border: '1px solid #E9E9E9', color: '#0A0A09', fontFamily: 'var(--font-sans)' }}
               >
                 Voltar
               </button>
               <button
                 onClick={() => handleResend(resendModal)}
                 disabled={resending}
-                className="px-4 py-2 text-sm font-semibold rounded-xl"
+                className="px-4 py-2 text-sm font-bold rounded-full"
                 style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: resending ? 0.7 : 1 }}
               >
                 {resending ? 'Enviando...' : 'Reenviar e-mail'}
@@ -756,14 +675,13 @@ export function EventDetail() {
         </div>
       )}
 
-      {/* ── Aviso flutuante (reenvio / falha ao gerar PDF) ── */}
+      {/* Aviso flutuante (reenvio / falha ao gerar PDF) */}
       {toast && (
         <div
           className="fixed bottom-6 right-6 z-50 max-w-xs rounded-xl px-4 py-3 text-sm"
           style={{
             background: '#00186D',
             color: '#FFFFFF',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
             fontFamily: 'var(--font-sans)',
           }}
         >

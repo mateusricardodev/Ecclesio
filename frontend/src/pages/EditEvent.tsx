@@ -100,7 +100,7 @@ export function EditEvent() {
     return (
       <DashboardLayout active="eventos">
         <EventWizardHeader active="info" eventId={id} />
-        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+        <p className="text-center py-20 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
           Carregando...
         </p>
       </DashboardLayout>
@@ -120,11 +120,11 @@ export function EditEvent() {
             <WizardField label="Endereço da página do evento">
               <div
                 className="flex items-center overflow-hidden"
-                style={{ border: '1px solid rgba(0,24,109,0.15)', borderRadius: '10px' }}
+                style={{ border: '1px solid #E9E9E9', borderRadius: '10px' }}
               >
                 <span
                   className="px-3 py-2.5 text-xs shrink-0"
-                  style={{ background: 'rgba(0,24,109,0.04)', borderRight: '1px solid rgba(0,24,109,0.12)', color: '#00186D', fontFamily: 'var(--font-sans)' }}
+                  style={{ background: 'rgba(0,24,109,0.04)', borderRight: '1px solid #E9E9E9', color: '#00186D', fontFamily: 'var(--font-sans)' }}
                 >
                   {baseUrl}
                 </span>
@@ -163,7 +163,7 @@ export function EditEvent() {
             </div>
 
             <WizardField label="Local do evento">
-              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções — São Paulo, SP" />
+              <WizardInput name="location" value={form.location} onChange={handleChange} placeholder="Ex: Centro de Convenções, São Paulo, SP" />
             </WizardField>
 
             <WizardField label="Telefone do organizador">
@@ -177,14 +177,14 @@ export function EditEvent() {
 
           <div className="flex items-center justify-between pb-8">
             <button type="button" onClick={() => navigate(`/events/${id}`)} style={wizardNavBtn()}>
-              ← Voltar ao evento
+              Voltar ao evento
             </button>
             <div className="flex items-center gap-3">
               <button type="submit" disabled={saving} style={wizardSecondaryBtn()}>
                 {saving ? 'Salvando...' : 'Salvar'}
               </button>
               <button type="button" disabled={saving} onClick={handleSaveAndNext} style={wizardPrimaryBtn(saving)}>
-                Próximo passo →
+                Próximo passo
               </button>
             </div>
           </div>

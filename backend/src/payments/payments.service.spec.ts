@@ -110,7 +110,7 @@ describe('PaymentsService', () => {
     jest.clearAllMocks();
   });
 
-  // ─── createPixForRegistration ────────────────────────────────────────────────
+  // createPixForRegistration
 
   describe('createPixForRegistration', () => {
     it('usa o amount passado como parâmetro', async () => {
@@ -199,7 +199,7 @@ describe('PaymentsService', () => {
     });
   });
 
-  // ─── confirmPayment ──────────────────────────────────────────────────────────
+  // confirmPayment
 
   describe('confirmPayment', () => {
     it('confirma pagamento: Payment=paid, Registration=confirmed, decrementa estoque', async () => {
@@ -273,7 +273,7 @@ describe('PaymentsService', () => {
       expect(mockMail.sendRegistrationConfirmation).not.toHaveBeenCalled();
     });
 
-    // ─── crédito na carteira do organizador ──────────────────────────────
+    // crédito na carteira do organizador
 
     it('credita o organizador com o valor da inscrição, não com o total cobrado', async () => {
       mockTx(makePaymentWithIncludes(), 1);
@@ -303,7 +303,7 @@ describe('PaymentsService', () => {
       expect(availableAt).toEqual(new Date('2026-09-08T00:00:00.000Z'));
     });
 
-    it('não credita quando a inscrição fica overbooked — valor aguarda reembolso', async () => {
+    it('não credita quando a inscrição fica overbooked (valor aguarda reembolso)', async () => {
       mockTx(makePaymentWithIncludes(), 0);
       mockDb.registration.updateMany.mockResolvedValue({ count: 0 });
 
@@ -351,7 +351,7 @@ describe('PaymentsService', () => {
     });
   });
 
-  // ─── confirmManually ─────────────────────────────────────────────────────────
+  // confirmManually
 
   describe('confirmManually', () => {
     const baseRegForManual = {
@@ -402,7 +402,7 @@ describe('PaymentsService', () => {
 
       await service.confirmManually(REG_ID, USER_ID);
 
-      // Confirmação manual cobre dinheiro e transferência direta — nesses casos
+      // Confirmação manual cobre dinheiro e transferência direta; nesses casos
       // o valor nunca passou pela plataforma, então não há repasse a registrar.
       expect(mockDb.ledgerEntry.create).not.toHaveBeenCalled();
     });
@@ -462,7 +462,7 @@ describe('PaymentsService', () => {
     });
   });
 
-  // ─── fluxo mock ponta-a-ponta ────────────────────────────────────────────────
+  // fluxo mock ponta-a-ponta
 
   describe('fluxo mock ponta-a-ponta', () => {
     it('cria PIX (pending) → confirma → Payment=paid, Registration=confirmed, email enviado', async () => {

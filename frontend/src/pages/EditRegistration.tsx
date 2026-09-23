@@ -40,7 +40,7 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
 
 /**
  * Uma cobrança emitida por gateway (Pix/cartão) e ainda em aberto carrega o
- * valor antigo no QR — o backend recusa a alteração até ela ser paga ou
+ * valor antigo no QR. O backend recusa a alteração até ela ser paga ou
  * vencer, então o campo aparece travado.
  */
 function hasOpenGatewayCharge(payment: Registration['payment']): boolean {
@@ -271,7 +271,7 @@ export function EditRegistration() {
         phone:     form.phone.replace(/\D/g,'') || undefined,
         birthDate: form.birthDate || undefined,
         ...(Object.keys(updatedExtra).length > 0 && { extraFields: updatedExtra }),
-        // Só vão no payload se o organizador mexeu nos campos — enviar sempre
+        // Só vão no payload se o organizador mexeu nos campos; enviar sempre
         // criaria um Payment vazio em toda edição de inscrição sem pagamento.
         ...(amountChanged && { amount: Math.round(Number(amount || 0) * 100) / 100 }),
         ...(methodChanged && { method: method || null }),
@@ -297,10 +297,10 @@ export function EditRegistration() {
             >
               <CheckCircle size={28} style={{ color: '#00186D' }} />
             </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 600, color: '#00186D' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.875rem', fontWeight: 400, color: '#0A0A09' }}>
               Inscrição atualizada!
             </h2>
-            <p className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               Redirecionando para o evento...
             </p>
           </div>
@@ -312,7 +312,7 @@ export function EditRegistration() {
   if (loading) {
     return (
       <DashboardLayout active="eventos">
-        <p className="text-center py-20 text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
+        <p className="text-center py-20 text-sm" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>Carregando...</p>
       </DashboardLayout>
     )
   }
@@ -324,14 +324,15 @@ export function EditRegistration() {
           <Link
             to={`/events/${eventId}`}
             className="inline-flex items-center gap-1.5 text-sm mb-4"
-            style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+            style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
           >
             <ArrowLeft size={14} /> Voltar ao evento
           </Link>
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] mb-1" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+          <p className="ecc-eyebrow mb-1"
+ style={{ color: '#00186D' }}>
             Inscrições
           </p>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 600, color: '#00186D', lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#0A0A09', lineHeight: 1.2 }}>
             Editar inscrição
           </h1>
         </div>
@@ -347,7 +348,8 @@ export function EditRegistration() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Dados básicos
             </p>
             <WizardField label="Nome completo" required>
@@ -372,7 +374,8 @@ export function EditRegistration() {
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Dados complementares
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -395,7 +398,8 @@ export function EditRegistration() {
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Pagamento
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -403,7 +407,7 @@ export function EditRegistration() {
                 <div className="relative">
                   <span
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
-                    style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}
+                    style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}
                   >
                     R$
                   </span>
@@ -441,17 +445,18 @@ export function EditRegistration() {
                 />
               </WizardField>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               {paymentLocked
                 ? 'Há uma cobrança em aberto no gateway com o valor e a forma de pagamento atuais. Só é possível alterá-los depois que ela for paga ou vencer.'
                 : payment?.status === 'paid'
-                  ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro — não gera cobrança nem estorno.'
+                  ? 'Pagamento já confirmado. Alterar valor ou forma de pagamento corrige apenas o registro. Não gera cobrança nem estorno.'
                   : 'Valor e forma de pagamento desta inscrição. Ficam registrados como recebidos se a inscrição já estiver confirmada, ou como pendentes até a confirmação do pagamento.'}
             </p>
           </WizardCard>
 
           <WizardCard>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+            <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
               Ingresso e confirmação
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -459,9 +464,9 @@ export function EditRegistration() {
                 type="button"
                 onClick={handleDownloadTicket}
                 disabled={downloading || !ticket?.code}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-full"
                 style={{
-                  border: '1px solid rgba(0,24,109,0.15)',
+                  border: '1px solid #E9E9E9',
                   color: '#00186D',
                   background: '#FFFFFF',
                   fontFamily: 'var(--font-sans)',
@@ -476,9 +481,9 @@ export function EditRegistration() {
                 type="button"
                 onClick={handleResend}
                 disabled={resending || ticket?.status !== 'confirmed'}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-full"
                 style={{
-                  border: '1px solid rgba(0,24,109,0.15)',
+                  border: '1px solid #E9E9E9',
                   color: '#00186D',
                   background: '#FFFFFF',
                   fontFamily: 'var(--font-sans)',
@@ -501,18 +506,19 @@ export function EditRegistration() {
                 {ticketMsg.text}
               </p>
             )}
-            <p className="text-xs leading-relaxed" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+            <p className="text-xs leading-relaxed" style={{ color: '#6F6F6F', fontFamily: 'var(--font-sans)' }}>
               {!ticket?.code
                 ? 'Esta inscrição não tem código de credenciamento, então não é possível gerar o ingresso em PDF.'
                 : ticket.status !== 'confirmed'
                   ? 'O e-mail de confirmação só pode ser reenviado depois que a inscrição estiver confirmada. O PDF já pode ser baixado e enviado por outro canal.'
-                  : 'O PDF traz o QR code de credenciamento — útil para quem não recebeu o e-mail. O reenvio dispara a mesma mensagem de confirmação para o e-mail cadastrado.'}
+                  : 'O PDF traz o QR code de credenciamento, útil para quem não recebeu o e-mail. O reenvio dispara a mesma mensagem de confirmação para o e-mail cadastrado.'}
             </p>
           </WizardCard>
 
           {(allExtraKeys.length > 0 || showUsaMed) && (
             <WizardCard>
-              <p className="text-xs font-semibold uppercase tracking-[0.1em]" style={{ color: '#D4B16A', fontFamily: 'var(--font-sans)' }}>
+              <p className="ecc-eyebrow"
+ style={{ color: '#00186D' }}>
                 Campos do formulário
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -528,7 +534,7 @@ export function EditRegistration() {
 
                 {showUsaMed && (
                   <div className="sm:col-span-2 flex flex-col gap-2">
-                    <p className="text-sm font-medium" style={{ color: '#33425C', fontFamily: 'var(--font-sans)' }}>
+                    <p className="text-sm font-medium" style={{ color: '#0A0A09', fontFamily: 'var(--font-sans)' }}>
                       Faz uso de medicamento?
                     </p>
                     <div className="flex gap-2">
@@ -540,11 +546,11 @@ export function EditRegistration() {
                             setUsaMedicamento(op)
                             if (op === 'nao') setQualMedicamento('')
                           }}
-                          className="px-5 py-2 rounded-full text-sm font-semibold transition-all"
+                          className="px-5 py-2 rounded-full text-sm font-bold transition-all"
                           style={
                             usaMedicamento === op
                               ? { background: '#00186D', color: '#FFFFFF', border: '1.5px solid #00186D' }
-                              : { background: 'transparent', color: '#6B7280', border: '1.5px solid rgba(0,24,109,0.2)' }
+                              : { background: 'transparent', color: '#6F6F6F', border: '1.5px solid rgba(0,24,109,0.2)' }
                           }
                         >
                           {op === 'sim' ? 'Sim' : 'Não'}

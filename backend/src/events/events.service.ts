@@ -228,7 +228,7 @@ export class EventsService {
 
     return methods.map((method) => {
       // Dinheiro é recebido direto pelo organizador, sem passar pela
-      // plataforma — logo, sem taxa.
+      // plataforma, logo sem taxa.
       const charge =
         method.type === 'cash'
           ? { base: Number(method.value), fee: 0, total: Number(method.value) }

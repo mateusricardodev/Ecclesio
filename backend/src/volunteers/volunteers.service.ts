@@ -11,7 +11,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
  * Equipe de credenciamento do evento.
  *
  * Quem está aqui pode usar o app de credenciamento (`/app`) naquele evento e
- * nada além disso — não vê a carteira, não edita o evento, não mexe em outros
+ * nada além disso: não vê a carteira, não edita o evento, não mexe em outros
  * eventos. A autorização em si já era feita pelo CheckinService, que consulta
  * `EventVolunteer`; o que faltava era o organizador conseguir popular a tabela
  * sem INSERT no banco (e, por falta disso, acabar compartilhando o login).

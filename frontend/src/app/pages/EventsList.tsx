@@ -35,7 +35,7 @@ export function EventsList() {
   const organization = events[0]?.organization ?? 'Credenciamento'
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-ecc-cream text-ecc-ink">
+    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-white text-ecc-ink">
       <AppHeader title={organization} onMenu={() => setDrawerOpen(true)}>
         <div className="flex">
           <TabButton
@@ -69,10 +69,10 @@ export function EventsList() {
         {!loading && !error && (
           <>
             <div className="pt-6">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ecc-gold-dark">
+              <p className="ecc-eyebrow">
                 Credenciamento
               </p>
-              <h2 className="mt-1 font-display text-[1.6rem] font-semibold leading-tight text-ecc-navy">
+              <h2 className="mt-3 font-display text-[2.25rem] leading-none tracking-[-0.02em] text-ecc-ink">
                 Seus eventos
               </h2>
               <p className="mt-1 text-sm text-ecc-muted">
@@ -121,8 +121,8 @@ function EventCard({
     <button
       onClick={onClick}
       className={
-        'block w-full rounded-2xl border border-ecc-navy/10 bg-white p-4 text-left ' +
-        'shadow-[0_1px_4px_rgba(0,0,0,0.04)] transition-transform active:scale-[0.99] ' +
+        'block w-full rounded-[20px] border border-ecc-line bg-white p-4 text-left ' +
+        ' transition-transform active:scale-[0.99] ' +
         (muted ? 'opacity-70' : '')
       }
     >
@@ -192,11 +192,11 @@ function EmptyState({ tab, onSeeEnded }: { tab: Tab; onSeeEnded: () => void }) {
     return <StateMessage>Você não possui eventos encerrados.</StateMessage>
   }
   return (
-    <div className="mt-5 rounded-2xl border border-ecc-navy/10 bg-white p-8 text-center shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+    <div className="mt-5 rounded-[20px] border border-ecc-line bg-white p-8 text-center">
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-ecc-navy/[0.06]">
         <Search className="h-5 w-5 text-ecc-navy" />
       </span>
-      <h3 className="mt-4 font-display text-[1.35rem] font-semibold text-ecc-navy">
+      <h3 className="mt-4 font-display text-[1.35rem] text-ecc-ink">
         Nenhum evento encontrado
       </h3>
       <p className="mt-1.5 text-sm text-ecc-muted">
@@ -204,7 +204,7 @@ function EmptyState({ tab, onSeeEnded }: { tab: Tab; onSeeEnded: () => void }) {
       </p>
       <button
         onClick={onSeeEnded}
-        className="mt-5 w-full rounded-xl border border-ecc-navy/20 py-3 text-sm font-semibold text-ecc-navy transition-colors active:bg-ecc-navy/5"
+        className="mt-5 w-full rounded-full border border-ecc-navy/20 py-3 text-sm font-semibold text-ecc-navy transition-colors active:bg-ecc-navy/5"
       >
         Ver eventos encerrados
       </button>
@@ -214,7 +214,7 @@ function EmptyState({ tab, onSeeEnded }: { tab: Tab; onSeeEnded: () => void }) {
 
 function CardSkeleton() {
   return (
-    <div className="animate-pulse rounded-2xl border border-ecc-navy/10 bg-white p-4">
+    <div className="animate-pulse rounded-[20px] border border-ecc-line bg-white p-4">
       <div className="flex items-center gap-3">
         <span className="h-11 w-11 shrink-0 rounded-xl bg-ecc-navy/[0.06]" />
         <div className="flex-1 space-y-2">
