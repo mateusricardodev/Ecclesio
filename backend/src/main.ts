@@ -15,14 +15,20 @@ async function bootstrap() {
 
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
+  // Origens do frontend liberadas no CORS vêm só de FRONTEND_URL (separadas
+  // por vírgula). Os endereços locais do Vite/Nest ficam liberados apenas fora
+  // de produção.
+  const configuredOrigins = (process.env.FRONTEND_URL ?? '')
+    .split(',')
+    .map((u) => u.trim().replace(/\/$/, ''))
+    .filter(Boolean);
+  const isProduction = process.env.NODE_ENV === 'production';
+  if (isProduction && configuredOrigins.length === 0) {
+    throw new Error('FRONTEND_URL precisa estar configurada em produção (origem do frontend para o CORS).');
+  }
   const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://event-register-ashen.vercel.app',
-    'http://187.77.226.111',
-    ...(process.env.FRONTEND_URL
-      ? process.env.FRONTEND_URL.split(',').map((u) => u.trim())
-      : []),
+    ...configuredOrigins,
+    ...(isProduction ? [] : ['http://localhost:5173', 'http://localhost:3000']),
   ];
 
   app.enableCors({

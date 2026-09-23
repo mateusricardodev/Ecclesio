@@ -316,8 +316,10 @@ MAIL_PORT=587
 MAIL_SECURE=false
 MAIL_USER="seu@email.com"
 MAIL_PASS="sua-chave"
-MAIL_FROM="inscrições.app <noreply@inscricoes.app>"
+MAIL_FROM="Ecclesio <noreply@seudominio.com>"
 ```
+
+> **Produção (`NODE_ENV=production`):** a API não sobe sem `FRONTEND_URL` (origens liberadas no CORS, separadas por vírgula) e sem `PAYMENT_PROVIDER=mercadopago` + `MERCADOPAGO_ACCESS_TOKEN` — o provider `mock` só funciona fora de produção.
 
 ---
 
@@ -376,7 +378,7 @@ http://localhost:5173
 
 ## 💳 Desenvolvimento com PIX
 
-O projeto possui um provider `mock` para desenvolvimento, permitindo testar o fluxo de pagamento sem utilizar o Mercado Pago.
+O projeto possui um provider `mock` para desenvolvimento (bloqueado em produção), permitindo testar o fluxo de pagamento sem utilizar o Mercado Pago.
 
 ```env
 PAYMENT_PROVIDER=mock

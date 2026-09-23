@@ -33,6 +33,9 @@ export class MailService {
 
   constructor(private readonly config: ConfigService) {
     if (!this.isDev) {
+      if (!this.config.get<string>('MAIL_HOST')) {
+        this.logger.error('MAIL_HOST não configurado — os e-mails de confirmação não serão enviados.');
+      }
       this.transporter = nodemailer.createTransport({
         host: this.config.get<string>('MAIL_HOST'),
         port: Number(this.config.get('MAIL_PORT', 587)),
@@ -43,6 +46,14 @@ export class MailService {
         },
       });
     }
+  }
+
+  /** Remetente: MAIL_FROM ou, na falta dela, a própria conta SMTP. */
+  private fromAddress(): string {
+    const configured = this.config.get<string>('MAIL_FROM');
+    if (configured) return configured;
+    const user = this.config.get<string>('MAIL_USER');
+    return user ? `Ecclesio <${user}>` : 'Ecclesio';
   }
 
   private async getTransporter(): Promise<Transporter> {
@@ -73,7 +84,7 @@ export class MailService {
    * saiu para poder avisar na tela.
    */
   async sendRegistrationConfirmation(data: RegistrationConfirmationData): Promise<boolean> {
-    const from = this.config.get<string>('MAIL_FROM', 'inscrições.app <noreply@inscricoes.app>');
+    const from = this.fromAddress();
 
     const formattedDate = new Date(data.eventDate).toLocaleDateString('pt-BR', {
       weekday: 'long',
@@ -109,7 +120,7 @@ export class MailService {
         subject: `Inscrição confirmada — ${data.eventTitle}`,
         html: this.buildEmailHtml({ ...data, formattedDate, formattedTime, hasQr: !!qrBuffer }),
         attachments: qrBuffer
-          ? [{ filename: 'qrcode.png', content: qrBuffer, cid: 'qrcode@inscricoes' }]
+          ? [{ filename: 'qrcode.png', content: qrBuffer, cid: 'qrcode@ecclesio' }]
           : [],
       });
 
@@ -135,7 +146,7 @@ export class MailService {
    * quando o SMTP recusou, para a tela poder mostrar quantos falharam.
    */
   async sendFeedbackInvite(data: FeedbackInviteData): Promise<boolean> {
-    const from = this.config.get<string>('MAIL_FROM', 'inscrições.app <noreply@inscricoes.app>');
+    const from = this.fromAddress();
 
     try {
       const transport = await this.getTransporter();
@@ -183,7 +194,7 @@ export class MailService {
           <tr>
             <td style="background:#1B2B5E;padding:36px 40px;text-align:center;">
               <p style="margin:0 0 10px 0;color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
-                inscrições.app
+                Ecclesio
               </p>
               <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:26px;font-weight:700;">
                 Como foi para você?
@@ -229,7 +240,7 @@ export class MailService {
             <td style="background:#1B2B5E;padding:20px 40px;text-align:center;">
               <p style="margin:0;color:#a0b0d0;font-size:11px;">
                 Este e-mail foi enviado automaticamente por
-                <strong style="color:#C9A84C;">inscrições.app</strong>.
+                <strong style="color:#C9A84C;">Ecclesio</strong>.
               </p>
             </td>
           </tr>
@@ -283,7 +294,7 @@ export class MailService {
               <p style="margin:0 0 4px 0;color:#C9A84C;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
                 Código de Credenciamento
               </p>
-              <img src="cid:qrcode@inscricoes" alt="QR Code" width="140" height="140"
+              <img src="cid:qrcode@ecclesio" alt="QR Code" width="140" height="140"
                    style="display:block;margin:16px auto;border-radius:8px;" />
               <p style="margin:0;color:#1B2B5E;font-size:20px;font-weight:700;font-family:monospace;letter-spacing:4px;">
                 ${data.registrationCode}
@@ -315,7 +326,7 @@ export class MailService {
           <tr>
             <td style="background:#1B2B5E;padding:36px 40px;text-align:center;">
               <p style="margin:0 0 10px 0;color:#C9A84C;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;">
-                inscrições.app
+                Ecclesio
               </p>
               <h1 style="margin:0 0 6px 0;color:#ffffff;font-size:26px;font-weight:700;">
                 Inscrição Confirmada!
@@ -372,7 +383,7 @@ export class MailService {
             <td style="background:#1B2B5E;padding:20px 40px;text-align:center;">
               <p style="margin:0;color:#a0b0d0;font-size:11px;">
                 Este e-mail foi enviado automaticamente por
-                <strong style="color:#C9A84C;">inscrições.app</strong>.
+                <strong style="color:#C9A84C;">Ecclesio</strong>.
               </p>
             </td>
           </tr>

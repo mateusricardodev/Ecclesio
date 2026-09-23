@@ -59,39 +59,41 @@ model User {
 }
 
 model Event {
-  id               String               @id @default(uuid())
-  title            String
-  description      String?
-  location         String?
-  date             DateTime
-  endDate          DateTime?
-  bannerUrl        String?
-  slug             String?              @unique
-  category         String?
-  maxParticipants  Int?
-  organizerPhone   String?
+  id                   String               @id @default(uuid())
+  title                String
+  description          String?
+  location             String?
+  date                 DateTime
+  endDate              DateTime?
+  bannerUrl            String?
+  slug                 String?              @unique
+  category             String?
+  maxParticipants      Int?
+  organizerPhone       String?
   // Link do grupo de WhatsApp exibido ao participante após a inscrição.
-  whatsappGroupUrl String?
-  isPublished      Boolean              @default(false)
-  about            String?
-  formFields       String?
+  whatsappGroupUrl     String?
+  // Modelo (PDF) da autorização de responsável, enviado pelo organizador.
+  authorizationFormUrl String?
+  isPublished          Boolean              @default(false)
+  about                String?
+  formFields           String?
   // Itens avaliados na pesquisa pós-evento (JSON de strings). null = lista padrão.
-  feedbackItems    String?
+  feedbackItems        String?
   // Pesquisa aceitando respostas — o organizador abre quando o evento termina.
-  feedbackOpen     Boolean              @default(false)
+  feedbackOpen         Boolean              @default(false)
   // Override da taxa de serviço da plataforma para este evento. null = usa o
   // padrão global (PLATFORM_FEE_*). 0 é um valor válido e significa isento.
-  feePercent       Decimal?
-  feeFixed         Decimal?
-  createdBy        String
-  createdAt        DateTime             @default(now())
-  user             User                 @relation(fields: [createdBy], references: [id])
-  tickets          Ticket[]
-  registrations    Registration[]
-  paymentMethods   EventPaymentMethod[]
-  volunteers       EventVolunteer[]
-  feedbacks        EventFeedback[]
-  ledgerEntries    LedgerEntry[]
+  feePercent           Decimal?
+  feeFixed             Decimal?
+  createdBy            String
+  createdAt            DateTime             @default(now())
+  user                 User                 @relation(fields: [createdBy], references: [id])
+  tickets              Ticket[]
+  registrations        Registration[]
+  paymentMethods       EventPaymentMethod[]
+  volunteers           EventVolunteer[]
+  feedbacks            EventFeedback[]
+  ledgerEntries        LedgerEntry[]
 }
 
 model EventVolunteer {

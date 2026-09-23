@@ -53,6 +53,7 @@ export class PublicService {
         maxParticipants: true,
         organizerPhone: true,
         whatsappGroupUrl: true,
+        authorizationFormUrl: true,
         isPublished: true,
         formFields: true,
         feePercent: true,

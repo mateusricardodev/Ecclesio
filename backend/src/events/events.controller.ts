@@ -35,8 +35,40 @@ const EXTENSION_BY_MIME: Record<string, string> = {
   'image/png': '.png',
   'image/gif': '.gif',
   'image/webp': '.webp',
+  'application/pdf': '.pdf',
 };
-const ALLOWED_IMAGE_TYPES = new Set(Object.keys(EXTENSION_BY_MIME));
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+
+// Grava com extensão neutra e não-executável até o conteúdo ser validado.
+const uploadStorage = multer.diskStorage({
+  destination: join(process.cwd(), 'uploads'),
+  filename: (_req, _file, cb) => {
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${unique}.upload`);
+  },
+});
+
+/**
+ * Confere os magic bytes do arquivo enviado e o renomeia para a extensão real
+ * do conteúdo. Apaga o arquivo e lança 400 se o tipo não for o esperado.
+ */
+async function finalizeUpload(
+  file: Express.Multer.File | undefined,
+  allowed: Set<string>,
+  invalidMessage: string,
+): Promise<string> {
+  if (!file) throw new BadRequestException('Nenhum arquivo enviado');
+
+  const detected = await fileTypeFromBuffer(readFileSync(file.path));
+  if (!detected || !allowed.has(detected.mime)) {
+    unlinkSync(file.path);
+    throw new BadRequestException(invalidMessage);
+  }
+
+  const finalFilename = file.filename.replace(/\.upload$/, EXTENSION_BY_MIME[detected.mime]);
+  renameSync(file.path, join(file.destination, finalFilename));
+  return finalFilename;
+}
 
 @Controller('events')
 export class EventsController {
@@ -109,14 +141,7 @@ export class EventsController {
   @Post(':id/banner')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: multer.diskStorage({
-        destination: join(process.cwd(), 'uploads'),
-        filename: (_req, _file, cb) => {
-          // Extensão neutra e não-executável até o conteúdo ser validado abaixo.
-          const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-          cb(null, `${unique}.upload`);
-        },
-      }),
+      storage: uploadStorage,
       fileFilter: (_req, file, cb) => {
         if (!file.mimetype.match(/image\/(jpg|jpeg|png|gif|webp)/)) {
           return cb(new BadRequestException('Apenas imagens são permitidas'), false);
@@ -131,20 +156,38 @@ export class EventsController {
     @CurrentUser() user: { id: string },
     @UploadedFile() file: Express.Multer.File,
   ) {
-    if (!file) throw new BadRequestException('Nenhum arquivo enviado');
+    const filename = await finalizeUpload(file, ALLOWED_IMAGE_TYPES, 'Arquivo não é uma imagem válida');
+    return this.eventsService.uploadBanner(id, user.id, filename);
+  }
 
-    const buffer = readFileSync(file.path);
-    const detected = await fileTypeFromBuffer(buffer);
-    if (!detected || !ALLOWED_IMAGE_TYPES.has(detected.mime)) {
-      unlinkSync(file.path);
-      throw new BadRequestException('Arquivo não é uma imagem válida');
-    }
+  /** Modelo de autorização de responsável (PDF) que o participante baixa na inscrição. */
+  @UseGuards(JwtGuard)
+  @Post(':id/authorization-form')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: uploadStorage,
+      fileFilter: (_req, file, cb) => {
+        if (file.mimetype !== 'application/pdf') {
+          return cb(new BadRequestException('Apenas arquivos PDF são permitidos'), false);
+        }
+        cb(null, true);
+      },
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
+  async uploadAuthorizationForm(
+    @Param('id') id: string,
+    @CurrentUser() user: { id: string },
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const filename = await finalizeUpload(file, new Set(['application/pdf']), 'Arquivo não é um PDF válido');
+    return this.eventsService.uploadAuthorizationForm(id, user.id, filename);
+  }
 
-    // Renomeia para a extensão real do conteúdo validado (nunca a do cliente).
-    const finalFilename = file.filename.replace(/\.upload$/, EXTENSION_BY_MIME[detected.mime]);
-    renameSync(file.path, join(file.destination, finalFilename));
-
-    return this.eventsService.uploadBanner(id, user.id, finalFilename);
+  @UseGuards(JwtGuard)
+  @Delete(':id/authorization-form')
+  removeAuthorizationForm(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+    return this.eventsService.removeAuthorizationForm(id, user.id);
   }
 
   @UseGuards(JwtGuard)

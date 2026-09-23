@@ -185,6 +185,34 @@ export class EventsService {
     return { bannerUrl };
   }
 
+  async uploadAuthorizationForm(id: string, userId: string, filename: string) {
+    await this.checkOwnership(id, userId);
+    await this.deleteAuthorizationFormFile(id);
+
+    const authorizationFormUrl = `/uploads/${filename}`;
+    await this.prisma.db.event.update({ where: { id }, data: { authorizationFormUrl } });
+    return { authorizationFormUrl };
+  }
+
+  async removeAuthorizationForm(id: string, userId: string) {
+    await this.checkOwnership(id, userId);
+    await this.deleteAuthorizationFormFile(id);
+    await this.prisma.db.event.update({ where: { id }, data: { authorizationFormUrl: null } });
+    return { authorizationFormUrl: null };
+  }
+
+  private async deleteAuthorizationFormFile(id: string) {
+    const current = await this.prisma.db.event.findUnique({
+      where: { id },
+      select: { authorizationFormUrl: true },
+    });
+    if (current?.authorizationFormUrl) {
+      try {
+        await unlink(join(process.cwd(), current.authorizationFormUrl));
+      } catch { /* arquivo já não existe, sem problema */ }
+    }
+  }
+
   /**
    * Modalidades do evento já com a taxa de serviço calculada, para o
    * organizador ver quanto o participante paga e quanto ele recebe.
