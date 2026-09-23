@@ -6,7 +6,6 @@ import { useAuthStore } from '../store/auth.store'
 const NAV_LINKS = [
   { label: 'Recursos', href: '/#recursos' },
   { label: 'Como funciona', href: '/#como-funciona' },
-  { label: 'Comparativo', href: '/#comparativo' },
   { label: 'Dúvidas', href: '/#duvidas' },
 ]
 

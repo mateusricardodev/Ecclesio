@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ClipboardList, Users, QrCode, Wallet, Check, X, Plus, Minus, ArrowUpRight,
+  ClipboardList, Users, QrCode, Wallet, Plus, Minus, ArrowUpRight,
 } from 'lucide-react'
 import { LandingNavbar } from '../components/LandingNavbar'
 import { Footer } from '../components/Footer'
@@ -34,15 +34,6 @@ const ORGANIZER_POINTS = [
   'Edição, cancelamento e reenvio do e-mail de confirmação em um clique.',
   'Exportação da lista em planilha para a secretaria.',
   'Pesquisa de satisfação enviada aos participantes depois do evento.',
-]
-
-const COMPARISON = [
-  { label: 'Inscrição pelo celular, sem criar conta', ecclesio: true, manual: false },
-  { label: 'Limite de vagas automático', ecclesio: true, manual: false },
-  { label: 'Pagamento conferido sem comprovante', ecclesio: true, manual: false },
-  { label: 'Ingresso com QR code por e-mail', ecclesio: true, manual: false },
-  { label: 'Lista única para toda a equipe', ecclesio: true, manual: false },
-  { label: 'Dados protegidos conforme a LGPD', ecclesio: true, manual: false },
 ]
 
 const STEPS = [
@@ -250,50 +241,9 @@ export function LandingPage() {
             </div>
           </section>
 
-          {/* Comparativo */}
-          <section id="comparativo" className="scroll-mt-24 pb-[120px] flex flex-col gap-5">
-            <div className="border-t border-ecc-faint py-20 flex flex-col items-center gap-10 text-center lg:px-[240px]">
-              <Eyebrow center>Comparativo</Eyebrow>
-              <Heading>Por que sair da planilha?</Heading>
-              <p className="ecc-paragraph">
-                Formulário genérico, planilha e conferência de comprovante no grupo funcionam até o evento crescer.
-                Veja o que muda.
-              </p>
-            </div>
-            <div className="overflow-x-auto">
-              <div className="min-w-[560px] grid grid-cols-2 rounded-[20px]">
-                <div className="bg-white border border-ecc-line rounded-[20px] overflow-hidden" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-                  <div className="h-24 flex items-center justify-center border-b border-ecc-faint">
-                    <img src="/logo-horizontal.png" alt="Ecclesio" className="h-9 object-contain" />
-                  </div>
-                  {COMPARISON.map((row) => (
-                    <div key={row.label} className="flex items-center gap-2 px-6 sm:px-8 py-7 border-b border-ecc-line last:border-b-0">
-                      <Check size={14} className="text-ecc-navy shrink-0" />
-                      <span className="font-[family-name:var(--font-mono)] text-xs text-ecc-ink">{row.label}</span>
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="h-24 flex items-center justify-center border-b border-ecc-faint">
-                    <span className="text-[22px] font-medium text-ecc-text tracking-tight">Planilha e grupo</span>
-                  </div>
-                  {COMPARISON.map((row) => (
-                    <div key={row.label} className="flex items-center gap-2 px-6 sm:px-8 py-7 border-b border-l border-ecc-line last:border-b-0">
-                      <X size={14} className="text-ecc-faint shrink-0" />
-                      <span className="font-[family-name:var(--font-mono)] text-xs text-ecc-text">{row.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
           {/* Missão */}
-          <section className="pb-[120px] grid lg:grid-cols-2 gap-5">
-            <div className="rounded-[30px] overflow-hidden aspect-[550/624] bg-ecc-cream flex items-center justify-center">
-              <img src="/logo-mark.png" alt="" className="w-[38%] max-w-[220px] object-contain" />
-            </div>
-            <div className="border-t border-ecc-line lg:pl-12 pt-10 flex flex-col justify-center gap-12">
+          <section className="pb-[120px]">
+            <div className="border-t border-ecc-line pt-10 flex flex-col gap-12 max-w-[900px]">
               <p className="font-[family-name:var(--font-display)] text-[30px] sm:text-[40px] leading-none text-ecc-ink" style={{ letterSpacing: '-0.04em' }}>
                 A equipe de um retiro, de um encontro ou de uma missa campal deveria gastar o tempo com as pessoas,
                 e não conferindo lista e comprovante. O Ecclesio existe para cuidar dessa parte.
