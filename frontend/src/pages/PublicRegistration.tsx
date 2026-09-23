@@ -583,7 +583,8 @@ export function PublicRegistration() {
                   style={{ accentColor: '#00186D' }}
                 />
                 <span className="text-sm" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                  Concordo com os termos de participação e autorizo o uso dos meus dados para fins de organização do evento.
+                  Concordo com os termos de participação e autorizo o uso dos meus dados, inclusive os de saúde quando informados, para fins de organização do evento, conforme a{' '}
+                  <Link to="/privacidade" target="_blank" style={{ color: '#00186D', textDecoration: 'underline' }}>Política de privacidade</Link>.
                 </span>
               </label>
 

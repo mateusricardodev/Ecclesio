@@ -9,9 +9,9 @@ interface AppDrawerProps {
   onClose: () => void
 }
 
-const items = [
+const items: { icon: typeof Users; label: string; to?: string }[] = [
   { icon: Users, label: 'Contas' },
-  { icon: Shield, label: 'Política de privacidade' },
+  { icon: Shield, label: 'Política de privacidade', to: '/privacidade' },
   { icon: Sun, label: 'Mudar tema' },
 ]
 
@@ -76,9 +76,10 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
         </div>
 
         <nav className="mt-3 flex flex-col px-2">
-          {items.map(({ icon: Icon, label }) => (
+          {items.map(({ icon: Icon, label, to }) => (
             <button
               key={label}
+              onClick={to ? () => { onClose(); navigate(to) } : undefined}
               className="flex items-center gap-4 rounded-xl px-3 py-3.5 text-left transition-colors active:bg-white/10"
             >
               <Icon className="h-5 w-5 text-white/60" />

@@ -210,7 +210,7 @@ export function Register() {
               Ao criar uma conta, você concorda com os{' '}
               <span className="cursor-pointer" style={{ color: '#00186D' }}>Termos de uso</span>
               {' '}e{' '}
-              <span className="cursor-pointer" style={{ color: '#00186D' }}>Política de privacidade</span>
+              <Link to="/privacidade" target="_blank" style={{ color: '#00186D' }}>Política de privacidade</Link>
             </p>
           </div>
         </div>

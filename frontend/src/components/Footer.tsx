@@ -45,7 +45,7 @@ export function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5 text-sm" style={{ fontFamily: 'var(--font-sans)' }}>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Sobre</span></li>
-              <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Privacidade</span></li>
+              <li><Link to="/privacidade" className="transition-colors hover:text-white">Privacidade</Link></li>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Termos de uso</span></li>
               <li><span style={{ color: 'rgba(255,255,255,0.3)' }}>Contato</span></li>
             </ul>

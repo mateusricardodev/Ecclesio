@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff, Mail, Lock, Users } from 'lucide-react'
 import api from '../api/axios'
 import { useAuthStore } from '../store/auth.store'
@@ -355,7 +355,7 @@ export function Login() {
               Ao continuar, você concorda com os{' '}
               <span className="cursor-pointer" style={{ color: '#00186D' }}>Termos de uso</span>
               {' '}e{' '}
-              <span className="cursor-pointer" style={{ color: '#00186D' }}>Política de privacidade</span>
+              <Link to="/privacidade" target="_blank" style={{ color: '#00186D' }}>Política de privacidade</Link>
             </p>
           </div>
         </div>
