@@ -52,6 +52,7 @@ export class PublicService {
         category: true,
         maxParticipants: true,
         organizerPhone: true,
+        whatsappGroupUrl: true,
         isPublished: true,
         formFields: true,
         feePercent: true,

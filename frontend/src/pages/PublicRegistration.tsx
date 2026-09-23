@@ -21,6 +21,7 @@ interface EventInfo {
   location: string | null
   paymentMethods: PaymentMethod[]
   formFields: string | null
+  whatsappGroupUrl: string | null
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -223,6 +224,7 @@ export function PublicRegistration() {
             participantCpf:  form.cpf,
             amount:          0,
             eventTitle:      event?.title,
+            whatsappGroupUrl: event?.whatsappGroupUrl,
             email:           form.email,
             free:            true,
           },
@@ -241,6 +243,7 @@ export function PublicRegistration() {
             amount:          0,
             amountDue:       Number(data.amount),
             eventTitle:      event?.title,
+            whatsappGroupUrl: event?.whatsappGroupUrl,
             email:           form.email,
             cashPending:     true,
           },
@@ -260,6 +263,7 @@ export function PublicRegistration() {
           expiresAt:          data.expiresAt,
           amount:             data.amount,
           eventTitle:         event?.title,
+          whatsappGroupUrl:   event?.whatsappGroupUrl,
           email:              form.email,
           reused:             data.reused,
         },

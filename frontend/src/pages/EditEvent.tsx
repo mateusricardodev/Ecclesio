@@ -27,7 +27,7 @@ export function EditEvent() {
 
   const [form, setForm] = useState({
     title: '', slug: '', category: '', maxParticipants: '',
-    date: '', endDate: '', location: '', organizerPhone: '',
+    date: '', endDate: '', location: '', organizerPhone: '', whatsappGroupUrl: '',
   })
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export function EditEvent() {
           endDate:         toDateInput(data.endDate),
           location:        data.location ?? '',
           organizerPhone:  data.organizerPhone ?? '',
+          whatsappGroupUrl: data.whatsappGroupUrl ?? '',
         })
       })
       .catch(() => setError('Não foi possível carregar os dados do evento.'))
@@ -74,6 +75,7 @@ export function EditEvent() {
         endDate:         form.endDate ? new Date(form.endDate + 'T00:00').toISOString() : undefined,
         location:        form.location || undefined,
         organizerPhone:  form.organizerPhone || undefined,
+        whatsappGroupUrl: form.whatsappGroupUrl.trim() || null,
       })
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
@@ -166,6 +168,10 @@ export function EditEvent() {
 
             <WizardField label="Telefone do organizador">
               <WizardInput name="organizerPhone" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
+            </WizardField>
+
+            <WizardField label="Link do grupo de WhatsApp">
+              <WizardInput name="whatsappGroupUrl" type="url" value={form.whatsappGroupUrl} onChange={handleChange} placeholder="https://chat.whatsapp.com/..." />
             </WizardField>
           </WizardCard>
 
