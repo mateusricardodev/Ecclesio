@@ -75,21 +75,21 @@ const OPTIONAL_FIELDS    = new Set(['Endereço: complemento'])
 
 const inputStyle: React.CSSProperties = {
   width:        '100%',
-  background:   '#FAFAFA',
-  border:       '1px solid rgba(0,24,109,0.15)',
-  borderRadius: '10px',
+  background:   '#FFFFFF',
+  border:       '1px solid #E9E9E9',
+  borderRadius: '12px',
   color:        '#0A0A09',
   fontFamily:   'var(--font-sans)',
-  fontSize:     '0.875rem',
-  padding:      '0.625rem 0.75rem',
+  fontSize:     '0.9375rem',
+  padding:      '0.75rem 0.875rem',
   outline:      'none',
 }
 
 const labelStyle: React.CSSProperties = {
   display:     'block',
-  fontSize:    '0.8125rem',
+  fontSize:    '0.875rem',
   fontWeight:  500,
-  color:       '#33425C',
+  color:       '#0A0A09',
   fontFamily:  'var(--font-sans)',
   marginBottom: '0.375rem',
 }
@@ -331,25 +331,21 @@ export function PublicRegistration() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F5F2E8' }}>
-      {/* Topbar mínima */}
-      <div className="w-full py-3 px-6 flex items-center" style={{ background: '#00186D' }}>
-        <img src="/logo-horizontal.png" alt="Ecclesio" className="h-6 brightness-0 invert" />
-      </div>
-
-      {/* Cabeçalho do evento */}
-      <div className="py-8 px-4" style={{ background: '#00186D' }}>
-        <div className="max-w-2xl mx-auto">
-          <h1 style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '2.5rem', fontWeight: 400, color: '#FFFFFF', lineHeight: 1.2 }}>
-            {event.title}
-          </h1>
-          <p className="text-sm mt-1 capitalize" style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-sans)' }}>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-16">
+        {/* Cabeçalho do evento */}
+        <nav className="h-[78px] flex items-center">
+          <Link to={`/evento/${slug}`} className="text-sm font-bold text-ecc-text hover:text-ecc-ink" style={{ letterSpacing: '-0.025em' }}>
+            Voltar para o evento
+          </Link>
+        </nav>
+        <header className="pt-4 pb-10 flex flex-col gap-5">
+          <p className="ecc-eyebrow first-letter:uppercase">
             {formatDate(startDate)}{event.location && ` · ${event.location}`}
           </p>
-        </div>
-      </div>
+          <h1 className="ecc-display text-[44px] sm:text-[64px]">{event.title}</h1>
+        </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-8">
         <div
           className="rounded-[20px] overflow-hidden"
           style={{ background: '#FFFFFF', border: '1px solid #E9E9E9' }}
@@ -357,7 +353,7 @@ export function PublicRegistration() {
           {/* Título do formulário */}
           <div className="px-6 py-5" style={{ borderBottom: '1px solid #E9E9E9' }}>
             <p style={sectionLabelStyle}>Formulário de inscrição</p>
-            <p className="text-xl font-semibold mt-0.5" style={{ color: '#0A0A09', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
+            <p className="mt-2" style={{ color: '#0A0A09', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em', fontSize: '1.75rem', lineHeight: 1 }}>
               Preencha seus dados
             </p>
           </div>
@@ -599,14 +595,7 @@ export function PublicRegistration() {
               <button
                 type="submit"
                 disabled={submitting || !form.termsAccepted}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-semibold text-sm transition-all"
-                style={{
-                  background:  (submitting || !form.termsAccepted) ? 'rgba(0,24,109,0.4)' : '#00186D',
-                  color:       '#FFFFFF',
-                  fontFamily:  'var(--font-sans)',
-                  cursor:      (submitting || !form.termsAccepted) ? 'not-allowed' : 'pointer',
-                  boxShadow:   (submitting || !form.termsAccepted) ? 'none' : '0 4px 14px rgba(0,24,109,0.25)',
-                }}
+                className="ecc-btn ecc-btn-primary w-full"
               >
                 {submitting && (
                   <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -616,14 +605,6 @@ export function PublicRegistration() {
                 )}
                 {submitting ? 'Processando...' : 'Confirmar inscrição'}
               </button>
-
-              <Link
-                to={`/evento/${slug}`}
-                className="text-center text-sm transition-colors"
-                style={{ color: '#9CA3AF', fontFamily: 'var(--font-sans)' }}
-              >
-                Voltar para o evento
-              </Link>
             </div>
           </form>
         </div>

@@ -72,7 +72,7 @@ export function EventCheckin() {
   ]
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-ecc-cream text-ecc-ink">
+    <div className="mx-auto flex min-h-screen max-w-[480px] flex-col bg-white text-ecc-ink">
       <AppHeader
         title={stats?.title ?? 'Evento'}
         centerTitle
@@ -126,10 +126,10 @@ export function EventCheckin() {
           !error &&
           groups.map((g) => (
             <section key={g.letter} className="mt-5">
-              <h2 className="ecc-eyebrow mb-2 px-1 text-[11px] text-ecc-gold-dark">
+              <h2 className="ecc-eyebrow mb-2 px-1">
                 {g.letter}
               </h2>
-              <ul className="divide-y divide-ecc-navy/[0.07] overflow-hidden rounded-[20px] border border-ecc-navy/10 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+              <ul className="divide-y divide-ecc-line overflow-hidden rounded-[20px] border border-ecc-line bg-white">
                 {g.items.map((p) => (
                   <li key={p.id}>
                     <ParticipantCard
@@ -207,7 +207,7 @@ function FilterTab({
 
 function RowSkeleton() {
   return (
-    <div className="animate-pulse rounded-[20px] border border-ecc-navy/10 bg-white p-4">
+    <div className="animate-pulse rounded-[20px] border border-ecc-line bg-white p-4">
       <div className="h-3.5 w-1/2 rounded bg-ecc-navy/[0.08]" />
       <div className="mt-2.5 h-2.5 w-1/3 rounded bg-ecc-navy/[0.06]" />
       <div className="mt-2 h-2.5 w-2/5 rounded bg-ecc-navy/[0.06]" />

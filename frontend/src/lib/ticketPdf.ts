@@ -20,8 +20,8 @@ export interface TicketPdfData {
   amount?: number | null
 }
 
-const NAVY: [number, number, number] = [27, 43, 94]
-const GOLD: [number, number, number] = [201, 168, 76]
+const NAVY: [number, number, number] = [0, 24, 109]
+const GOLD: [number, number, number] = [212, 177, 106]
 const CREAM: [number, number, number] = [242, 237, 228]
 const LABEL: [number, number, number] = [130, 130, 130]
 const VALUE: [number, number, number] = [30, 30, 30]
@@ -44,7 +44,7 @@ export async function buildTicketPdf(data: TicketPdfData): Promise<jsPDF> {
     ? await QRCode.toDataURL(data.code, {
         width: 300,
         margin: 2,
-        color: { dark: '#1B2B5E', light: '#F2EDE4' },
+        color: { dark: '#00186D', light: '#FFFFFF' },
       })
     : null
 
