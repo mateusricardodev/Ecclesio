@@ -18,7 +18,7 @@ export function CreateEvent() {
 
   const [form, setForm] = useState({
     slug: '', title: '', category: '', maxParticipants: '',
-    date: '', endDate: '', location: '', description: '', organizerPhone: '',
+    date: '', endDate: '', location: '', description: '', organizerPhone: '', whatsappGroupUrl: '',
   })
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
@@ -44,6 +44,7 @@ export function CreateEvent() {
         location:        form.location || undefined,
         description:     form.description || undefined,
         organizerPhone:  form.organizerPhone || undefined,
+        whatsappGroupUrl: form.whatsappGroupUrl.trim() || undefined,
       })
       navigate(`/events/${data.id}/setup/payment`)
     } catch (err: unknown) {
@@ -125,6 +126,10 @@ export function CreateEvent() {
 
             <WizardField label="Telefone do organizador">
               <WizardInput name="organizerPhone" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
+            </WizardField>
+
+            <WizardField label="Link do grupo de WhatsApp">
+              <WizardInput name="whatsappGroupUrl" type="url" value={form.whatsappGroupUrl} onChange={handleChange} placeholder="https://chat.whatsapp.com/..." />
             </WizardField>
           </WizardCard>
 

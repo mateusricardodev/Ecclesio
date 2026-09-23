@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import api from '../api/axios'
+import api, { API_BASE_URL } from '../api/axios'
 import { formatBRL } from '../lib/money'
 
 interface PaymentMethod {
@@ -21,6 +21,8 @@ interface EventInfo {
   location: string | null
   paymentMethods: PaymentMethod[]
   formFields: string | null
+  whatsappGroupUrl: string | null
+  authorizationFormUrl: string | null
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -223,6 +225,7 @@ export function PublicRegistration() {
             participantCpf:  form.cpf,
             amount:          0,
             eventTitle:      event?.title,
+            whatsappGroupUrl: event?.whatsappGroupUrl,
             email:           form.email,
             free:            true,
           },
@@ -241,6 +244,7 @@ export function PublicRegistration() {
             amount:          0,
             amountDue:       Number(data.amount),
             eventTitle:      event?.title,
+            whatsappGroupUrl: event?.whatsappGroupUrl,
             email:           form.email,
             cashPending:     true,
           },
@@ -260,6 +264,7 @@ export function PublicRegistration() {
           expiresAt:          data.expiresAt,
           amount:             data.amount,
           eventTitle:         event?.title,
+          whatsappGroupUrl:   event?.whatsappGroupUrl,
           email:              form.email,
           reused:             data.reused,
         },
@@ -491,19 +496,25 @@ export function PublicRegistration() {
                   <div className="flex-1">
                     <p className="text-sm font-semibold" style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}>Autorização de Responsável</p>
                     <p className="text-xs mt-0.5" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
-                      Baixe o modelo, preencha, assine e entregue no dia do evento.
+                      {event.authorizationFormUrl
+                        ? 'Baixe o modelo, preencha, assine e entregue no dia do evento.'
+                        : 'Traga a autorização assinada pelo responsável no dia do evento.'}
                     </p>
-                    <a
-                      href="/autorizacao-responsavel.pdf"
-                      download
-                      className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-sm font-semibold transition-all"
-                      style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                      Baixar modelo
-                    </a>
+                    {event.authorizationFormUrl && (
+                      <a
+                        href={`${API_BASE_URL}${event.authorizationFormUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                        className="inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-sm font-semibold transition-all"
+                        style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Baixar modelo
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

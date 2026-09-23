@@ -24,6 +24,8 @@ interface PixState {
   expiresAt?: string
   amount?: number
   eventTitle?: string
+  /** Link do grupo de WhatsApp definido pelo organizador do evento */
+  whatsappGroupUrl?: string | null
   email?: string
   reused?: boolean
   free?: boolean
@@ -42,6 +44,29 @@ function Spinner({ className = 'w-5 h-5' }: { className?: string }) {
       <path className="opacity-75" fill="currentColor"
         d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 000 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
     </svg>
+  )
+}
+
+function WhatsAppGroupCard({ url }: { url: string }) {
+  return (
+    <div className="bg-[#E7F8EE] border border-[#25D366]/30 rounded-xl p-5 flex flex-col items-center gap-3 mb-6">
+      <svg viewBox="0 0 32 32" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2C8.28 2 2 8.28 2 16c0 2.47.67 4.78 1.83 6.77L2 30l7.43-1.8A13.93 13.93 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2z" fill="#25D366"/>
+        <path d="M22.5 19.5c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#fff"/>
+      </svg>
+      <div className="text-center">
+        <p className="font-inter font-semibold text-gray-800 text-sm">Entre no grupo do WhatsApp</p>
+        <p className="font-inter text-xs text-gray-500 mt-0.5">Fique por dentro de todas as informações do evento</p>
+      </div>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-bebas w-full bg-[#25D366] hover:bg-[#1dba58] text-black py-3 rounded-full text-xl tracking-widest uppercase transition-colors flex items-center justify-center gap-2"
+      >
+        Acessar grupo
+      </a>
+    </div>
   )
 }
 
@@ -180,24 +205,7 @@ export function PixPayment() {
             </p>
           </div>
 
-          <div className="bg-[#E7F8EE] border border-[#25D366]/30 rounded-xl p-5 flex flex-col items-center gap-3 mb-6">
-            <svg viewBox="0 0 32 32" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 2C8.28 2 2 8.28 2 16c0 2.47.67 4.78 1.83 6.77L2 30l7.43-1.8A13.93 13.93 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2z" fill="#25D366"/>
-              <path d="M22.5 19.5c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#fff"/>
-            </svg>
-            <div className="text-center">
-              <p className="font-inter font-semibold text-gray-800 text-sm">Entre no grupo do WhatsApp</p>
-              <p className="font-inter text-xs text-gray-500 mt-0.5">Fique por dentro de todas as informações do evento</p>
-            </div>
-            <a
-              href="https://chat.whatsapp.com/LnQvtR0hTwuJFW8kkZrzdy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bebas w-full bg-[#25D366] hover:bg-[#1dba58] text-black py-3 rounded-full text-xl tracking-widest uppercase transition-colors flex items-center justify-center gap-2"
-            >
-              Acessar grupo
-            </a>
-          </div>
+          {state.whatsappGroupUrl && <WhatsAppGroupCard url={state.whatsappGroupUrl} />}
 
           {state.email && (
             <p className="font-inter text-sm text-gray-500 mb-6">
@@ -264,24 +272,7 @@ export function PixPayment() {
           <h1 className="font-cinzel text-2xl font-bold text-[#1B2B5E] mb-2">Inscrição confirmada!</h1>
           <p className="font-inter text-gray-500 text-sm mb-6">Seu pagamento foi processado com sucesso.</p>
 
-          <div className="bg-[#E7F8EE] border border-[#25D366]/30 rounded-xl p-5 flex flex-col items-center gap-3 mb-6">
-            <svg viewBox="0 0 32 32" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 2C8.28 2 2 8.28 2 16c0 2.47.67 4.78 1.83 6.77L2 30l7.43-1.8A13.93 13.93 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2z" fill="#25D366"/>
-              <path d="M22.5 19.5c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#fff"/>
-            </svg>
-            <div className="text-center">
-              <p className="font-inter font-semibold text-gray-800 text-sm">Entre no grupo do WhatsApp</p>
-              <p className="font-inter text-xs text-gray-500 mt-0.5">Fique por dentro de todas as informações do evento</p>
-            </div>
-            <a
-              href="https://chat.whatsapp.com/LnQvtR0hTwuJFW8kkZrzdy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bebas w-full bg-[#25D366] hover:bg-[#1dba58] text-black py-3 rounded-full text-xl tracking-widest uppercase transition-colors flex items-center justify-center gap-2"
-            >
-              Acessar grupo
-            </a>
-          </div>
+          {state.whatsappGroupUrl && <WhatsAppGroupCard url={state.whatsappGroupUrl} />}
 
           {state.email && (
             <p className="font-inter text-sm text-gray-500 mb-6">

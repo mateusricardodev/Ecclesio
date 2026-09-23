@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   Matches,
   Min,
 } from 'class-validator';
@@ -52,6 +53,14 @@ export class CreateEventDto {
   @IsString()
   @IsOptional()
   organizerPhone?: string;
+
+  // null limpa o link na edição.
+  @IsUrl(
+    { protocols: ['http', 'https'], require_protocol: true },
+    { message: 'Link do grupo de WhatsApp inválido' },
+  )
+  @IsOptional()
+  whatsappGroupUrl?: string | null;
 
   @IsBoolean()
   @IsOptional()

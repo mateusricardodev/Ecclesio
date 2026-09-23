@@ -69,6 +69,7 @@ export class EventsService {
         category: dto.category,
         maxParticipants: dto.maxParticipants,
         organizerPhone: dto.organizerPhone,
+        whatsappGroupUrl: dto.whatsappGroupUrl,
         about: dto.about,
         formFields: dto.formFields,
         createdBy: userId,
@@ -99,6 +100,7 @@ export class EventsService {
         ...(dto.category !== undefined && { category: dto.category }),
         ...(dto.maxParticipants !== undefined && { maxParticipants: dto.maxParticipants }),
         ...(dto.organizerPhone !== undefined && { organizerPhone: dto.organizerPhone }),
+        ...(dto.whatsappGroupUrl !== undefined && { whatsappGroupUrl: dto.whatsappGroupUrl }),
         ...(dto.isPublished !== undefined && { isPublished: dto.isPublished }),
         ...(dto.about !== undefined && { about: dto.about }),
         ...(dto.formFields !== undefined && { formFields: dto.formFields }),
@@ -181,6 +183,34 @@ export class EventsService {
     const bannerUrl = `/uploads/${filename}`;
     await this.prisma.db.event.update({ where: { id }, data: { bannerUrl } });
     return { bannerUrl };
+  }
+
+  async uploadAuthorizationForm(id: string, userId: string, filename: string) {
+    await this.checkOwnership(id, userId);
+    await this.deleteAuthorizationFormFile(id);
+
+    const authorizationFormUrl = `/uploads/${filename}`;
+    await this.prisma.db.event.update({ where: { id }, data: { authorizationFormUrl } });
+    return { authorizationFormUrl };
+  }
+
+  async removeAuthorizationForm(id: string, userId: string) {
+    await this.checkOwnership(id, userId);
+    await this.deleteAuthorizationFormFile(id);
+    await this.prisma.db.event.update({ where: { id }, data: { authorizationFormUrl: null } });
+    return { authorizationFormUrl: null };
+  }
+
+  private async deleteAuthorizationFormFile(id: string) {
+    const current = await this.prisma.db.event.findUnique({
+      where: { id },
+      select: { authorizationFormUrl: true },
+    });
+    if (current?.authorizationFormUrl) {
+      try {
+        await unlink(join(process.cwd(), current.authorizationFormUrl));
+      } catch { /* arquivo já não existe, sem problema */ }
+    }
   }
 
   /**

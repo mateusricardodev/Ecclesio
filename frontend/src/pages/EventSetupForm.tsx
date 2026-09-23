@@ -4,7 +4,7 @@ import { Check } from 'lucide-react'
 import { EventWizardHeader } from '../components/EventWizardHeader'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { WizardCard, Toggle, wizardNavBtn, wizardPrimaryBtn } from '../components/WizardShared'
-import api from '../api/axios'
+import api, { API_BASE_URL } from '../api/axios'
 
 const FIELD_GROUPS = [
   {
@@ -24,16 +24,21 @@ const FIELD_GROUPS = [
 ]
 
 const FIXED_FIELDS = ['Nome completo', 'Documento (CPF)', 'E-mail']
+const AUTHORIZATION_FIELD = 'Autorização de Responsável'
 
 export function EventSetupForm() {
   const { id }    = useParams<{ id: string }>()
   const navigate  = useNavigate()
   const [enabled, setEnabled] = useState<Set<string>>(new Set())
   const [saving, setSaving]   = useState(false)
+  const [authFormUrl, setAuthFormUrl] = useState<string | null>(null)
+  const [uploading, setUploading]     = useState(false)
+  const [uploadError, setUploadError] = useState('')
 
   useEffect(() => {
     if (!id) return
     api.get(`/events/${id}`).then(({ data }) => {
+      setAuthFormUrl(data.authorizationFormUrl ?? null)
       if (data.formFields) {
         try { setEnabled(new Set(JSON.parse(data.formFields))) } catch { /* invalid JSON */ }
       }
@@ -46,6 +51,41 @@ export function EventSetupForm() {
       if (next.has(field)) { next.delete(field) } else { next.add(field) }
       return next
     })
+  }
+
+  async function handleAuthFormUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !id) return
+    setUploading(true)
+    setUploadError('')
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const { data } = await api.post(`/events/${id}/authorization-form`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setAuthFormUrl(data.authorizationFormUrl)
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } }
+      setUploadError(e?.response?.data?.message ?? 'Não foi possível enviar o arquivo.')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  async function handleAuthFormRemove() {
+    if (!id) return
+    setUploading(true)
+    setUploadError('')
+    try {
+      await api.delete(`/events/${id}/authorization-form`)
+      setAuthFormUrl(null)
+    } catch {
+      setUploadError('Não foi possível remover o arquivo.')
+    } finally {
+      setUploading(false)
+    }
   }
 
   async function handleNext() {
@@ -142,6 +182,47 @@ export function EventSetupForm() {
                     </span>
                     <Toggle enabled={enabled.has(field)} onToggle={() => toggle(field)} />
                   </div>
+                  {field === AUTHORIZATION_FIELD && enabled.has(field) && (
+                    <div className="col-span-3 mt-3 flex flex-col gap-2">
+                      <p className="text-xs" style={{ color: '#6B7280', fontFamily: 'var(--font-sans)' }}>
+                        Envie o modelo (PDF) que o participante vai baixar, preencher e entregar no dia do evento.
+                      </p>
+                      <div className="flex flex-wrap items-center gap-3">
+                        {authFormUrl && (
+                          <a
+                            href={`${API_BASE_URL}${authFormUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm underline"
+                            style={{ color: '#00186D', fontFamily: 'var(--font-sans)' }}
+                          >
+                            Ver modelo enviado
+                          </a>
+                        )}
+                        <label
+                          className="text-sm font-semibold px-4 py-1.5 rounded-full cursor-pointer"
+                          style={{ background: '#00186D', color: '#FFFFFF', fontFamily: 'var(--font-sans)', opacity: uploading ? 0.6 : 1 }}
+                        >
+                          {uploading ? 'Enviando...' : authFormUrl ? 'Trocar PDF' : 'Enviar PDF'}
+                          <input type="file" accept="application/pdf" className="hidden" onChange={handleAuthFormUpload} disabled={uploading} />
+                        </label>
+                        {authFormUrl && (
+                          <button
+                            type="button"
+                            onClick={handleAuthFormRemove}
+                            disabled={uploading}
+                            className="text-sm"
+                            style={{ color: '#991B1B', fontFamily: 'var(--font-sans)' }}
+                          >
+                            Remover
+                          </button>
+                        )}
+                      </div>
+                      {uploadError && (
+                        <p className="text-xs" style={{ color: '#991B1B', fontFamily: 'var(--font-sans)' }}>{uploadError}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
