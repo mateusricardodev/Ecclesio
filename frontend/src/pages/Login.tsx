@@ -82,15 +82,15 @@ export function Login() {
   const isLogin = mode === 'login'
 
   return (
-    <div className="min-h-screen bg-white flex flex-col lg:flex-row lg:p-5 gap-5">
+    <div className="min-h-screen bg-white flex flex-col lg:flex-row-reverse lg:p-5 gap-5">
       {/* Formulário */}
       <div className="flex-1 flex flex-col px-4 sm:px-10 lg:px-14 pt-6 pb-10">
-        <Link to="/" className="self-start">
-          <img src="/logo-horizontal.png" alt="Ecclesio" className="h-8 sm:h-9 object-contain" />
+        <Link to="/" className="w-full max-w-[440px] mx-auto">
+          <img src="/logo-horizontal.png" alt="Ecclesio" className="h-8 sm:h-9 object-contain object-left" />
         </Link>
 
         <div className="flex-1 flex items-center">
-          <div className="w-full max-w-[440px] mx-auto lg:mx-0 py-12">
+          <div className="w-full max-w-[440px] mx-auto py-12">
             <p className="ecc-eyebrow">{isLogin ? 'Entrar' : 'Criar conta'}</p>
             <h1 className="ecc-display text-[48px] sm:text-[60px] mt-6">
               {isLogin ? 'Bem-vindo de volta.' : 'Comece seu evento.'}
