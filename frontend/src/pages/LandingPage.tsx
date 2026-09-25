@@ -190,9 +190,6 @@ export function LandingPage() {
                 ))}
               </div>
             </div>
-            <div className="h-[360px] sm:h-[620px] rounded-[30px] overflow-hidden">
-              <img src="/interior-igreja.jpg" alt="Interior de uma igreja com bancos de madeira" className="w-full h-full object-cover" />
-            </div>
           </section>
 
           {/* Para o organizador */}
