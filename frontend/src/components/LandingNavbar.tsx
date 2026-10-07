@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { useAuthStore } from '../store/auth.store'
 
@@ -12,13 +12,27 @@ const NAV_LINKS = [
 export function LandingNavbar() {
   const [open, setOpen] = useState(false)
   const token = useAuthStore((s) => s.token)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Fundo branco sólido para o conteúdo não passar por trás do menu ao rolar;
+  // a linha de baixo só aparece depois que a página saiu do topo.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const cta = token
     ? { to: '/dashboard', label: 'Meu painel' }
     : { to: '/login', label: 'Entrar' }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 bg-white border-b transition-colors ${
+        scrolled ? 'border-ecc-line' : 'border-transparent'
+      }`}
+    >
       <div className="max-w-[1500px] mx-auto px-4 sm:px-10 h-[78px] sm:h-[92px] flex items-center justify-between gap-6">
         <Link to="/" className="shrink-0">
           <img src="/logo-horizontal.png" alt="Ecclesio" className="h-8 sm:h-9 object-contain" />
@@ -62,7 +76,7 @@ export function LandingNavbar() {
       </div>
 
       {open && (
-        <div className="md:hidden mx-4 rounded-[20px] bg-white px-6 py-5 flex flex-col gap-4 border border-ecc-line">
+        <div className="md:hidden mx-4 mb-4 rounded-[20px] bg-white px-6 py-5 flex flex-col gap-4 border border-ecc-line">
           {NAV_LINKS.map((l) => (
             <a
               key={l.label}
