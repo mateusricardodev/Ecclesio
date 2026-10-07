@@ -6,15 +6,18 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { GoogleTokenVerifier } from './google-token.verifier.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly google: GoogleTokenVerifier,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -69,6 +72,53 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
+    return this.signToken(user);
+  }
+
+  async loginWithGoogle(credential: string) {
+    const profile = await this.google.verify(credential);
+
+    let user = await this.prisma.db.user.findUnique({
+      where: { googleId: profile.googleId },
+    });
+
+    if (!user) {
+      // O e-mail é gravado como a pessoa digitou, então a busca ignora caixa.
+      // Se houver mais de uma conta (ex.: "Joao@" sombra e "joao@" real),
+      // prefere a conta real.
+      const [existing] = await this.prisma.db.user.findMany({
+        where: { email: { equals: profile.email, mode: 'insensitive' } },
+        orderBy: { isShadow: 'asc' },
+        take: 1,
+      });
+
+      if (existing) {
+        // Vincula o Google à conta que já existe com esse e-mail. É seguro
+        // porque o Google atestou o e-mail (email_verified). Uma conta-sombra
+        // vira conta real aqui, igual ao `register`, mantendo o histórico de
+        // inscrições.
+        user = await this.prisma.db.user.update({
+          where: { id: existing.id },
+          data: { googleId: profile.googleId, isShadow: false },
+        });
+      } else {
+        // Senha aleatória que ninguém sabe: essa conta só entra pelo Google.
+        const password = await bcrypt.hash(randomBytes(32).toString('hex'), 10);
+        user = await this.prisma.db.user.create({
+          data: {
+            name: profile.name,
+            email: profile.email,
+            password,
+            googleId: profile.googleId,
+          },
+        });
+      }
+    }
+
+    return this.signToken(user);
+  }
+
+  private signToken(user: { id: string; email: string; role: string }) {
     const token = this.jwt.sign({
       sub: user.id,
       email: user.email,

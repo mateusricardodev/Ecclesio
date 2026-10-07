@@ -46,6 +46,7 @@
     "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
     "file-type": "^21.3.4",
+    "google-auth-library": "^11.1.0",
     "helmet": "^8.2.0",
     "mercadopago": "^3.1.0",
     "nodemailer": "^8.0.7",

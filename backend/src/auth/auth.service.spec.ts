@@ -4,10 +4,12 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { GoogleTokenVerifier } from './google-token.verifier.js';
 
 const mockDb = {
   user: {
     findUnique: jest.fn(),
+    findMany: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
   },
@@ -15,6 +17,7 @@ const mockDb = {
 
 const mockPrisma = { db: mockDb };
 const mockJwt = { sign: jest.fn().mockReturnValue('signed-token') };
+const mockGoogle = { verify: jest.fn() };
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -25,6 +28,7 @@ describe('AuthService', () => {
         AuthService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: JwtService, useValue: mockJwt },
+        { provide: GoogleTokenVerifier, useValue: mockGoogle },
       ],
     }).compile();
 
@@ -159,6 +163,81 @@ describe('AuthService', () => {
       mockDb.user.findUnique.mockResolvedValue(null);
 
       await expect(service.me('uuid-inexistente')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  // loginWithGoogle
+
+  describe('loginWithGoogle', () => {
+    const profile = { googleId: 'g-123', email: 'joao@test.com', name: 'João Silva' };
+
+    beforeEach(() => {
+      mockGoogle.verify.mockResolvedValue(profile);
+    });
+
+    it('entra direto quando o googleId já está vinculado', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', email: 'joao@test.com', role: 'user' });
+
+      const result = await service.loginWithGoogle('id-token');
+
+      expect(result).toEqual({ access_token: 'signed-token' });
+      expect(mockDb.user.findUnique).toHaveBeenCalledWith({ where: { googleId: 'g-123' } });
+      expect(mockDb.user.update).not.toHaveBeenCalled();
+      expect(mockDb.user.create).not.toHaveBeenCalled();
+    });
+
+    it('vincula o Google a uma conta real existente com o mesmo e-mail', async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+      mockDb.user.findMany.mockResolvedValue([{ id: 'u1', isShadow: false }]);
+      mockDb.user.update.mockResolvedValue({ id: 'u1', email: 'joao@test.com', role: 'user' });
+
+      await service.loginWithGoogle('id-token');
+
+      expect(mockDb.user.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { email: { equals: 'joao@test.com', mode: 'insensitive' } },
+        }),
+      );
+      expect(mockDb.user.update).toHaveBeenCalledWith({
+        where: { id: 'u1' },
+        data: { googleId: 'g-123', isShadow: false },
+      });
+      expect(mockDb.user.create).not.toHaveBeenCalled();
+    });
+
+    it('assume a conta-sombra mantendo o histórico, sem trocar o nome', async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+      mockDb.user.findMany.mockResolvedValue([{ id: 'shadow-1', isShadow: true }]);
+      mockDb.user.update.mockResolvedValue({ id: 'shadow-1', email: 'joao@test.com', role: 'user' });
+
+      await service.loginWithGoogle('id-token');
+
+      const call = mockDb.user.update.mock.calls[0][0];
+      expect(call.where).toEqual({ id: 'shadow-1' });
+      expect(call.data).toEqual({ googleId: 'g-123', isShadow: false });
+      expect(mockJwt.sign).toHaveBeenCalledWith(expect.objectContaining({ sub: 'shadow-1' }));
+    });
+
+    it('cria conta nova com senha aleatória quando o e-mail não existe', async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+      mockDb.user.findMany.mockResolvedValue([]);
+      mockDb.user.create.mockResolvedValue({ id: 'new', email: 'joao@test.com', role: 'user' });
+
+      await service.loginWithGoogle('id-token');
+
+      const { data } = mockDb.user.create.mock.calls[0][0];
+      expect(data).toEqual(
+        expect.objectContaining({ name: 'João Silva', email: 'joao@test.com', googleId: 'g-123' }),
+      );
+      expect(data.password).toMatch(/^\$2[aby]\$/); // hash bcrypt, não texto
+      expect(data).not.toHaveProperty('isShadow');
+    });
+
+    it('propaga a recusa do verificador sem tocar no banco', async () => {
+      mockGoogle.verify.mockRejectedValue(new UnauthorizedException('Token do Google inválido'));
+
+      await expect(service.loginWithGoogle('forjado')).rejects.toThrow(UnauthorizedException);
+      expect(mockDb.user.findUnique).not.toHaveBeenCalled();
     });
   });
 });
