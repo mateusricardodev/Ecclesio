@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import api from '../api/axios'
 import { useAuthStore } from '../store/auth.store'
 
 type Mode = 'login' | 'register'
+
+// ID do cliente OAuth (público). Sem ele o botão do Google simplesmente não aparece.
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
 
 // Só aceita caminhos internos ("/app/eventos"), nunca URLs absolutas ou "//host"
 function safeRedirect(raw: string | null): string {
@@ -39,19 +43,42 @@ export function Login() {
     setSuccess('')
   }
 
+  async function finishLogin(accessToken: string) {
+    const me = await api.get('/auth/me', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    setAuth(me.data, accessToken)
+    navigate(redirectTo, { replace: true })
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
       const { data } = await api.post('/auth/login', { email, password })
-      const me = await api.get('/auth/me', {
-        headers: { Authorization: `Bearer ${data.access_token}` },
-      })
-      setAuth(me.data, data.access_token)
-      navigate(redirectTo, { replace: true })
+      await finishLogin(data.access_token)
     } catch {
       setError('E-mail ou senha inválidos')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleGoogle(credential: string | undefined) {
+    setError('')
+    setSuccess('')
+    if (!credential) {
+      setError('Não foi possível entrar com o Google')
+      return
+    }
+    setLoading(true)
+    try {
+      // Serve para entrar e para criar conta: o backend vincula ou cria.
+      const { data } = await api.post('/auth/google', { credential })
+      await finishLogin(data.access_token)
+    } catch {
+      setError('Não foi possível entrar com o Google')
     } finally {
       setLoading(false)
     }
@@ -122,6 +149,16 @@ export function Login() {
             )}
             {error && (
               <p className="text-sm rounded-2xl px-4 py-3 mt-6 bg-ecc-red-soft text-ecc-red border border-[#FECACA]">{error}</p>
+            )}
+
+            {GOOGLE_CLIENT_ID && (
+              <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} locale="pt-BR">
+                <GoogleButton
+                  text={isLogin ? 'signin_with' : 'signup_with'}
+                  onCredential={handleGoogle}
+                  onError={() => setError('Não foi possível entrar com o Google')}
+                />
+              </GoogleOAuthProvider>
             )}
 
             {isLogin ? (
@@ -201,6 +238,52 @@ export function Login() {
           </ol>
         </div>
       </aside>
+    </div>
+  )
+}
+
+// O botão oficial do Google é um iframe com largura fixa em px (200–400), então
+// medimos o container para ele acompanhar o formulário no celular.
+function GoogleButton({
+  text, onCredential, onError,
+}: {
+  text: 'signin_with' | 'signup_with'
+  onCredential: (credential: string | undefined) => void
+  onError: () => void
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(0)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setWidth(Math.max(200, Math.min(400, Math.floor(el.clientWidth))))
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div className="mt-8">
+      <div ref={ref} className="flex justify-center min-h-[44px]">
+        {width > 0 && (
+          <GoogleLogin
+            key={`${text}-${width}`}
+            onSuccess={(res) => onCredential(res.credential)}
+            onError={onError}
+            text={text}
+            shape="pill"
+            size="large"
+            width={width}
+          />
+        )}
+      </div>
+      <div className="flex items-center gap-3 mt-6 text-xs text-ecc-faint">
+        <span className="h-px flex-1 bg-ecc-line" />
+        ou com e-mail
+        <span className="h-px flex-1 bg-ecc-line" />
+      </div>
     </div>
   )
 }
