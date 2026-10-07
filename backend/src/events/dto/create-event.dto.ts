@@ -50,7 +50,10 @@ export class CreateEventDto {
   @IsOptional()
   maxParticipants?: number;
 
-  @IsString()
+  // Telefone com DDD, com ou sem máscara: "(11) 99999-9999", "11999999999".
+  @Matches(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/, {
+    message: 'Telefone do organizador inválido',
+  })
   @IsOptional()
   organizerPhone?: string;
 
