@@ -87,6 +87,11 @@ export function Login() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    // Mesma regra do RegisterDto no backend.
+    if (!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+      setError('A senha precisa de 8 caracteres, uma letra maiúscula e um número')
+      return
+    }
     if (password !== confirmPassword) {
       setError('As senhas não coincidem')
       return
@@ -197,7 +202,7 @@ export function Login() {
                 </Field>
                 <Field label="Senha">
                   <PasswordInput
-                    value={password} onChange={setPassword} placeholder="Mínimo 6 caracteres" minLength={6}
+                    value={password} onChange={setPassword} placeholder="8+ caracteres, com maiúscula e número" minLength={8}
                     visible={showPassword} onToggle={() => setShowPassword((v) => !v)}
                     autoComplete="new-password"
                   />
