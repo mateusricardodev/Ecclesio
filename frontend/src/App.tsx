@@ -18,6 +18,7 @@ import { PublicFeedback } from './pages/PublicFeedback'
 import { EventFeedback } from './pages/EventFeedback'
 import { EventVolunteers } from './pages/EventVolunteers'
 import { Wallet } from './pages/Wallet'
+import { Settings } from './pages/Settings'
 import { AdminPayouts } from './pages/AdminPayouts'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { LandingPage } from './pages/LandingPage'
@@ -148,6 +149,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Wallet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/configuracoes"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />

@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { label: 'Eventos', icon: Calendar, to: '/eventos', key: 'eventos' },
   { label: 'Inscrições', icon: Users, to: '/buscar-inscricoes', key: 'inscricoes' },
   { label: 'Financeiro', icon: Wallet, to: '/financeiro', key: 'financeiro' },
-  { label: 'Configurações', icon: Settings, to: '/dashboard', key: 'config' },
+  { label: 'Configurações', icon: Settings, to: '/configuracoes', key: 'config' },
 ]
 
 /** Item exclusivo do admin da plataforma: a fila de resgates a pagar. */
@@ -107,12 +107,12 @@ export function DashboardLayout({
             <Bell size={18} />
           </button>
 
-          {/* Avatar + nome */}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2.5 rounded-full pl-1.5 pr-3 py-1.5 transition-colors group hover:bg-ecc-navy-soft"
+          {/* Avatar + nome → Configurações */}
+          <Link
+            to="/configuracoes"
+            className="flex items-center gap-2.5 rounded-full pl-1.5 pr-3 py-1.5 transition-colors hover:bg-ecc-navy-soft"
             style={{ color: '#0A0A09' }}
-            title="Sair"
+            title="Configurações"
           >
             <span
               className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
@@ -128,8 +128,7 @@ export function DashboardLayout({
                 Organizador
               </span>
             </span>
-            <LogOut size={14} className="hidden sm:block ml-1 opacity-0 group-hover:opacity-60 transition-opacity" />
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -142,7 +141,7 @@ export function DashboardLayout({
             borderRight: '1px solid #E9E9E9',
           }}
         >
-          <SidebarContent active={active} isAdmin={isAdmin} />
+          <SidebarContent active={active} isAdmin={isAdmin} onLogout={handleLogout} />
         </aside>
 
         {/* SIDEBAR mobile drawer */}
@@ -163,7 +162,7 @@ export function DashboardLayout({
                   <X size={18} />
                 </button>
               </div>
-              <SidebarContent active={active} isAdmin={isAdmin} onNavigate={() => setSidebarOpen(false)} />
+              <SidebarContent active={active} isAdmin={isAdmin} onLogout={handleLogout} onNavigate={() => setSidebarOpen(false)} />
             </aside>
           </div>
         )}
@@ -180,10 +179,12 @@ export function DashboardLayout({
 function SidebarContent({
   active,
   isAdmin,
+  onLogout,
   onNavigate,
 }: {
   active: string
   isAdmin?: boolean
+  onLogout: () => void
   onNavigate?: () => void
 }) {
   const items = isAdmin ? [...NAV_ITEMS, ADMIN_NAV_ITEM] : NAV_ITEMS
@@ -214,6 +215,16 @@ function SidebarContent({
           </Link>
         )
       })}
+
+      <button
+        type="button"
+        onClick={onLogout}
+        className="mt-auto flex items-center gap-3 px-4 py-2.5 rounded-full text-sm transition-all hover:bg-[#F5F5F5]"
+        style={{ fontFamily: 'var(--font-sans)', fontWeight: 500, color: '#6F6F6F' }}
+      >
+        <LogOut size={16} style={{ opacity: 0.55 }} />
+        Sair
+      </button>
     </nav>
   )
 }
