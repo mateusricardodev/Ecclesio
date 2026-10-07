@@ -48,6 +48,10 @@ model User {
   // preenchido no primeiro login com Google (ou ao vincular a uma conta
   // existente com o mesmo e-mail verificado).
   googleId          String?          @unique
+  // false quando a senha gravada é aleatória e ninguém a conhece (conta criada
+  // pelo Google ou conta-sombra). Nesse caso "alterar senha" vira "definir
+  // senha" e não pede a senha atual.
+  hasPassword       Boolean          @default(true)
   // Conta de recebimento do organizador, usada nos saques da carteira. A chave
   // é dado pessoal (LGPD): nunca logue nem exponha fora das rotas do dono.
   pixKey            String?
