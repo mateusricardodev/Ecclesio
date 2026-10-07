@@ -245,10 +245,6 @@ export function LandingPage() {
                 A equipe de um retiro, de um encontro ou de uma missa campal deveria gastar o tempo com as pessoas,
                 e não conferindo lista e comprovante. O Ecclesio existe para cuidar dessa parte.
               </p>
-              <div className="flex flex-col gap-2">
-                <p className="text-[15px] text-ecc-ink">Ecclesio</p>
-                <p className="ecc-eyebrow">Feito para a missão da Igreja</p>
-              </div>
             </div>
           </section>
 
