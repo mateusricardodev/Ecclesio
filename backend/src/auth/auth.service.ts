@@ -3,6 +3,7 @@ import {
   ConflictException,
   UnauthorizedException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -11,6 +12,8 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { GoogleTokenVerifier } from './google-token.verifier.js';
+import { UpdateProfileDto } from './dto/update-profile.dto.js';
+import { ChangePasswordDto } from './dto/change-password.dto.js';
 
 @Injectable()
 export class AuthService {
@@ -40,14 +43,31 @@ export class AuthService {
 
         return await this.prisma.db.user.update({
           where: { id: exists.id },
-          data: { name: dto.name, password: hashed, isShadow: false },
-          select: { id: true, name: true, email: true, role: true, createdAt: true },
+          data: {
+            name: dto.name,
+            password: hashed,
+            isShadow: false,
+            hasPassword: true,
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            createdAt: true,
+          },
         });
       }
 
       const user = await this.prisma.db.user.create({
         data: { name: dto.name, email: dto.email, password: hashed },
-        select: { id: true, name: true, email: true, role: true, createdAt: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+        },
       });
 
       return user;
@@ -109,6 +129,7 @@ export class AuthService {
             name: profile.name,
             email: profile.email,
             password,
+            hasPassword: false,
             googleId: profile.googleId,
           },
         });
@@ -131,9 +152,49 @@ export class AuthService {
   async me(userId: string) {
     const user = await this.prisma.db.user.findUnique({
       where: { id: userId },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        hasPassword: true,
+        googleId: true,
+      },
     });
     if (!user) throw new NotFoundException('Usuário não encontrado');
-    return user;
+
+    // O googleId em si não sai daqui; a tela só precisa saber se há vínculo.
+    const { googleId, ...rest } = user;
+    return { ...rest, googleConnected: googleId !== null };
+  }
+
+  async updateProfile(userId: string, dto: UpdateProfileDto) {
+    const name = dto.name.trim();
+    if (!name) throw new BadRequestException('Informe o nome');
+
+    await this.prisma.db.user.update({ where: { id: userId }, data: { name } });
+    return this.me(userId);
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    const user = await this.prisma.db.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+
+    if (user.hasPassword) {
+      const valid =
+        !!dto.currentPassword &&
+        (await bcrypt.compare(dto.currentPassword, user.password));
+      if (!valid) throw new BadRequestException('Senha atual incorreta');
+    }
+
+    const password = await bcrypt.hash(dto.newPassword, 10);
+    await this.prisma.db.user.update({
+      where: { id: userId },
+      data: { password, hasPassword: true },
+    });
+    return { ok: true };
   }
 }

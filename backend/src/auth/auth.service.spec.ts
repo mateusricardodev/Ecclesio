@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service.js';
@@ -149,13 +149,14 @@ describe('AuthService', () => {
   // me
 
   describe('me', () => {
-    it('retorna dados do usuário por id', async () => {
-      const user = { id: 'u1', name: 'João', email: 'joao@test.com', role: 'user', createdAt: new Date() };
-      mockDb.user.findUnique.mockResolvedValue(user);
+    it('retorna dados do usuário por id, sem expor o googleId', async () => {
+      const base = { id: 'u1', name: 'João', email: 'joao@test.com', role: 'user', createdAt: new Date(), hasPassword: true };
+      mockDb.user.findUnique.mockResolvedValue({ ...base, googleId: 'g-123' });
 
       const result = await service.me('u1');
 
-      expect(result).toEqual(user);
+      expect(result).toEqual({ ...base, googleConnected: true });
+      expect(result).not.toHaveProperty('googleId');
       expect(mockDb.user.findUnique).toHaveBeenCalledWith({ where: { id: 'u1' }, select: expect.any(Object) });
     });
 
@@ -238,6 +239,65 @@ describe('AuthService', () => {
 
       await expect(service.loginWithGoogle('forjado')).rejects.toThrow(UnauthorizedException);
       expect(mockDb.user.findUnique).not.toHaveBeenCalled();
+    });
+  });
+
+  // updateProfile
+
+  describe('updateProfile', () => {
+    it('grava o nome sem espaços nas pontas', async () => {
+      mockDb.user.update.mockResolvedValue({});
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', name: 'Maria', googleId: null });
+
+      await service.updateProfile('u1', { name: '  Maria  ' });
+
+      expect(mockDb.user.update).toHaveBeenCalledWith({ where: { id: 'u1' }, data: { name: 'Maria' } });
+    });
+
+    it('recusa nome só com espaços', async () => {
+      await expect(service.updateProfile('u1', { name: '   ' })).rejects.toThrow(BadRequestException);
+      expect(mockDb.user.update).not.toHaveBeenCalled();
+    });
+  });
+
+  // changePassword
+
+  describe('changePassword', () => {
+    it('troca a senha quando a atual confere', async () => {
+      const hashed = await bcrypt.hash('Antiga123', 10);
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', password: hashed, hasPassword: true });
+      mockDb.user.update.mockResolvedValue({});
+
+      await service.changePassword('u1', { currentPassword: 'Antiga123', newPassword: 'Nova1234' });
+
+      const { data } = mockDb.user.update.mock.calls[0][0];
+      expect(data.hasPassword).toBe(true);
+      expect(await bcrypt.compare('Nova1234', data.password)).toBe(true);
+    });
+
+    it('recusa com 400 (não 401, que derrubaria a sessão) quando a senha atual está errada', async () => {
+      const hashed = await bcrypt.hash('Antiga123', 10);
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', password: hashed, hasPassword: true });
+
+      await expect(
+        service.changePassword('u1', { currentPassword: 'errada', newPassword: 'Nova1234' }),
+      ).rejects.toThrow(BadRequestException);
+      expect(mockDb.user.update).not.toHaveBeenCalled();
+    });
+
+    it('exige a senha atual quando a conta tem senha', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', password: 'hash', hasPassword: true });
+
+      await expect(service.changePassword('u1', { newPassword: 'Nova1234' })).rejects.toThrow(BadRequestException);
+    });
+
+    it('deixa conta criada pelo Google definir a primeira senha sem a atual', async () => {
+      mockDb.user.findUnique.mockResolvedValue({ id: 'u1', password: 'hash-aleatorio', hasPassword: false });
+      mockDb.user.update.mockResolvedValue({});
+
+      await service.changePassword('u1', { newPassword: 'Nova1234' });
+
+      expect(mockDb.user.update.mock.calls[0][0].data.hasPassword).toBe(true);
     });
   });
 });

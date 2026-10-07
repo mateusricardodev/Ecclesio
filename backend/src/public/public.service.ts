@@ -251,7 +251,7 @@ export class PublicService {
       if (!user) {
         const randomPassword = await bcrypt.hash(randomBytes(32).toString('hex'), 10);
         user = await tx.user.create({
-          data: { name: dto.fullName, email: dto.email, password: randomPassword, isShadow: true },
+          data: { name: dto.fullName, email: dto.email, password: randomPassword, isShadow: true, hasPassword: false },
         });
       }
 
