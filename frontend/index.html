@@ -8,7 +8,9 @@
     <title>Ecclesio</title>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Link estático para a política: o Google confere que a página inicial
+         aponta para ela lendo o HTML cru. O React substitui isto ao montar. -->
+    <div id="root"><a href="/privacidade" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Política de privacidade</a></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
