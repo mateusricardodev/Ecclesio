@@ -4,6 +4,7 @@ import { EventWizardHeader } from '../components/EventWizardHeader'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { WizardField, WizardCard, WizardInput, WizardSelect, WizardTextarea, wizardPrimaryBtn } from '../components/WizardShared'
 import api from '../api/axios'
+import { formatPhone, isCompletePhone } from '../lib/phone'
 
 const CATEGORIES = [
   'Acampamentos', 'Ação Social', 'Conferências', 'Congressos', 'Cultos',
@@ -25,13 +26,19 @@ export function CreateEvent() {
     const { name, value } = e.target
     setForm((f) => ({
       ...f,
-      [name]: name === 'slug' ? value.toLowerCase().replace(/[^a-z0-9-]/g, '-') : value,
+      [name]: name === 'slug' ? value.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+        : name === 'organizerPhone' ? formatPhone(value)
+        : value,
     }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    if (form.organizerPhone && !isCompletePhone(form.organizerPhone)) {
+      setError('Telefone do organizador incompleto — informe DDD e número')
+      return
+    }
     setLoading(true)
     try {
       const { data } = await api.post('/events', {
@@ -125,7 +132,7 @@ export function CreateEvent() {
             </WizardField>
 
             <WizardField label="Telefone do organizador">
-              <WizardInput name="organizerPhone" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
+              <WizardInput name="organizerPhone" type="tel" inputMode="tel" autoComplete="tel" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
             </WizardField>
 
             <WizardField label="Link do grupo de WhatsApp">

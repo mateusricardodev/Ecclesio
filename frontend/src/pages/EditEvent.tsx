@@ -4,6 +4,7 @@ import { EventWizardHeader } from '../components/EventWizardHeader'
 import { DashboardLayout } from '../components/DashboardLayout'
 import { WizardField, WizardCard, WizardInput, WizardSelect, wizardNavBtn, wizardPrimaryBtn, wizardSecondaryBtn } from '../components/WizardShared'
 import api from '../api/axios'
+import { formatPhone, isCompletePhone } from '../lib/phone'
 
 const CATEGORIES = [
   'Acampamentos', 'Ação Social', 'Conferências', 'Congressos', 'Cultos',
@@ -42,7 +43,7 @@ export function EditEvent() {
           date:            toDateInput(data.date),
           endDate:         toDateInput(data.endDate),
           location:        data.location ?? '',
-          organizerPhone:  data.organizerPhone ?? '',
+          organizerPhone:  formatPhone(data.organizerPhone ?? ''),
           whatsappGroupUrl: data.whatsappGroupUrl ?? '',
         })
       })
@@ -54,7 +55,9 @@ export function EditEvent() {
     const { name, value } = e.target
     setForm((f) => ({
       ...f,
-      [name]: name === 'slug' ? value.toLowerCase().replace(/[^a-z0-9-]/g, '-') : value,
+      [name]: name === 'slug' ? value.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+        : name === 'organizerPhone' ? formatPhone(value)
+        : value,
     }))
   }
 
@@ -62,6 +65,9 @@ export function EditEvent() {
     if (!id) return false
     if (!form.title.trim()) { setError('Nome do evento é obrigatório'); return false }
     if (!form.date)          { setError('Data de início é obrigatória'); return false }
+    if (form.organizerPhone && !isCompletePhone(form.organizerPhone)) {
+      setError('Telefone do organizador incompleto — informe DDD e número'); return false
+    }
     setError('')
     setSaving(true)
     setSaved(false)
@@ -167,7 +173,7 @@ export function EditEvent() {
             </WizardField>
 
             <WizardField label="Telefone do organizador">
-              <WizardInput name="organizerPhone" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
+              <WizardInput name="organizerPhone" type="tel" inputMode="tel" autoComplete="tel" value={form.organizerPhone} onChange={handleChange} placeholder="(11) 99999-9999" />
             </WizardField>
 
             <WizardField label="Link do grupo de WhatsApp">
