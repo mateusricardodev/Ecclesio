@@ -294,6 +294,10 @@ JWT_SECRET="sua-chave-secreta"
 FRONTEND_URL="http://localhost:5173"
 PORT=3000
 
+# Login com Google: ID do cliente OAuth (Google Cloud → Google Auth Platform →
+# Clientes, tipo "Aplicativo da Web"). Sem ele, POST /auth/google responde 503.
+GOOGLE_CLIENT_ID=""
+
 PAYMENT_PROVIDER=mock
 
 MERCADOPAGO_ACCESS_TOKEN=""
@@ -360,6 +364,8 @@ Crie o `.env`:
 
 ```env
 VITE_API_URL="http://localhost:3000"
+# Mesmo ID do GOOGLE_CLIENT_ID do backend. Sem ele o botão do Google some.
+VITE_GOOGLE_CLIENT_ID=""
 ```
 
 Execute:
