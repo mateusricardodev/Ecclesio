@@ -44,6 +44,10 @@ model User {
   // aleatórios, nunca escolhida por alguém. Só contas com isShadow=true têm
   // o nome propagado quando o organizador edita uma inscrição vinculada.
   isShadow          Boolean          @default(false)
+  // "sub" do ID token do Google — identificador estável da conta Google,
+  // preenchido no primeiro login com Google (ou ao vincular a uma conta
+  // existente com o mesmo e-mail verificado).
+  googleId          String?          @unique
   // Conta de recebimento do organizador, usada nos saques da carteira. A chave
   // é dado pessoal (LGPD): nunca logue nem exponha fora das rotas do dono.
   pixKey            String?
