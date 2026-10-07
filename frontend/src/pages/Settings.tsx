@@ -26,6 +26,18 @@ interface MyRegistration {
 
 const PAGE_SIZE = 10
 
+// Mesmo contato da política de privacidade.
+const SUPPORT_EMAIL = 'mateus.ricardo761919@gmail.com'
+
+function changeEmailHref(currentEmail: string) {
+  const subject = 'Troca de e-mail da conta'
+  const body = `Olá! Quero trocar o e-mail da minha conta no Ecclesio.
+
+E-mail atual: ${currentEmail}
+Novo e-mail: `
+  return `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
 const STATUS_BADGE: Record<MyRegistration['status'], { label: string; bg: string; color: string }> = {
   confirmed: { label: 'Confirmada', bg: '#F0FDF4', color: '#166534' },
   pending: { label: 'Aguardando pagamento', bg: '#FFFBEB', color: '#92400E' },
@@ -138,7 +150,10 @@ function ProfileCard({ me, onSaved }: { me: Me; onSaved: (user: Me) => void }) {
             className={inputClass}
           />
         </Field>
-        <Field label="E-mail" hint="É o seu login. Para trocar, fale com o suporte.">
+        <Field
+          label="E-mail"
+          hint={<>É o seu login. Para trocar, <a href={changeEmailHref(me.email)} className="text-ecc-navy underline">fale com o suporte</a>.</>}
+        >
           <input value={me.email} readOnly className={`${inputClass} bg-[#F9F9F9] text-ecc-text cursor-not-allowed`} />
         </Field>
         <p className="text-xs text-ecc-faint">
@@ -349,7 +364,7 @@ function CardFooter({ msg, children }: { msg: Msg; children: React.ReactNode }) 
   )
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: React.ReactNode; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-xs font-medium text-ecc-ink">{label}</span>
