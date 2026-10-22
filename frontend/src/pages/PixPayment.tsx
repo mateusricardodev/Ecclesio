@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import QRCode from 'qrcode'
 import api, { API_BASE_URL } from '../api/axios'
+import { usePageMeta } from '../lib/seo'
 import { downloadTicketPdf } from '../lib/ticketPdf'
 
 /**
@@ -71,6 +72,7 @@ function WhatsAppGroupCard({ url }: { url: string }) {
 }
 
 export function PixPayment() {
+  usePageMeta({ title: 'Pagamento PIX | Ecclesio', noindex: true })
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const location = useLocation()

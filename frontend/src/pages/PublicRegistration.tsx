@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import api, { API_BASE_URL } from '../api/axios'
+import { usePageMeta } from '../lib/seo'
 import { formatBRL } from '../lib/money'
 
 interface PaymentMethod {
@@ -120,6 +121,12 @@ export function PublicRegistration() {
     fullName: '', email: '', cpf: '', phone: '', birthDate: '',
     termsAccepted: false,
     extra: {} as Record<string, string>,
+  })
+
+  usePageMeta({
+    title: event ? `Inscrição: ${event.title} | Ecclesio` : 'Inscrição | Ecclesio',
+    path: `/evento/${slug}/inscricao`,
+    noindex: notFound,
   })
 
   useEffect(() => {

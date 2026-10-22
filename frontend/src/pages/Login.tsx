@@ -4,6 +4,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import api from '../api/axios'
 import { useAuthStore } from '../store/auth.store'
+import { usePageMeta } from '../lib/seo'
 
 type Mode = 'login' | 'register'
 
@@ -18,6 +19,7 @@ function safeRedirect(raw: string | null): string {
 }
 
 export function Login() {
+  usePageMeta({ title: 'Entrar | Ecclesio', path: '/login', noindex: true })
   const [searchParams] = useSearchParams()
   const [mode, setMode] = useState<Mode>(searchParams.get('modo') === 'cadastro' ? 'register' : 'login')
 

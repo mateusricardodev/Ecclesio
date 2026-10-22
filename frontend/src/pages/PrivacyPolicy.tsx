@@ -3,8 +3,14 @@ import { Link } from 'react-router-dom'
 import { LandingNavbar } from '../components/LandingNavbar'
 import { Footer } from '../components/Footer'
 import { PrivacyContent } from './PrivacyContent'
+import { usePageMeta } from '../lib/seo'
 
 export function PrivacyPolicy() {
+  usePageMeta({
+    title: 'Política de Privacidade | Ecclesio',
+    description: 'Quais dados pessoais o Ecclesio coleta, para que são usados, com quem são compartilhados e como exercer seus direitos pela LGPD.',
+    path: '/privacidade/',
+  })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (

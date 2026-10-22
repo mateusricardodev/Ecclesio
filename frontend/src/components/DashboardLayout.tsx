@@ -5,6 +5,7 @@ import {
   Wallet, Banknote,
 } from 'lucide-react'
 import { useAuthStore } from '../store/auth.store'
+import { usePageMeta } from '../lib/seo'
 
 const NAV_ITEMS = [
   { label: 'Painel', icon: LayoutDashboard, to: '/dashboard', key: 'dashboard' },
@@ -29,6 +30,8 @@ export function DashboardLayout({
   children: React.ReactNode
 }) {
   const navigate = useNavigate()
+  // Todo o painel do organizador fica fora da busca.
+  usePageMeta({ title: 'Painel | Ecclesio', noindex: true })
   const { user, logout } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 

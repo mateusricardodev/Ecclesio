@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { LandingNavbar } from '../components/LandingNavbar'
 import { Footer } from '../components/Footer'
+import { usePageMeta } from '../lib/seo'
 
 const BENEFITS = [
   {
@@ -134,6 +135,8 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export function LandingPage() {
+  usePageMeta({ path: '/' })
+
   return (
     <div className="min-h-screen bg-white">
       <LandingNavbar />

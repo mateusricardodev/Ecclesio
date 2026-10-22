@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import api, { API_BASE_URL } from '../api/axios'
 import { formatBRL } from '../lib/money'
+import { usePageMeta, absoluteUrl, toDescription } from '../lib/seo'
 
 interface PaymentMethod {
   id: string
@@ -19,6 +20,7 @@ interface EventData {
   date: string
   endDate: string | null
   location: string | null
+  description: string | null
   about: string | null
   isPublished: boolean
   category: string | null
@@ -40,6 +42,19 @@ export function EventPublic() {
   const [event, setEvent]           = useState<EventData | null>(null)
   const [loading, setLoading]       = useState(true)
   const [notFound, setNotFound]     = useState(false)
+
+  usePageMeta(
+    notFound
+      ? { title: 'Evento não encontrado | Ecclesio', noindex: true }
+      : event
+        ? {
+            title: `${event.title} | Inscrição – Ecclesio`,
+            description: eventDescription(event),
+            image: event.bannerUrl ? absoluteUrl(`${API_BASE_URL}${event.bannerUrl}`) : undefined,
+            path: `/evento/${event.slug}`,
+          }
+        : { path: `/evento/${slug}` },
+  )
 
   useEffect(() => {
     if (!slug) return
@@ -168,4 +183,14 @@ export function EventPublic() {
       </div>
     </div>
   )
+}
+
+// Descrição do evento para busca: usa o resumo que o organizador escreveu e,
+// na falta dele, monta uma a partir de data e local.
+function eventDescription(event: EventData): string {
+  const text = event.description || event.about
+  if (text?.trim()) return toDescription(text)
+  const date = new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' })
+  const where = event.location ? ` em ${event.location}` : ''
+  return toDescription(`Inscrições para ${event.title}, ${date}${where}. Faça sua inscrição online pelo Ecclesio.`)
 }

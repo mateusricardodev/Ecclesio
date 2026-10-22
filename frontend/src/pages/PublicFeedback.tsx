@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { CheckCircle2 } from 'lucide-react'
 import api, { API_BASE_URL } from '../api/axios'
+import { usePageMeta } from '../lib/seo'
 
 interface FeedbackForm {
   eventTitle: string
@@ -38,6 +39,7 @@ const FIELD: React.CSSProperties = {
 }
 
 export function PublicFeedback() {
+  usePageMeta({ title: 'Avaliação do evento | Ecclesio', noindex: true })
   const { slug } = useParams<{ slug: string }>()
   const [searchParams] = useSearchParams()
   const registrationId = searchParams.get('r') ?? undefined
