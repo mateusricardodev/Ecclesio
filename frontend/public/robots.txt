@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Áreas logadas (painel do organizador, admin e app de credenciamento)
+Disallow: /dashboard
+Disallow: /eventos
+Disallow: /events/
+Disallow: /buscar-inscricoes
+Disallow: /financeiro
+Disallow: /configuracoes
+Disallow: /admin/
+Disallow: /app
+
+# Login e cadastro
+Disallow: /login
+Disallow: /register
+
+# Etapas do participante que não devem aparecer em busca
+Disallow: /evento/*/pagamento-pix
+Disallow: /evento/*/avaliacao
+
+Sitemap: https://ecclesio.com.br/sitemap.xml
