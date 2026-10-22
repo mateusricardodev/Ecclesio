@@ -35,12 +35,16 @@ function prerenderPrivacyPolicy(): Plugin {
         )
 
         const dist = fileURLToPath(new URL('./dist', import.meta.url))
-        const html = (await readFile(resolve(dist, 'index.html'), 'utf-8'))
-          .replace('<title>Ecclesio</title>', '<title>Política de Privacidade · Ecclesio</title>')
+        const title = 'Política de Privacidade | Ecclesio'
+        const description =
+          'Quais dados pessoais o Ecclesio coleta, para que são usados, com quem são compartilhados e como exercer seus direitos pela LGPD.'
+        const url = 'https://ecclesio.com.br/privacidade/'
+
+        const html = setHeadTags(await readFile(resolve(dist, 'index.html'), 'utf-8'), { title, description, url })
           .replace(/<div id="root">[\s\S]*?<\/div>\s*<\/body>/, `<div id="root">${body}</div>
   </body>`)
 
-        if (!html.includes('Política de Privacidade</h1>')) {
+        if (!html.includes('Política de Privacidade</h1>') || !html.includes(`<title>${title}</title>`)) {
           throw new Error('prerender da política de privacidade não entrou no HTML')
         }
 
@@ -51,6 +55,18 @@ function prerenderPrivacyPolicy(): Plugin {
       }
     },
   }
+}
+
+// Troca título, descrição, canonical e as tags de compartilhamento do index.html
+// gerado, para uma página que tem HTML estático próprio.
+function setHeadTags(html: string, { title, description, url }: { title: string; description: string; url: string }) {
+  const attr = (v: string) => v.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+  return html
+    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
+    .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*"/g, `$1${attr(description)}"`)
+    .replace(/(<meta (?:property|name)="(?:og:title|twitter:title)" content=")[^"]*"/g, `$1${attr(title)}"`)
+    .replace(/(<meta property="og:url" content=")[^"]*"/, `$1${url}"`)
+    .replace(/(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
 }
 
 export default defineConfig({
