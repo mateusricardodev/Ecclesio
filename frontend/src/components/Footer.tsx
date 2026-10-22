@@ -22,7 +22,7 @@ export function Footer() {
 
         <div className="flex flex-wrap items-end gap-x-10 gap-y-4">
           <Link to="/" className="shrink-0">
-            <img src="/logo-horizontal.png" alt="Ecclesio" className="h-10 object-contain" />
+            <img src="/logo-horizontal.png" alt="Ecclesio" loading="lazy" className="h-10 object-contain" />
           </Link>
           <p className="ecc-eyebrow flex-1 flex gap-4">
             <span>© Ecclesio.</span>

@@ -129,7 +129,8 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         </span>
         {open ? <Minus size={18} className="shrink-0 text-ecc-navy" /> : <Plus size={18} className="shrink-0 text-ecc-navy" />}
       </button>
-      {open && <p className="ecc-paragraph pb-6 pr-10 max-w-2xl">{a}</p>}
+      {/* Sempre no HTML (só escondido) para a resposta ser indexada pela busca. */}
+      <p hidden={!open} className="ecc-paragraph pb-6 pr-10 max-w-2xl">{a}</p>
     </div>
   )
 }
@@ -149,8 +150,8 @@ export function LandingPage() {
               Do convite ao <span className="whitespace-nowrap">check-in.</span>
             </h1>
             <p className="ecc-paragraph max-w-xl">
-              O Ecclesio organiza as inscrições dos eventos da sua paróquia ou comunidade: formulário,
-              pagamento por PIX, lista de inscritos e credenciamento na entrada.
+              O Ecclesio organiza a inscrição para eventos de igrejas, paróquias, ministérios e comunidades:
+              formulário personalizado, pagamento via PIX, lista de inscritos e credenciamento na entrada.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <Link to="/login?modo=cadastro" className="ecc-btn ecc-btn-primary">
