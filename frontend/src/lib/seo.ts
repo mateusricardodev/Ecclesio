@@ -39,6 +39,25 @@ export function usePageMeta(meta: PageMeta) {
   }, [title, description, image, path, noindex])
 }
 
+/**
+ * Dados estruturados (JSON-LD) da página, ex.: o schema.org/Event de um evento.
+ * Fica num <script> próprio, removido ao sair da página; o bloco fixo do
+ * index.html (Organization/SoftwareApplication) não é tocado.
+ */
+export function useJsonLd(data: object | null) {
+  const json = data ? JSON.stringify(data) : null
+
+  useEffect(() => {
+    if (!json) return
+    const el = document.createElement('script')
+    el.type = 'application/ld+json'
+    el.dataset.page = 'true'
+    el.text = json
+    document.head.appendChild(el)
+    return () => el.remove()
+  }, [json])
+}
+
 /** Monta uma URL absoluta para imagens servidas pela API (ex.: banner em /uploads). */
 export function absoluteUrl(url: string): string {
   return new URL(url, window.location.origin).href

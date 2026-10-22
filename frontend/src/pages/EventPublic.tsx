@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import api, { API_BASE_URL } from '../api/axios'
 import { formatBRL } from '../lib/money'
-import { usePageMeta, absoluteUrl, toDescription } from '../lib/seo'
+import { usePageMeta, useJsonLd, absoluteUrl, toDescription, SITE_URL } from '../lib/seo'
 
 interface PaymentMethod {
   id: string
@@ -55,6 +55,7 @@ export function EventPublic() {
           }
         : { path: `/evento/${slug}` },
   )
+  useJsonLd(event ? eventJsonLd(event) : null)
 
   useEffect(() => {
     if (!slug) return
@@ -193,4 +194,39 @@ function eventDescription(event: EventData): string {
   const date = new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' })
   const where = event.location ? ` em ${event.location}` : ''
   return toDescription(`Inscrições para ${event.title}, ${date}${where}. Faça sua inscrição online pelo Ecclesio.`)
+}
+
+// schema.org/Event com os dados reais do evento, para o Google entender a
+// página (e poder mostrá-la como evento nos resultados).
+function eventJsonLd(event: EventData) {
+  const dateOnly = (iso: string) => iso.slice(0, 10) // datas do evento são só dia (meia-noite UTC)
+  const url = `${SITE_URL}/evento/${event.slug}`
+  // Valor que o participante paga de fato (inscrição + taxa), igual ao exibido na página.
+  const prices = event.paymentMethods.map((m) => Number(m.totalAmount ?? m.value)).filter((v) => Number.isFinite(v))
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.title,
+    startDate: dateOnly(event.date),
+    ...(event.endDate && { endDate: dateOnly(event.endDate) }),
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    ...(event.location && {
+      location: { '@type': 'Place', name: event.location, address: event.location },
+    }),
+    description: eventDescription(event),
+    ...(event.bannerUrl && { image: [absoluteUrl(`${API_BASE_URL}${event.bannerUrl}`)] }),
+    url,
+    ...(event.user?.name && { organizer: { '@type': 'Organization', name: event.user.name } }),
+    ...(prices.length > 0 && {
+      offers: {
+        '@type': 'Offer',
+        price: Math.min(...prices).toFixed(2),
+        priceCurrency: 'BRL',
+        availability: 'https://schema.org/InStock',
+        url: `${url}/inscricao`,
+      },
+    }),
+  }
 }
