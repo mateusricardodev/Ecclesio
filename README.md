@@ -1,333 +1,186 @@
 # Ecclesio
 
-> **Plataforma completa para criação, gerenciamento e credenciamento de eventos.**
+> Event registration, payments and QR check-in for churches, ministries and communities.
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react)](https://react.dev/)
-[![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?style=for-the-badge\&logo=nestjs)](https://nestjs.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge\&logo=typescript)](https://www.typescriptlang.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge\&logo=postgresql)](https://www.postgresql.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7-2D3748?style=for-the-badge\&logo=prisma)](https://www.prisma.io/)
-[![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge\&logo=vite)](https://vitejs.dev/)
+<p>
+  <a href="https://ecclesio.com.br/"><img src="frontend/public/logo-horizontal.png" alt="Ecclesio" height="42"></a>
+</p>
 
----
+<p>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=20232A" alt="React 19"></a>
+  <a href="https://nestjs.com/"><img src="https://img.shields.io/badge/NestJS-11-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS 11"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-15%2B-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 15+"></a>
+  <a href="https://www.prisma.io/"><img src="https://img.shields.io/badge/Prisma-7-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma 7"></a>
+</p>
 
-## Sobre o projeto
+## Overview
 
-O **Ecclesio** é uma plataforma full-stack desenvolvida para simplificar a criação e gerenciamento de eventos.
+Ecclesio is a full-stack platform built to simplify the complete event journey for churches and communities: from the public invitation and registration form to online payment, ticket delivery and entrance check-in.
 
-A solução permite que organizadores criem eventos, configurem formulários personalizados, definam formas de pagamento e acompanhem inscrições através de um painel administrativo.
+The goal is simple: event teams should spend their time with people, not searching through spreadsheets, payment screenshots and paper lists.
 
-Para os participantes, o sistema oferece uma experiência completa de inscrição, pagamento via PIX e recebimento de ingresso com QR Code.
+**Live application:** [ecclesio.com.br](https://ecclesio.com.br/)
 
-O projeto também possui um módulo específico para **credenciamento**, permitindo realizar check-in através de QR Code ou busca por nome/CPF.
+**Repository:** [github.com/mateusricardodev/Ecclesio](https://github.com/mateusricardodev/Ecclesio)
 
----
+## Product flow
 
-## Problema
+![Ecclesio event flow](docs/assets/event-flow.svg)
 
-Gerenciar inscrições de eventos manualmente pode gerar:
+1. **Create the event** — define dates, location, capacity, payment methods and registration fields.
+2. **Share the link** — publish a public event page and send it to the community.
+3. **Manage registrations** — follow participants, payment status and available capacity from the dashboard.
+4. **Check in at the door** — scan each ticket's QR code from a phone or find the participant by name or CPF.
 
-* Planilhas descentralizadas
-* Erros de cadastro
-* Dificuldade para acompanhar pagamentos
-* Filas no credenciamento
-* Falta de informações centralizadas
-* Processos manuais demorados
+## Product preview
 
-### Solução
+<p align="center">
+  <img src="frontend/public/og-image.png" alt="Ecclesio product preview" width="900">
+</p>
 
-O inscrições.app centraliza todo o fluxo:
+The interface uses an editorial visual language with a navy, gold and white palette, designed to keep the experience clear for organizers, participants and volunteers.
 
-```text
-Criar evento
-     ↓
-Configurar formulário
-     ↓
-Publicar evento
-     ↓
-Participante se inscreve
-     ↓
-Pagamento PIX
-     ↓
-Confirmação
-     ↓
-Ingresso com QR Code
-     ↓
-Check-in no evento
-```
+## Features
 
----
+### For organizers
 
-## Principais funcionalidades
+- Create and publish events through a four-step wizard.
+- Upload event banners and configure public event pages.
+- Build custom registration forms with optional fields such as address, emergency contact, responsible person and medication information.
+- Set capacity limits and prevent duplicate CPF registrations within the same event.
+- Manage registrations, search by name or CPF, edit records and resend confirmation emails.
+- Confirm cash payments manually or receive online payment updates automatically.
+- Export participant lists for the event team.
+- Add volunteers with access restricted to a specific event.
+- Send post-event satisfaction surveys.
+- Track online-registration revenue in the organizer wallet and request PIX payouts.
 
-### Organizador
+### For participants
 
-* Cadastro e login
-* Autenticação via JWT
-* Criação de eventos
-* Wizard de criação em 4 etapas
-* Upload de banners
-* Formulários personalizados
-* Configuração de pagamentos
-* Controle de capacidade
-* Dashboard
-* Gerenciamento de inscrições
-* Busca global
-* Inscrição manual
-* Cancelamento de inscrições
-* Confirmação manual de pagamentos
+- Register through a public link without creating an account.
+- Pay by PIX through Mercado Pago or follow the event's configured payment instructions.
+- Receive confirmation by email.
+- Access a ticket with a unique QR code.
+- View registrations and payment details from the authenticated participant area.
 
-### Participante
+### For check-in teams
 
-* Visualização pública do evento
-* Inscrição sem necessidade de login
-* Formulários personalizados
-* Pagamento via PIX
-* QR Code PIX
-* Código copia-e-cola
-* Confirmação automática via webhook
-* E-mail de confirmação
-* Ingresso em PDF
-* QR Code para credenciamento
+- Scan QR codes with a mobile-friendly interface.
+- Search by participant name or CPF when scanning is not available.
+- Record attendance and view check-in history and statistics.
+- Keep volunteer access scoped to the event they are helping with.
 
-### Credenciamento
+### Authentication and account settings
 
-O sistema possui uma área específica para check-in:
+- JWT-based email and password authentication.
+- Google Sign-In using Google Identity Services and server-side ID-token verification.
+- Existing accounts are linked by verified email when the user signs in with Google.
+- Shadow accounts created during public registration can be claimed through email registration or Google Sign-In without losing event history.
+- Account settings for profile name, password creation/change, Google connection status and participant registration history.
 
-* Leitura de QR Code
-* Busca por nome
-* Busca por CPF
-* Registro de presença
-* Histórico de check-ins
-* Estatísticas de presença
+## Technical architecture
 
-### Segurança
+![Ecclesio architecture](docs/assets/architecture.svg)
 
-* JWT Authentication
-* Autorização por proprietário do recurso
-* Rate limiting
-* Helmet
-* CORS
-* Validação de uploads
-* Validação por Magic Bytes
-* Soft delete para cancelamentos
-* Transações com isolamento `Serializable`
-
----
-
-## Arquitetura
-
-O projeto utiliza uma arquitetura monorepo com duas aplicações independentes:
+The repository is a monorepo containing two independent applications:
 
 ```text
 Ecclesio/
-│
-├── backend/
-│   ├── src/
-│   ├── prisma/
-│   └── generated/
-│
-└── frontend/
-    ├── src/
-    ├── components/
-    ├── pages/
-    └── ...
+├── backend/       NestJS REST API, Prisma and PostgreSQL
+├── frontend/      React SPA, Vite and Tailwind CSS
+└── docs/assets/   README visuals
 ```
-
-### Backend
-
-API REST desenvolvida com NestJS.
-
-```text
-Frontend
-   │
-   ▼
-REST API
-   │
-   ▼
-NestJS
-   │
-   ├── Auth
-   ├── Events
-   ├── Registrations
-   ├── Payments
-   ├── Check-in
-   └── Tickets
-   │
-   ▼
-Prisma ORM
-   │
-   ▼
-PostgreSQL
-```
-
----
-
-## Stack tecnológica
 
 ### Frontend
 
-| Tecnologia     | Função           |
-| -------------- | ---------------- |
-| React 19       | Interface        |
-| Vite           | Build/dev server |
-| TypeScript     | Tipagem          |
-| Tailwind CSS 4 | UI               |
-| Zustand        | Estado global    |
-| React Router 7 | Roteamento       |
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS 4
+- React Router 7
+- Zustand
+- Axios
+- QR code scanning with ZXing
+- Ticket PDF generation with jsPDF
 
 ### Backend
 
-| Tecnologia   | Função         |
-| ------------ | -------------- |
-| NestJS 11    | API            |
-| TypeScript   | Linguagem      |
-| Prisma 7     | ORM            |
-| PostgreSQL   | Banco de dados |
-| Passport JWT | Autenticação   |
-| Jest         | Testes         |
+- NestJS 11
+- TypeScript
+- Prisma 7 with the PostgreSQL adapter
+- PostgreSQL 15+
+- JWT authentication and Google ID-token verification
+- Jest unit and end-to-end tests
+- Helmet, CORS and rate limiting
+- Upload validation using file magic bytes
+- Serializable transactions for capacity, CPF deduplication and wallet operations
 
-### Integrações
+### Integrations
 
-| Tecnologia   | Função                |
-| ------------ | --------------------- |
-| Mercado Pago | Pagamentos PIX        |
-| Brevo SMTP   | E-mails               |
-| Multer       | Upload de arquivos    |
-| file-type    | Validação de arquivos |
-| QR Code      | Ingressos e check-in  |
+- **Mercado Pago** — PIX payments and webhook confirmation.
+- **Brevo SMTP** — registration and ticket emails.
+- **Google Identity Services** — Google Sign-In.
+- **QR Code** — tickets and check-in.
 
-### Infraestrutura
+## Local development
 
-```text
-Ubuntu
-  │
-  ├── Nginx
-  │
-  ├── PM2
-  │
-  ├── NestJS API
-  │
-  └── React Build
-```
+### Requirements
 
----
+- Node.js 22 or later
+- PostgreSQL 15 or later
+- npm
+- A Mercado Pago account for real payment testing (optional)
+- A Brevo account for email delivery (optional)
+- A Google Cloud OAuth Web Client ID for Google Sign-In (optional during basic local development)
 
-## Modelo de dados
-
-Principais entidades:
-
-```text
-User
- │
- ├── Event
- │    ├── EventPaymentMethod
- │    ├── Registration
- │    │     └── Payment ──┐
- │    ├── Ticket          │
- │    └── CheckinLog      │
- │                        │
- ├── LedgerEntry ◄────────┘
- ├── PayoutRequest
- └── EventVolunteer
-```
-
-O sistema utiliza PostgreSQL como banco de dados e Prisma como camada de acesso.
-
-### Carteira do organizador
-
-Pagamentos online caem na conta da plataforma. O que pertence ao organizador é
-registrado como crédito em `LedgerEntry` e resgatado via `PayoutRequest`:
-
-- `Payment.amount` é o total cobrado; `baseAmount` é a parte do organizador e
-  `feeAmount` a taxa de serviço que fica com a plataforma.
-- **O saldo nunca é uma coluna**: é sempre a soma de `LedgerEntry`. Uma linha
-  entra no saldo sacável quando `availableAt <= agora`; vendas ficam retidas até
-  `PAYOUT_HOLD_DAYS` depois do fim do evento, que é a proteção contra estornar
-  um PIX já resgatado.
-- O crédito nasce no `confirmPayment` do webhook, dentro da mesma transação que
-  marca o pagamento como pago. O índice único de `LedgerEntry.paymentId` é a
-  garantia de que um webhook repetido não credita duas vezes.
-- Pagamento em dinheiro e confirmação manual **não** geram crédito: o valor foi
-  direto para o organizador e nunca passou pela plataforma.
-- Pedir um resgate debita o razão na mesma transação serializável que confere o
-  saldo. Recusar gera uma linha de estorno, em vez de apagar o débito.
-- O repasse em si é manual na v1: o admin envia o PIX e marca como pago em
-  `/admin/saques`.
-
----
-
-## Como executar
-
-### Pré-requisitos
-
-* Node.js 20+
-* PostgreSQL 15+
-* npm
-* Conta Mercado Pago (opcional)
-* Conta Brevo (opcional)
-
----
-
-### 1. Clone o projeto
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/mateusricardodev/Ecclesio.git
 cd Ecclesio
 ```
 
----
-
-### 2. Configure o Backend
+### 2. Configure the backend
 
 ```bash
 cd backend
 npm install
 ```
 
-Crie um arquivo `.env`:
+Create `backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/inscricoes"
-
-JWT_SECRET="sua-chave-secreta"
+DATABASE_URL="postgresql://user:password@localhost:5432/ecclesio"
+JWT_SECRET="replace-with-a-long-random-secret"
 FRONTEND_URL="http://localhost:5173"
 PORT=3000
 
-# Login com Google: ID do cliente OAuth (Google Cloud → Google Auth Platform →
-# Clientes, tipo "Aplicativo da Web"). Sem ele, POST /auth/google responde 503.
-GOOGLE_CLIENT_ID=""
+# Google Cloud → Google Auth Platform → Clients → Web application
+GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
 
+# Use mock outside production to test the payment flow locally.
 PAYMENT_PROVIDER=mock
-
 MERCADOPAGO_ACCESS_TOKEN=""
 MERCADOPAGO_WEBHOOK_SECRET=""
 
-# Taxa de serviço da plataforma, cobrada POR CIMA do valor da inscrição
-# (inscrição de R$ 100 + 5% = participante paga R$ 105 e o organizador
-# recebe R$ 100). Um evento pode sobrescrever via Event.feePercent/feeFixed.
 PLATFORM_FEE_PERCENT=5
 PLATFORM_FEE_FIXED=0
 PLATFORM_FEE_MIN=0
-
-# Carteira: dias de retenção do saldo contados a partir do fim do evento,
-# e valor mínimo de um pedido de resgate.
 PAYOUT_HOLD_DAYS=7
 MIN_PAYOUT_AMOUNT=10
 
 MAIL_HOST="smtp-relay.brevo.com"
 MAIL_PORT=587
 MAIL_SECURE=false
-MAIL_USER="seu@email.com"
-MAIL_PASS="sua-chave"
-MAIL_FROM="Ecclesio <noreply@seudominio.com>"
+MAIL_USER="your-email@example.com"
+MAIL_PASS="your-smtp-key"
+MAIL_FROM="Ecclesio <noreply@example.com>"
 ```
 
-> **Produção (`NODE_ENV=production`):** a API não sobe sem `FRONTEND_URL` (origens liberadas no CORS, separadas por vírgula) e sem `PAYMENT_PROVIDER=mercadopago` + `MERCADOPAGO_ACCESS_TOKEN`. O provider `mock` só funciona fora de produção.
+For Google Sign-In, add `http://localhost:5173` and the production frontend origin to the OAuth client's **Authorized JavaScript origins** in Google Cloud. The same client ID is used by the frontend and backend; the OAuth client secret is not used by this ID-token flow and should never be exposed in the frontend.
 
----
-
-### 3. Configure o banco
+### 3. Prepare the database
 
 ```bash
 npx prisma generate
@@ -335,106 +188,97 @@ npx prisma migrate dev
 npm run seed
 ```
 
----
-
-### 4. Inicie o backend
+### 4. Start the backend
 
 ```bash
 npm run start:dev
 ```
 
-API:
+The API runs at `http://localhost:3000`.
 
-```text
-http://localhost:3000
-```
+### 5. Configure and start the frontend
 
----
-
-### 5. Inicie o frontend
-
-Em outro terminal:
+In a second terminal:
 
 ```bash
 cd frontend
 npm install
 ```
 
-Crie o `.env`:
+Create `frontend/.env`:
 
 ```env
 VITE_API_URL="http://localhost:3000"
-# Mesmo ID do GOOGLE_CLIENT_ID do backend. Sem ele o botão do Google some.
-VITE_GOOGLE_CLIENT_ID=""
+VITE_GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
 ```
 
-Execute:
+Then start the app:
 
 ```bash
 npm run dev
 ```
 
-Frontend:
+The frontend runs at `http://localhost:5173`.
 
-```text
-http://localhost:5173
-```
+## Payment development mode
 
----
-
-## Desenvolvimento com PIX
-
-O projeto possui um provider `mock` para desenvolvimento (bloqueado em produção), permitindo testar o fluxo de pagamento sem utilizar o Mercado Pago.
+The `mock` provider is available outside production so the registration and payment flow can be tested without Mercado Pago:
 
 ```env
 PAYMENT_PROVIDER=mock
 ```
 
-Após realizar uma inscrição, o pagamento pode ser aprovado através da API de desenvolvimento.
+After creating a registration, approve a mock payment with:
 
 ```bash
 curl -X POST http://localhost:3000/payments/mock/<providerPaymentId>/approve
 ```
 
----
+Production requires `PAYMENT_PROVIDER=mercadopago` and a valid `MERCADOPAGO_ACCESS_TOKEN`.
 
-## Testes
+## Testing
 
-### Unitários
+Run backend unit tests:
 
 ```bash
 cd backend
-
 npm test
 ```
 
-### Cobertura
+Run coverage:
 
 ```bash
 npm run test:cov
 ```
 
-### E2E
+Run end-to-end tests:
 
 ```bash
 npm run test:e2e
 ```
 
----
+Build and lint the frontend:
 
-## Principais rotas
-
-### Público
-
-```text
-/
- /login
- /evento/:slug
- /evento/:slug/inscricao
- /evento/:slug/pagamento-pix
+```bash
+cd frontend
+npm run lint
+npm run build
 ```
 
-### Organizador
+## Main routes
+
+### Public
+
+```text
+/                         Landing page
+/login                    Email/password and Google Sign-In
+/privacidade              Privacy policy
+/evento/:slug             Public event page
+/evento/:slug/inscricao   Public registration form
+/evento/:slug/pagamento-pix
+```
+
+### Organizer
 
 ```text
 /dashboard
@@ -446,15 +290,10 @@ npm run test:e2e
 /events/:id/equipe
 /buscar-inscricoes
 /financeiro
+/configuracoes
 ```
 
-### Admin da plataforma
-
-```text
-/admin/saques
-```
-
-### Credenciamento
+### Check-in
 
 ```text
 /app/eventos
@@ -463,52 +302,66 @@ npm run test:e2e
 /app/evento/:id/qrcode
 ```
 
----
+### Platform admin
+
+```text
+/admin/saques
+```
+
+## Security notes
+
+- Passwords are stored as bcrypt hashes.
+- Google ID tokens are verified on the backend against the configured OAuth client ID.
+- Only verified Google email addresses can be linked to an existing account.
+- Event data is authorized by resource ownership.
+- Capacity checks and CPF deduplication run inside serializable transactions.
+- Canceled registrations are soft-deleted and remain available for auditability.
+- Uploads are checked by their actual file signature, not only by the browser-provided MIME type.
+- Secrets belong only in environment files and must never be committed.
 
 ## Roadmap
 
-* [x] Autenticação
-* [x] Criação de eventos
-* [x] Formulários personalizados
-* [x] Inscrições
-* [x] Pagamento PIX
-* [x] Webhook de pagamento
-* [x] Ingressos com QR Code
-* [x] Check-in
-* [x] Dashboard
-* [x] Upload de banners
-* [x] E-mail de confirmação
-* [ ] Exportação de relatórios
-* [ ] Recuperação de senha
-* [ ] Sistema avançado de permissões
-* [ ] Reembolso automático
-* [ ] Relatórios financeiros avançados
+- [x] Event creation and publishing
+- [x] Custom registration forms
+- [x] PIX payment flow
+- [x] Payment webhooks
+- [x] QR-code tickets
+- [x] QR-code check-in
+- [x] Organizer dashboard
+- [x] Volunteer check-in team
+- [x] Organizer wallet and PIX payout requests
+- [x] Google Sign-In
+- [x] Profile and password settings
+- [x] Post-event feedback
+- [ ] Password recovery by email
+- [ ] Advanced permission roles
+- [ ] Automatic refunds
+- [ ] Advanced financial reports
 
----
+## Deployment
 
-## Deploy
-
-O projeto foi estruturado para execução em ambiente Linux utilizando:
+The production setup is designed for Ubuntu with:
 
 ```text
-Nginx + PM2 + Ubuntu
+Nginx → static React build + reverse proxy → PM2-managed NestJS API → PostgreSQL
 ```
 
-O frontend pode ser servido como build estático, enquanto o backend roda como processo gerenciado pelo PM2.
+Before deploying a schema change, apply migrations in the backend:
 
----
+```bash
+cd backend
+npx prisma migrate deploy
+```
 
-## Status
+For production, build the frontend after setting `VITE_API_URL` and `VITE_GOOGLE_CLIENT_ID`; Vite embeds those values during the build.
 
-**Projeto funcional / Full Stack**
-
-O projeto representa uma aplicação completa de gerenciamento de eventos, desde a criação do evento até o credenciamento do participante.
-
----
-
-## Autor
+## Author
 
 **Mateus Ricardo**
 
-Desenvolvedor de Software com experiência em aplicações web, APIs REST, bancos de dados, automação e análise de dados.
+Software developer focused on web applications, REST APIs, databases, automation and data analysis.
+
+## License
+
+This project is currently maintained as a personal/product project. All rights reserved unless a license is added to the repository.
 

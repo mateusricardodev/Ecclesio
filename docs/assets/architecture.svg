@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">Ecclesio technical architecture</title>
+  <desc id="desc">React frontend connected to a NestJS API, PostgreSQL database and external services.</desc>
+  <rect width="1200" height="300" rx="28" fill="#fff" stroke="#E9E9E9" stroke-width="2"/>
+  <g font-family="Arial, sans-serif" fill="#0A0A09">
+    <text x="52" y="48" font-size="14" letter-spacing="3" fill="#00186D">SYSTEM OVERVIEW</text>
+    <g stroke="#00186D" stroke-width="2" fill="#F5F6FB">
+      <rect x="55" y="100" width="220" height="100" rx="18"/><rect x="350" y="100" width="220" height="100" rx="18"/>
+      <rect x="645" y="100" width="220" height="100" rx="18"/><rect x="940" y="100" width="205" height="100" rx="18"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="165" y="137" font-size="22" font-weight="700">React + Vite</text><text x="165" y="164" font-size="14" fill="#6F6F6F">Frontend</text>
+      <text x="460" y="137" font-size="22" font-weight="700">NestJS</text><text x="460" y="164" font-size="14" fill="#6F6F6F">REST API</text>
+      <text x="755" y="137" font-size="22" font-weight="700">PostgreSQL</text><text x="755" y="164" font-size="14" fill="#6F6F6F">Prisma ORM</text>
+      <text x="1042" y="137" font-size="22" font-weight="700">Integrations</text><text x="1042" y="164" font-size="14" fill="#6F6F6F">Mercado Pago · Brevo · Google</text>
+    </g>
+    <g stroke="#D4B16A" stroke-width="3" fill="none">
+      <path d="M275 150h75m220 0h75m220 0h75"/><path d="m340 150-12-8m12 8-12 8m290-8-12-8m12 8-12 8m290-8-12-8m12 8-12 8"/>
+    </g>
+    <text x="600" y="250" text-anchor="middle" font-size="14" fill="#6F6F6F">JWT authentication · validation · rate limiting · transactional workflows</text>
+  </g>
+</svg>

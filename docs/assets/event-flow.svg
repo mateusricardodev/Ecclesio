@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="title desc">
+  <title id="title">Ecclesio event flow</title>
+  <desc id="desc">Create an event, collect registrations, receive payments and check participants in.</desc>
+  <rect width="1200" height="260" rx="28" fill="#00186D"/>
+  <g font-family="Arial, sans-serif" fill="#fff">
+    <text x="56" y="52" font-size="14" letter-spacing="3" fill="#D4B16A">FROM INVITATION TO CHECK-IN</text>
+    <g font-size="18" font-weight="700" text-anchor="middle">
+      <text x="150" y="125">Create</text><text x="150" y="151">your event</text>
+      <text x="430" y="125">Share the</text><text x="430" y="151">registration link</text>
+      <text x="710" y="125">Receive</text><text x="710" y="151">payments</text>
+      <text x="990" y="125">Check in</text><text x="990" y="151">with QR codes</text>
+    </g>
+    <g fill="#D4B16A" font-size="34" text-anchor="middle">
+      <text x="150" y="102">01</text><text x="430" y="102">02</text><text x="710" y="102">03</text><text x="990" y="102">04</text>
+    </g>
+    <g stroke="#D4B16A" stroke-width="2" fill="none" opacity=".8">
+      <path d="M245 135h110"/><path d="M525 135h110"/><path d="M805 135h110"/>
+      <path d="m345 135-12-8m12 8-12 8m290-8-12-8m12 8-12 8m290-8-12-8m12 8-12 8"/>
+    </g>
+    <text x="600" y="218" text-anchor="middle" font-size="14" fill="#fff" opacity=".72">One workspace for organizers, participants and volunteers</text>
+  </g>
+</svg>
